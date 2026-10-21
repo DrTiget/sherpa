@@ -20,7 +20,7 @@ run_tests() { # $1 = ожидаемая оболочка улучшенного 
     docker/run.sh cargo test -p servergui-core "$@" -- --nocapture --test-threads=1
 }
 echo "== сервер без zsh: fallback на bash =="
-run_tests bash --test ssh_integration --test ssh_enhanced
+run_tests bash --test ssh_integration --test ssh_enhanced --test monitor_integration
 echo "== сервер с zsh =="
 docker exec $NAME apk add --no-cache zsh >/dev/null 2>&1 || { echo "не удалось поставить zsh в контейнер"; exit 1; }
 run_tests zsh --test ssh_enhanced

@@ -3,6 +3,7 @@ use crate::{
     known_hosts::{fingerprint, HostCheck, KnownHosts},
     model::{AuthConfig, ExecResult, Server},
     secrets::SecretStore,
+    monitor::{self, MonitorEvent},
     terminal::{self, Registry, TermEvent, TerminalHandle},
     CoreError, CoreResult,
 };
@@ -75,11 +76,12 @@ pub struct SshPool {
     sessions: Mutex<HashMap<String, Session>>,
     pending: std::sync::Mutex<HashMap<(String, u16), PublicKey>>,
     terminals: Registry,
+    monitors: monitor::Registry,
 }
 
 impl SshPool {
     pub fn new(known: KnownHosts) -> Self {
-        Self { known: Arc::new(known), sessions: Mutex::new(HashMap::new()), pending: Default::default(), terminals: Default::default() }
+        Self { known: Arc::new(known), sessions: Mutex::new(HashMap::new()), pending: Default::default(), terminals: Default::default(), monitors: Default::default() }
     }
 
     pub fn known_hosts(&self) -> &KnownHosts {
@@ -220,6 +222,7 @@ impl SshPool {
 
     pub async fn disconnect(&self, id: &str) -> CoreResult<()> {
         self.close_server_terminals(id);
+        self.close_server_monitors(id);
         if let Some(s) = self.sessions.lock().await.remove(id) {
             let _ = s.disconnect(russh::Disconnect::ByApplication, "", "en").await;
         }
@@ -230,6 +233,57 @@ impl SshPool {
         let hs: Vec<_> = self.terminals.lock().unwrap().values().filter(|(s, _)| s == server_id).map(|(_, h)| h.clone()).collect();
         for h in hs {
             h.close();
+        }
+    }
+
+    fn close_server_monitors(&self, server_id: &str) {
+        let hs: Vec<_> = self.monitors.lock().unwrap().values().filter(|(s, _)| s == server_id).map(|(_, h)| h.clone()).collect();
+        for h in hs {
+            h.close();
+        }
+    }
+
+    /// Запускает сбор метрик (долгоживущий exec-канал) на соединении из пула. Возвращает id монитора и поток событий.
+    pub async fn monitor_start(
+        &self,
+        server: &Server,
+        secrets: &dyn SecretStore,
+        interval_ms: u64,
+    ) -> CoreResult<(String, tokio::sync::mpsc::UnboundedReceiver<MonitorEvent>)> {
+        self.connect(server, secrets).await?;
+        let session = self.sessions.lock().await.get(&server.id).cloned().ok_or(CoreError::NotFound)?;
+        let ch = match session.channel_open_session().await {
+            Ok(c) => c,
+            Err(e) => {
+                self.sessions.lock().await.remove(&server.id);
+                return Err(CoreError::msg(format!("Сессия потеряна: {e}")));
+            }
+        };
+        ch.exec(true, monitor::command(interval_ms).into_bytes()).await?;
+        let id = uuid::Uuid::new_v4().to_string();
+        let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
+        let h = monitor::spawn(ch, id.clone(), tx, self.monitors.clone());
+        self.monitors.lock().unwrap().insert(id.clone(), (server.id.clone(), h));
+        Ok((id, rx))
+    }
+
+    pub fn monitor_stop(&self, monitor_id: &str) {
+        let h = self.monitors.lock().unwrap().get(monitor_id).map(|(_, h)| h.clone());
+        if let Some(h) = h {
+            h.close();
+        }
+    }
+
+    /// Послать сигнал процессу на сервере. Ошибка (нет прав, нет процесса) возвращается текстом.
+    pub async fn process_kill(&self, server: &Server, secrets: &dyn SecretStore, pid: u32, signal: &str) -> CoreResult<()> {
+        let cmd = monitor::kill_command(pid, signal)?;
+        let r = self.exec(server, secrets, &cmd).await?;
+        if r.exit_code == Some(0) {
+            Ok(())
+        } else {
+            let t = format!("{}{}", r.stdout, r.stderr);
+            let t = t.trim();
+            Err(CoreError::msg(if t.is_empty() { format!("kill завершился с кодом {:?}", r.exit_code) } else { t.to_string() }))
         }
     }
 
