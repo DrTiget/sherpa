@@ -39,6 +39,9 @@ fn main() {
             commands::terminal_close,
             commands::set_enhanced_shell,
             commands::uninstall_enhanced_shell,
+            commands::monitor_start,
+            commands::monitor_stop,
+            commands::process_kill,
         ])
         .run(tauri::generate_context!())
         .expect("ошибка запуска приложения");

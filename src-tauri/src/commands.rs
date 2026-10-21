@@ -4,7 +4,7 @@ use servergui_core::{
     CoreError,
 };
 use servergui_core::ssh::{ShellStatus, TerminalInfo};
-use servergui_core::terminal::TermEvent;
+use servergui_core::{monitor::MonitorEvent, terminal::TermEvent};
 use tauri::{ipc::Channel, State};
 
 type R<T> = Result<T, CoreError>;
@@ -113,4 +113,32 @@ pub async fn uninstall_enhanced_shell(s: State<'_, AppState>, id: String) -> R<(
     s.pool.shell_uninstall(&srv, s.store.secrets().as_ref()).await?;
     s.store.set_enhanced_shell(&id, false)?;
     Ok(())
+}
+
+/// Запускает монитор ресурсов; снимки идут в `on_event`. Возвращает monitor_id.
+#[tauri::command]
+pub async fn monitor_start(s: State<'_, AppState>, server_id: String, interval_ms: u64, on_event: Channel<MonitorEvent>) -> R<String> {
+    let srv = s.store.get(&server_id)?;
+    let (id, mut rx) = s.pool.monitor_start(&srv, s.store.secrets().as_ref(), interval_ms).await?;
+    tokio::spawn(async move {
+        while let Some(ev) = rx.recv().await {
+            if on_event.send(ev).is_err() {
+                break;
+            }
+        }
+    });
+    Ok(id)
+}
+
+#[tauri::command]
+pub fn monitor_stop(s: State<AppState>, monitor_id: String) -> R<()> {
+    s.pool.monitor_stop(&monitor_id);
+    Ok(())
+}
+
+/// Сигнал процессу (TERM/KILL…). Нет прав — ошибка с текстом от `kill`.
+#[tauri::command]
+pub async fn process_kill(s: State<'_, AppState>, server_id: String, pid: u32, signal: String) -> R<()> {
+    let srv = s.store.get(&server_id)?;
+    s.pool.process_kill(&srv, s.store.secrets().as_ref(), pid, &signal).await
 }
