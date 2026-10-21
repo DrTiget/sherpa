@@ -4,8 +4,8 @@ import { FitAddon } from "@xterm/addon-fit";
 import { SearchAddon } from "@xterm/addon-search";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import "@xterm/xterm/css/xterm.css";
-import { api } from "./api";
-import { errorText, type ApiError, type Server } from "./types";
+import { api } from "../../api";
+import { errorText, type ApiError, type Server } from "../../types";
 
 type Status = "connecting" | "open" | "ended";
 type UnknownHost = Extract<ApiError, { kind: "unknown_host" }>;
@@ -133,7 +133,7 @@ export default function TerminalTab({ server, active, onServerChanged, onUnknown
   const find = (back: boolean) => query && (back ? search.current?.findPrevious(query) : search.current?.findNext(query));
 
   return (
-    <div className="term-wrap" style={{ display: active ? "flex" : "none" }}>
+    <div className="term-wrap">
       {searching && (
         <div className="term-search">
           <input autoFocus value={query} placeholder="Поиск" onChange={(e) => { setQuery(e.target.value); search.current?.findNext(e.target.value); }}

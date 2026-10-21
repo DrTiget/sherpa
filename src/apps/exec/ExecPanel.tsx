@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { api } from "./api";
-import { errorText, type ExecResult, type Server } from "./types";
+import { api } from "../../api";
+import { errorText, type ExecResult, type Server } from "../../types";
 
 interface Props {
   server: Server;

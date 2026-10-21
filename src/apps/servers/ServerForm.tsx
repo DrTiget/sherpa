@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
-import type { AuthType, Server, ServerInput } from "./types";
+import type { AuthType, Server, ServerInput } from "../../types";
 
 interface Props {
   server: Server | null;
