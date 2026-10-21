@@ -1,5 +1,5 @@
-import { invoke } from "@tauri-apps/api/core";
-import type { ExecResult, Server, ServerInput } from "./types";
+import { Channel, invoke } from "@tauri-apps/api/core";
+import type { ExecResult, Server, ServerInput, TermEvent } from "./types";
 
 export const api = {
   list: () => invoke<Server[]>("list_servers"),
@@ -13,4 +13,14 @@ export const api = {
   exec: (id: string, command: string) => invoke<ExecResult>("exec", { id, command }),
   trustHost: (host: string, port: number, fingerprint: string) =>
     invoke<void>("trust_host", { host, port, fingerprint }),
+  terminalOpen: (serverId: string, cols: number, rows: number, onEvent: (e: TermEvent) => void) => {
+    const ch = new Channel<TermEvent>();
+    ch.onmessage = onEvent;
+    return invoke<string>("terminal_open", { serverId, cols, rows, onEvent: ch });
+  },
+  terminalWrite: (terminalId: string, data: Uint8Array) =>
+    invoke<void>("terminal_write", { terminalId, data: Array.from(data) }),
+  terminalResize: (terminalId: string, cols: number, rows: number) =>
+    invoke<void>("terminal_resize", { terminalId, cols, rows }),
+  terminalClose: (terminalId: string) => invoke<void>("terminal_close", { terminalId }),
 };

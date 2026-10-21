@@ -2,6 +2,7 @@ use crate::{
     known_hosts::{fingerprint, HostCheck, KnownHosts},
     model::{AuthConfig, ExecResult, Server},
     secrets::SecretStore,
+    terminal::{self, Registry, TermEvent, TerminalHandle},
     CoreError, CoreResult,
 };
 use russh::{
@@ -55,11 +56,12 @@ pub struct SshPool {
     known: Arc<KnownHosts>,
     sessions: Mutex<HashMap<String, Session>>,
     pending: std::sync::Mutex<HashMap<(String, u16), PublicKey>>,
+    terminals: Registry,
 }
 
 impl SshPool {
     pub fn new(known: KnownHosts) -> Self {
-        Self { known: Arc::new(known), sessions: Mutex::new(HashMap::new()), pending: Default::default() }
+        Self { known: Arc::new(known), sessions: Mutex::new(HashMap::new()), pending: Default::default(), terminals: Default::default() }
     }
 
     pub fn known_hosts(&self) -> &KnownHosts {
@@ -199,8 +201,63 @@ impl SshPool {
     }
 
     pub async fn disconnect(&self, id: &str) -> CoreResult<()> {
+        self.close_server_terminals(id);
         if let Some(s) = self.sessions.lock().await.remove(id) {
             let _ = s.disconnect(russh::Disconnect::ByApplication, "", "en").await;
+        }
+        Ok(())
+    }
+
+    fn close_server_terminals(&self, server_id: &str) {
+        let hs: Vec<_> = self.terminals.lock().unwrap().values().filter(|(s, _)| s == server_id).map(|(_, h)| h.clone()).collect();
+        for h in hs {
+            h.close();
+        }
+    }
+
+    fn terminal(&self, tid: &str) -> CoreResult<TerminalHandle> {
+        self.terminals.lock().unwrap().get(tid).map(|(_, h)| h.clone()).ok_or_else(|| CoreError::msg("Терминал не найден или уже закрыт"))
+    }
+
+    /// Открывает PTY + shell на соединении из пула (подключается при необходимости).
+    /// Возвращает id терминала и поток событий.
+    pub async fn terminal_open(
+        &self,
+        server: &Server,
+        secrets: &dyn SecretStore,
+        cols: u32,
+        rows: u32,
+    ) -> CoreResult<(String, tokio::sync::mpsc::UnboundedReceiver<TermEvent>)> {
+        self.connect(server, secrets).await?;
+        let session = self.sessions.lock().await.get(&server.id).cloned().ok_or(CoreError::NotFound)?;
+        let ch = match session.channel_open_session().await {
+            Ok(c) => c,
+            Err(e) => {
+                self.sessions.lock().await.remove(&server.id);
+                return Err(CoreError::msg(format!("Сессия потеряна: {e}")));
+            }
+        };
+        ch.request_pty(false, "xterm-256color", cols, rows, 0, 0, &[]).await?;
+        ch.request_shell(false).await?;
+        let tid = uuid::Uuid::new_v4().to_string();
+        let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
+        let h = terminal::spawn(ch, tid.clone(), tx, self.terminals.clone());
+        self.terminals.lock().unwrap().insert(tid.clone(), (server.id.clone(), h));
+        Ok((tid, rx))
+    }
+
+    pub fn terminal_write(&self, tid: &str, data: Vec<u8>) -> CoreResult<()> {
+        if self.terminal(tid)?.write(data) { Ok(()) } else { Err(CoreError::msg("Терминал закрыт")) }
+    }
+
+    pub fn terminal_resize(&self, tid: &str, cols: u32, rows: u32) -> CoreResult<()> {
+        self.terminal(tid)?.resize(cols, rows);
+        Ok(())
+    }
+
+    pub fn terminal_close(&self, tid: &str) -> CoreResult<()> {
+        if let Ok(h) = self.terminal(tid) {
+            h.close();
         }
         Ok(())
     }

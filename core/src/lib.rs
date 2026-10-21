@@ -6,5 +6,6 @@ pub mod model;
 pub mod secrets;
 pub mod ssh;
 pub mod store;
+pub mod terminal;
 
 pub use error::{CoreError, CoreResult};

@@ -55,3 +55,13 @@ export function errorText(e: unknown): string {
     default: return typeof e === "string" ? e : JSON.stringify(e);
   }
 }
+
+export type TermEvent =
+  | { event: "data"; data: number[] }
+  | { event: "closed"; exit_code: number | null; reason: string };
+
+export interface TermTab {
+  key: string;
+  serverId: string;
+  title: string;
+}

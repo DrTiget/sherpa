@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "./api";
 import ExecPanel from "./ExecPanel";
 import ServerForm from "./ServerForm";
-import { errorText, type ApiError, type Server, type ServerInput } from "./types";
+import TerminalsView from "./TerminalsView";
+import { errorText, type ApiError, type Server, type ServerInput, type TermTab } from "./types";
 
 type Mode = { t: "view" } | { t: "new" } | { t: "edit" };
 type Pending = { err: Extract<ApiError, { kind: "unknown_host" }>; retry: () => Promise<void> };
@@ -15,6 +16,25 @@ export default function App() {
   const [busy, setBusy] = useState<string | null>(null);
   const [msg, setMsg] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
   const [pending, setPending] = useState<Pending | null>(null);
+
+  const [view, setView] = useState<"servers" | "terminals">("servers");
+  const [tabs, setTabs] = useState<TermTab[]>([]);
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+
+  const openTerminal = (srv: Server) => {
+    const n = tabs.filter((t) => t.serverId === srv.id).length;
+    const key = crypto.randomUUID();
+    setTabs((t) => [...t, { key, serverId: srv.id, title: n ? `${srv.name} (${n + 1})` : srv.name }]);
+    setActiveTab(key); setView("terminals");
+  };
+  const closeTab = (key: string) => {
+    const rest = tabs.filter((t) => t.key !== key);
+    setTabs(rest);
+    if (activeTab === key) setActiveTab(rest.length ? rest[rest.length - 1].key : null);
+  };
+  const onUnknownHost = useCallback((err: Extract<ApiError, { kind: "unknown_host" }>, retry: () => void) => {
+    setPending({ err, retry: async () => retry() });
+  }, []);
 
   const refresh = useCallback(async () => {
     setServers(await api.list());
@@ -80,6 +100,10 @@ export default function App() {
       <aside className="sidebar">
         <div className="brand">ServerGUI</div>
         <button className="primary add" onClick={() => { setMode({ t: "new" }); setSelected(null); setMsg(null); }}>+ Добавить сервер</button>
+        <div className="views">
+          <button className={view === "servers" ? "sel" : ""} onClick={() => setView("servers")}>Серверы</button>
+          <button className={view === "terminals" ? "sel" : ""} onClick={() => setView("terminals")}>Терминалы{tabs.length ? ` (${tabs.length})` : ""}</button>
+        </div>
         <div className="list">
           {servers.length === 0 && <p className="hint">Серверов пока нет</p>}
           {byGroup.map(([g, list]) => (
@@ -90,7 +114,7 @@ export default function App() {
                   onClick={() => { setSelected(s.id); setMode({ t: "view" }); setMsg(null); }}>
                   <span className={"dot" + (connected.has(s.id) ? " on" : "")} title={connected.has(s.id) ? "подключено" : "не подключено"} />
                   <span className="name">{s.name}</span>
-                  <span className="sub">{s.host}</span>
+                  <span className="sub">{s.host}<b className="term-btn" title="Открыть терминал" onClick={(e) => { e.stopPropagation(); openTerminal(s); }}>&gt;_</b></span>
                 </div>
               ))}
             </div>
@@ -98,7 +122,7 @@ export default function App() {
         </div>
       </aside>
 
-      <main className="main">
+      <main className="main" style={{ display: view === "terminals" ? "none" : undefined }}>
         {msg && <div className={"banner " + msg.kind} onClick={() => setMsg(null)}>{msg.text}</div>}
         {mode.t !== "view" ? (
           <ServerForm key={mode.t + (current?.id ?? "")} server={mode.t === "edit" ? current : null} groups={groups}
@@ -124,6 +148,7 @@ export default function App() {
                 </button>
               )}
               <span className="spacer" />
+              <button className="primary" onClick={() => openTerminal(current)}>Терминал</button>
               <button onClick={() => setMode({ t: "edit" })}>Изменить</button>
               <button className="danger" onClick={remove}>Удалить</button>
             </div>
@@ -136,6 +161,10 @@ export default function App() {
           <div className="empty">Выберите сервер слева или добавьте новый</div>
         )}
       </main>
+      <div className="main term-main" style={{ display: view === "terminals" ? "flex" : "none" }}>
+        <TerminalsView tabs={tabs} activeKey={activeTab} servers={servers} onSelect={setActiveTab} onClose={closeTab}
+          onRename={(k, title) => setTabs((ts) => ts.map((t) => (t.key === k ? { ...t, title } : t)))} onUnknownHost={onUnknownHost} />
+      </div>
 
       {pending && (
         <div className="modal-bg">
