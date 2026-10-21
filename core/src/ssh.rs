@@ -1,4 +1,5 @@
 use crate::{
+    enhanced,
     known_hosts::{fingerprint, HostCheck, KnownHosts},
     model::{AuthConfig, ExecResult, Server},
     secrets::SecretStore,
@@ -12,6 +13,23 @@ use russh::{
 };
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tokio::sync::Mutex;
+
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct ShellStatus {
+    /// "zsh" | "bash" | "default"
+    pub shell: String,
+    /// true — файлы были (пере)залиты в этот раз.
+    pub uploaded: bool,
+    /// Команда установки zsh, если его на сервере нет.
+    pub install_hint: Option<String>,
+}
+
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct TerminalInfo {
+    pub terminal_id: String,
+    pub shell: String,
+    pub install_hint: Option<String>,
+}
 
 /// Результат проверки ключа хоста, который handler передаёт наружу.
 #[derive(Debug, Clone)]
@@ -227,8 +245,14 @@ impl SshPool {
         secrets: &dyn SecretStore,
         cols: u32,
         rows: u32,
-    ) -> CoreResult<(String, tokio::sync::mpsc::UnboundedReceiver<TermEvent>)> {
+    ) -> CoreResult<(TerminalInfo, tokio::sync::mpsc::UnboundedReceiver<TermEvent>)> {
         self.connect(server, secrets).await?;
+        let (shell, hint, launch) = if server.enhanced_shell {
+            let (st, launch) = self.prepare_shell(server, secrets).await?;
+            (st.shell, st.install_hint, launch)
+        } else {
+            ("default".to_string(), None, None)
+        };
         let session = self.sessions.lock().await.get(&server.id).cloned().ok_or(CoreError::NotFound)?;
         let ch = match session.channel_open_session().await {
             Ok(c) => c,
@@ -238,12 +262,15 @@ impl SshPool {
             }
         };
         ch.request_pty(false, "xterm-256color", cols, rows, 0, 0, &[]).await?;
-        ch.request_shell(false).await?;
+        match launch {
+            Some(cmd) => ch.exec(false, cmd.into_bytes()).await?,
+            None => ch.request_shell(false).await?,
+        }
         let tid = uuid::Uuid::new_v4().to_string();
         let (tx, rx) = tokio::sync::mpsc::unbounded_channel();
         let h = terminal::spawn(ch, tid.clone(), tx, self.terminals.clone());
         self.terminals.lock().unwrap().insert(tid.clone(), (server.id.clone(), h));
-        Ok((tid, rx))
+        Ok((TerminalInfo { terminal_id: tid, shell, install_hint: hint }, rx))
     }
 
     pub fn terminal_write(&self, tid: &str, data: Vec<u8>) -> CoreResult<()> {
@@ -264,6 +291,10 @@ impl SshPool {
 
     /// Выполнить команду в активной сессии (подключается автоматически, если сессии нет).
     pub async fn exec(&self, server: &Server, secrets: &dyn SecretStore, command: &str) -> CoreResult<ExecResult> {
+        self.run(server, secrets, command, None).await
+    }
+
+    async fn run(&self, server: &Server, secrets: &dyn SecretStore, command: &str, stdin: Option<&[u8]>) -> CoreResult<ExecResult> {
         self.connect(server, secrets).await?;
         let session = self.sessions.lock().await.get(&server.id).cloned().ok_or(CoreError::NotFound)?;
         let mut ch = match session.channel_open_session().await {
@@ -275,6 +306,10 @@ impl SshPool {
             }
         };
         ch.exec(true, command.as_bytes().to_vec()).await?;
+        if let Some(data) = stdin {
+            ch.data_bytes(data.to_vec()).await?;
+            ch.eof().await?;
+        }
         let (mut out, mut err, mut code) = (Vec::new(), Vec::new(), None);
         while let Some(msg) = ch.wait().await {
             match msg {
@@ -285,6 +320,48 @@ impl SshPool {
             }
         }
         Ok(ExecResult { stdout: String::from_utf8_lossy(&out).into(), stderr: String::from_utf8_lossy(&err).into(), exit_code: code })
+    }
+
+    /// Заливает набор «улучшенной оболочки» (если версия на сервере отличается) и выбирает zsh или bash.
+    /// Возвращает статус и команду запуска (None — подходящей оболочки нет).
+    async fn prepare_shell(&self, server: &Server, secrets: &dyn SecretStore) -> CoreResult<(ShellStatus, Option<String>)> {
+        let probe = enhanced::parse_probe(&self.run(server, secrets, enhanced::PROBE_CMD, None).await?.stdout);
+        let mut uploaded = false;
+        if probe.remote_version.as_deref() != Some(enhanced::version().as_str()) {
+            let r = self
+                .run(
+                    server,
+                    secrets,
+                    "d=\"$HOME/.servergui\"; mkdir -p \"$d\" && chmod 700 \"$d\" && rm -rf \"$d/shell\" && mkdir -p \"$d/shell\" && tar xf - -C \"$d/shell\"",
+                    Some(&enhanced::build_tar()),
+                )
+                .await?;
+            if r.exit_code != Some(0) {
+                return Err(CoreError::msg(format!("Не удалось залить файлы оболочки на сервер (нужен tar): {}", r.stderr.trim())));
+            }
+            uploaded = true;
+        }
+        let launch = enhanced::launch_cmd(&probe);
+        let status = ShellStatus {
+            shell: launch.as_ref().map_or("default", |l| l.0).to_string(),
+            uploaded,
+            install_hint: (!probe.has_zsh).then(|| enhanced::zsh_install_hint(&probe.os_id, server.username == "root")),
+        };
+        Ok((status, launch.map(|l| l.1)))
+    }
+
+    /// Включение опции: залить файлы и сообщить, какая оболочка будет использована.
+    pub async fn shell_install(&self, server: &Server, secrets: &dyn SecretStore) -> CoreResult<ShellStatus> {
+        Ok(self.prepare_shell(server, secrets).await?.0)
+    }
+
+    /// «Удалить с сервера»: стирает ~/.servergui целиком (файлы оболочки и история).
+    pub async fn shell_uninstall(&self, server: &Server, secrets: &dyn SecretStore) -> CoreResult<()> {
+        let r = self.run(server, secrets, "rm -rf \"$HOME/.servergui\"", None).await?;
+        if r.exit_code != Some(0) {
+            return Err(CoreError::msg(format!("Не удалось удалить ~/.servergui: {}", r.stderr.trim())));
+        }
+        Ok(())
     }
 }
 

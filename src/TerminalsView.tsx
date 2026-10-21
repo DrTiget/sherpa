@@ -9,10 +9,11 @@ interface Props {
   onSelect: (key: string) => void;
   onClose: (key: string) => void;
   onRename: (key: string, title: string) => void;
+  onServerChanged: () => Promise<void>;
   onUnknownHost: (err: Extract<ApiError, { kind: "unknown_host" }>, retry: () => void) => void;
 }
 
-export default function TerminalsView({ tabs, activeKey, servers, onSelect, onClose, onRename, onUnknownHost }: Props) {
+export default function TerminalsView({ tabs, activeKey, servers, onSelect, onClose, onRename, onServerChanged, onUnknownHost }: Props) {
   const [editing, setEditing] = useState<string | null>(null);
   return (
     <div className="terms">
@@ -30,9 +31,12 @@ export default function TerminalsView({ tabs, activeKey, servers, onSelect, onCl
         ))}
       </div>
       {tabs.length === 0 && <div className="empty">Нет открытых терминалов. Нажмите «Терминал» у сервера.</div>}
-      {tabs.map((t) => (
-        <TerminalTab key={t.key} serverId={t.serverId} active={t.key === activeKey} onUnknownHost={onUnknownHost} />
-      ))}
+      {tabs.map((t) => {
+        const srv = servers.find((x) => x.id === t.serverId);
+        return srv ? (
+          <TerminalTab key={t.key} server={srv} active={t.key === activeKey} onServerChanged={onServerChanged} onUnknownHost={onUnknownHost} />
+        ) : null;
+      })}
     </div>
   );
 }

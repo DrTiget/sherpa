@@ -3,6 +3,7 @@ use servergui_core::{
     model::{ExecResult, Server, ServerInput},
     CoreError,
 };
+use servergui_core::ssh::{ShellStatus, TerminalInfo};
 use servergui_core::terminal::TermEvent;
 use tauri::{ipc::Channel, State};
 
@@ -68,9 +69,9 @@ pub fn trust_host(s: State<AppState>, host: String, port: u16, fingerprint: Stri
 
 /// Открывает терминал; вывод идёт в `on_event` (Tauri Channel) байтами.
 #[tauri::command]
-pub async fn terminal_open(s: State<'_, AppState>, server_id: String, cols: u32, rows: u32, on_event: Channel<TermEvent>) -> R<String> {
+pub async fn terminal_open(s: State<'_, AppState>, server_id: String, cols: u32, rows: u32, on_event: Channel<TermEvent>) -> R<TerminalInfo> {
     let srv = s.store.get(&server_id)?;
-    let (tid, mut rx) = s.pool.terminal_open(&srv, s.store.secrets().as_ref(), cols, rows).await?;
+    let (info, mut rx) = s.pool.terminal_open(&srv, s.store.secrets().as_ref(), cols, rows).await?;
     tokio::spawn(async move {
         while let Some(ev) = rx.recv().await {
             if on_event.send(ev).is_err() {
@@ -78,7 +79,7 @@ pub async fn terminal_open(s: State<'_, AppState>, server_id: String, cols: u32,
             }
         }
     });
-    Ok(tid)
+    Ok(info)
 }
 
 #[tauri::command]
@@ -94,4 +95,22 @@ pub fn terminal_resize(s: State<AppState>, terminal_id: String, cols: u32, rows:
 #[tauri::command]
 pub fn terminal_close(s: State<AppState>, terminal_id: String) -> R<()> {
     s.pool.terminal_close(&terminal_id)
+}
+
+/// Включить/выключить «улучшенную оболочку». При включении сразу заливает файлы на сервер.
+#[tauri::command]
+pub async fn set_enhanced_shell(s: State<'_, AppState>, id: String, enabled: bool) -> R<Option<ShellStatus>> {
+    let srv = s.store.get(&id)?;
+    let status = if enabled { Some(s.pool.shell_install(&srv, s.store.secrets().as_ref()).await?) } else { None };
+    s.store.set_enhanced_shell(&id, enabled)?;
+    Ok(status)
+}
+
+/// «Удалить с сервера»: стирает ~/.servergui и выключает опцию.
+#[tauri::command]
+pub async fn uninstall_enhanced_shell(s: State<'_, AppState>, id: String) -> R<()> {
+    let srv = s.store.get(&id)?;
+    s.pool.shell_uninstall(&srv, s.store.secrets().as_ref()).await?;
+    s.store.set_enhanced_shell(&id, false)?;
+    Ok(())
 }

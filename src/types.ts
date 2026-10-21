@@ -13,6 +13,7 @@ export interface Server {
   username: string;
   group: string | null;
   auth: AuthConfig;
+  enhanced_shell: boolean;
 }
 
 export type AuthInput =
@@ -27,6 +28,7 @@ export interface ServerInput {
   username: string;
   group: string | null;
   auth: AuthInput;
+  enhanced_shell: boolean;
 }
 
 export interface ExecResult {
@@ -64,4 +66,17 @@ export interface TermTab {
   key: string;
   serverId: string;
   title: string;
+}
+
+export interface TerminalInfo {
+  terminal_id: string;
+  /** "zsh" | "bash" | "default" */
+  shell: string;
+  install_hint: string | null;
+}
+
+export interface ShellStatus {
+  shell: string;
+  uploaded: boolean;
+  install_hint: string | null;
 }

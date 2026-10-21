@@ -163,7 +163,7 @@ export default function App() {
       </main>
       <div className="main term-main" style={{ display: view === "terminals" ? "flex" : "none" }}>
         <TerminalsView tabs={tabs} activeKey={activeTab} servers={servers} onSelect={setActiveTab} onClose={closeTab}
-          onRename={(k, title) => setTabs((ts) => ts.map((t) => (t.key === k ? { ...t, title } : t)))} onUnknownHost={onUnknownHost} />
+          onRename={(k, title) => setTabs((ts) => ts.map((t) => (t.key === k ? { ...t, title } : t)))} onServerChanged={refresh} onUnknownHost={onUnknownHost} />
       </div>
 
       {pending && (

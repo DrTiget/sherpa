@@ -21,6 +21,7 @@ export default function ServerForm({ server, groups, onSave, onCancel }: Props) 
   const [keyPath, setKeyPath] = useState(a?.type === "key" ? a.key_path ?? "" : "");
   const [keyPem, setKeyPem] = useState("");
   const [passphrase, setPassphrase] = useState("");
+  const [enhanced, setEnhanced] = useState(server?.enhanced_shell ?? false);
   const [busy, setBusy] = useState(false);
   const editing = !!server;
   const hasSaved = (a?.type === "password" && a.password_ref) || (a?.type === "key" && a.passphrase_ref);
@@ -39,7 +40,7 @@ export default function ServerForm({ server, groups, onSave, onCancel }: Props) 
       : type === "key" ? { type, key_path: nz(keyPath), key_pem: nz(keyPem), passphrase: nz(passphrase) }
       : { type };
     try {
-      await onSave({ name, host, port, username, group: nz(group.trim()), auth });
+      await onSave({ name, host, port, username, group: nz(group.trim()), auth, enhanced_shell: enhanced });
     } finally {
       setBusy(false);
     }
@@ -88,6 +89,11 @@ export default function ServerForm({ server, groups, onSave, onCancel }: Props) 
         </>
       )}
       {type === "agent" && <p className="hint">Ключи берутся из запущенного ssh-agent (SSH_AUTH_SOCK / Pageant).</p>}
+      <label className="check">
+        <input type="checkbox" checked={enhanced} onChange={(e) => setEnhanced(e.target.checked)} />
+        Улучшенная оболочка в терминале (подсказки, подсветка, автодополнение в стиле Kali)
+        <span className="hint">Файлы кладутся только в ~/.servergui на сервере; ~/.bashrc и системные файлы не меняются. Файлы заливаются при открытии терминала.</span>
+      </label>
       <div className="actions">
         <button type="button" onClick={onCancel}>Отмена</button>
         <button className="primary" disabled={busy}>{editing ? "Сохранить" : "Добавить"}</button>

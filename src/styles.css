@@ -47,3 +47,8 @@ pre { background:#0a0c10; border:1px solid var(--line); border-radius:6px; paddi
 .term-bar.ended { color:#fbbf24; }
 .term-search { position:absolute; top:8px; right:20px; z-index:5; display:flex; gap:4px; background:var(--panel); border:1px solid var(--line); padding:6px; border-radius:6px; }
 .term-search input { margin:0; width:180px; padding:4px 8px; } .term-search button { padding:2px 8px; }
+.check { display:flex; flex-wrap:wrap; align-items:center; gap:8px; color:var(--text); font-size:13px; } .check input { width:auto; margin:0; } .check .hint { flex-basis:100%; font-size:12px; }
+.term-wrap { background:#1b1d21; } .term-host { background:#1b1d21; }
+.term-tools { display:flex; align-items:center; gap:8px; padding:5px 10px; background:var(--panel); border-bottom:1px solid var(--line); } .term-tools button { padding:3px 10px; font-size:12px; }
+.tool-err { color:#fca5a5; font-size:12px; }
+.hintbar code { color:#8ae234; font-family:ui-monospace,monospace; background:#0a0c10; padding:2px 6px; border-radius:4px; } .hintbar { border-top:none; border-bottom:1px solid var(--line); order:-1; }

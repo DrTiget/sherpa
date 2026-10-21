@@ -13,5 +13,14 @@ for i in $(seq 1 40); do
   docker logs $NAME 2>&1 | grep -q "done" && break; sleep 1
 done
 sleep 2
-DOCKER_ARGS="-v $T:/keys:ro -e SSH_TEST_HOST=127.0.0.1 -e SSH_TEST_PORT=$PORT -e SSH_TEST_KEY=/keys/id" \
-  docker/run.sh cargo test -p servergui-core --test ssh_integration -- --nocapture
+docker exec $NAME apk add --no-cache bash >/dev/null 2>&1 || echo "не удалось поставить bash в контейнер"
+run_tests() { # $1 = ожидаемая оболочка улучшенного режима, остальное — аргументы cargo test
+  expect=$1; shift
+  DOCKER_ARGS="-v $T:/keys:ro -e SSH_TEST_HOST=127.0.0.1 -e SSH_TEST_PORT=$PORT -e SSH_TEST_KEY=/keys/id -e SSH_TEST_EXPECT=$expect" \
+    docker/run.sh cargo test -p servergui-core "$@" -- --nocapture --test-threads=1
+}
+echo "== сервер без zsh: fallback на bash =="
+run_tests bash --test ssh_integration --test ssh_enhanced
+echo "== сервер с zsh =="
+docker exec $NAME apk add --no-cache zsh >/dev/null 2>&1 || { echo "не удалось поставить zsh в контейнер"; exit 1; }
+run_tests zsh --test ssh_enhanced

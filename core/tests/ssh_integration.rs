@@ -25,7 +25,7 @@ async fn exec_with_password_and_key() {
     let secrets: Arc<MemoryStore> = Arc::new(MemoryStore::default());
     let store = ServerStore::new(dir.path().join("servers.json"), secrets.clone());
     let pool = SshPool::new(KnownHosts::new(dir.path().join("known_hosts")));
-    let mk = |auth| ServerInput { name: "t".into(), host: host.clone(), port, username: "tester".into(), group: None, auth };
+    let mk = |auth| ServerInput { name: "t".into(), host: host.clone(), port, username: "tester".into(), group: None, enhanced_shell: false, auth };
     let pw = store.create(mk(AuthInput::Password { password: Some("testpass123".into()) })).unwrap();
     let bad = store.create(mk(AuthInput::Password { password: Some("wrong".into()) })).unwrap();
     let by_key = store.create(mk(AuthInput::Key { key_path: Some(key.clone()), key_pem: None, passphrase: None })).unwrap();
@@ -93,7 +93,7 @@ async fn interactive_terminals() {
     let known = KnownHosts::new(dir.path().join("known_hosts"));
     let pool = SshPool::new(known);
     let srv = store
-        .create(ServerInput { name: "t".into(), host: host.clone(), port, username: "tester".into(), group: None,
+        .create(ServerInput { name: "t".into(), host: host.clone(), port, username: "tester".into(), group: None, enhanced_shell: false,
             auth: AuthInput::Key { key_path: Some(key), key_pem: None, passphrase: None } })
         .unwrap();
     let s: &dyn SecretStore = secrets.as_ref();
@@ -104,8 +104,8 @@ async fn interactive_terminals() {
     pool.trust_host(&host, port, &fp).unwrap();
 
     // два терминала на одной сессии
-    let (t1, mut rx1) = pool.terminal_open(&srv, s, 100, 30).await.unwrap();
-    let (t2, mut rx2) = pool.terminal_open(&srv, s, 80, 24).await.unwrap();
+    let (t1, mut rx1) = pool.terminal_open(&srv, s, 100, 30).await.map(|(i, r)| (i.terminal_id, r)).unwrap();
+    let (t2, mut rx2) = pool.terminal_open(&srv, s, 80, 24).await.map(|(i, r)| (i.terminal_id, r)).unwrap();
     assert_ne!(t1, t2);
     let (mut o1, mut o2) = (String::new(), String::new());
     pool.terminal_write(&t1, "echo hello; tty; echo $TERM\n".into()).unwrap();

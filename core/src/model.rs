@@ -33,6 +33,9 @@ pub struct Server {
     #[serde(default)]
     pub group: Option<String>,
     pub auth: AuthConfig,
+    /// «Улучшенная оболочка» (zsh/bash в стиле Kali из ~/.servergui). По умолчанию выкл.
+    #[serde(default)]
+    pub enhanced_shell: bool,
 }
 
 fn default_port() -> u16 {
@@ -58,6 +61,8 @@ pub struct ServerInput {
     #[serde(default)]
     pub group: Option<String>,
     pub auth: AuthInput,
+    #[serde(default)]
+    pub enhanced_shell: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -76,6 +81,7 @@ mod tests {
         let s = Server {
             id: "1".into(), name: "web".into(), host: "h".into(), port: 2222, username: "root".into(),
             group: Some("prod".into()),
+            enhanced_shell: false,
             auth: AuthConfig::Key { key_path: Some("/k".into()), key_ref: None, passphrase_ref: Some("server:1:passphrase".into()) },
         };
         let j = serde_json::to_string(&s).unwrap();
@@ -88,5 +94,6 @@ mod tests {
         let s: Server = serde_json::from_str(r#"{"id":"1","name":"a","host":"h","username":"u","auth":{"type":"agent"}}"#).unwrap();
         assert_eq!(s.port, 22);
         assert_eq!(s.group, None);
+        assert!(!s.enhanced_shell);
     }
 }

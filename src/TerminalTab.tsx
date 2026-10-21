@@ -5,25 +5,30 @@ import { SearchAddon } from "@xterm/addon-search";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import "@xterm/xterm/css/xterm.css";
 import { api } from "./api";
-import { errorText, type ApiError } from "./types";
+import { errorText, type ApiError, type Server } from "./types";
 
 type Status = "connecting" | "open" | "ended";
 type UnknownHost = Extract<ApiError, { kind: "unknown_host" }>;
 
 interface Props {
-  serverId: string;
+  server: Server;
   active: boolean;
+  /** Перечитать список серверов (после смены флага «улучшенная оболочка»). */
+  onServerChanged: () => Promise<void>;
   /** Первый контакт с хостом: родитель показывает диалог отпечатка и вызывает retry после подтверждения. */
   onUnknownHost: (err: UnknownHost, retry: () => void) => void;
 }
 
+// Палитра Kali (Tango)
 const THEME = {
-  background: "#0a0c10", foreground: "#e4e8ef", cursor: "#38bdf8", selectionBackground: "#23405a",
-  black: "#1d222b", red: "#f87171", green: "#34d399", yellow: "#fbbf24", blue: "#38bdf8",
-  magenta: "#c084fc", cyan: "#22d3ee", white: "#e4e8ef",
+  background: "#1b1d21", foreground: "#d3d7cf", cursor: "#8ae234", cursorAccent: "#1b1d21", selectionBackground: "#3b4f6b",
+  black: "#2e3436", red: "#cc0000", green: "#4e9a06", yellow: "#c4a000", blue: "#3465a4", magenta: "#75507b", cyan: "#06989a", white: "#d3d7cf",
+  brightBlack: "#6b7280", brightRed: "#ef2929", brightGreen: "#8ae234", brightYellow: "#fce94f", brightBlue: "#729fcf",
+  brightMagenta: "#ad7fa8", brightCyan: "#34e2e2", brightWhite: "#eeeeec",
 };
 
-export default function TerminalTab({ serverId, active, onUnknownHost }: Props) {
+export default function TerminalTab({ server, active, onServerChanged, onUnknownHost }: Props) {
+  const serverId = server.id;
   const host = useRef<HTMLDivElement>(null);
   const term = useRef<Terminal | null>(null);
   const fit = useRef<FitAddon | null>(null);
@@ -35,13 +40,16 @@ export default function TerminalTab({ serverId, active, onUnknownHost }: Props) 
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState("");
   const decoder = useRef(new TextEncoder());
+  const [hint, setHint] = useState<string | null>(null);
+  const [toolBusy, setToolBusy] = useState(false);
+  const [toolErr, setToolErr] = useState<string | null>(null);
 
   const start = useCallback(async () => {
     const t = term.current!;
     const my = ++gen.current;
-    setStatus("connecting"); setInfo("");
+    setStatus("connecting"); setInfo(""); setHint(null);
     try {
-      const id = await api.terminalOpen(serverId, t.cols, t.rows, (ev) => {
+      const opened = await api.terminalOpen(serverId, t.cols, t.rows, (ev) => {
         if (gen.current !== my) return;
         if (ev.event === "data") t.write(new Uint8Array(ev.data));
         else {
@@ -50,8 +58,9 @@ export default function TerminalTab({ serverId, active, onUnknownHost }: Props) 
           setInfo(ev.exit_code !== null ? `Сессия завершена (код выхода ${ev.exit_code})` : `Сессия завершена: ${ev.reason}`);
         }
       });
-      if (gen.current !== my) { api.terminalClose(id).catch(() => {}); return; }
-      tid.current = id;
+      if (gen.current !== my) { api.terminalClose(opened.terminal_id).catch(() => {}); return; }
+      tid.current = opened.terminal_id;
+      setHint(opened.shell !== "zsh" ? opened.install_hint : null);
       setStatus("open");
       t.focus();
     } catch (e) {
@@ -104,6 +113,22 @@ export default function TerminalTab({ serverId, active, onUnknownHost }: Props) 
     if (active) { requestAnimationFrame(() => { try { fit.current?.fit(); } catch { /* */ } term.current?.focus(); }); }
   }, [active]);
 
+  /** Закрыть текущую сессию и открыть новую (например, после переключения оболочки). */
+  const restart = () => {
+    gen.current++;
+    if (tid.current) { api.terminalClose(tid.current).catch(() => {}); tid.current = null; }
+    term.current?.write("\r\n\x1b[90m--- новая сессия ---\x1b[0m\r\n");
+    void start();
+  };
+  const tool = async (fn: () => Promise<void>) => {
+    setToolBusy(true); setToolErr(null);
+    try { await fn(); await onServerChanged(); restart(); } catch (e) { setToolErr(errorText(e)); } finally { setToolBusy(false); }
+  };
+  const toggleEnhanced = () => tool(async () => { await api.setEnhanced(serverId, !server.enhanced_shell); });
+  const uninstall = () => {
+    if (!confirm("Удалить ~/.servergui с сервера (файлы оболочки и историю команд)? Опция будет выключена.")) return;
+    void tool(() => api.uninstallShell(serverId));
+  };
   const reconnect = () => { term.current?.write("\r\n\x1b[90m--- переподключение ---\x1b[0m\r\n"); void start(); };
   const find = (back: boolean) => query && (back ? search.current?.findPrevious(query) : search.current?.findNext(query));
 
@@ -118,6 +143,20 @@ export default function TerminalTab({ serverId, active, onUnknownHost }: Props) 
             }} />
           <button onClick={() => find(true)}>↑</button><button onClick={() => find(false)}>↓</button>
           <button onClick={() => { setSearching(false); term.current?.focus(); }}>✕</button>
+        </div>
+      )}
+      <div className="term-tools">
+        <button disabled={toolBusy} onClick={toggleEnhanced} title="Подсказки, подсветка и автодополнение в стиле Kali (файлы в ~/.servergui на сервере)">
+          Улучшенная оболочка: {server.enhanced_shell ? "вкл" : "выкл"}
+        </button>
+        {server.enhanced_shell && <button disabled={toolBusy} onClick={uninstall}>Удалить с сервера</button>}
+        {toolBusy && <span className="hint">применяется…</span>}
+        {toolErr && <span className="tool-err">{toolErr}</span>}
+      </div>
+      {hint && server.enhanced_shell && (
+        <div className="term-bar hintbar">
+          <span>Установите zsh для подсказок и подсветки: <code>{hint}</code></span>
+          <button onClick={() => navigator.clipboard.writeText(hint)}>Копировать</button>
         </div>
       )}
       <div className="term-host" ref={host} />

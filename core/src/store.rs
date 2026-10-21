@@ -83,7 +83,7 @@ impl ServerStore {
     pub fn create(&self, input: ServerInput) -> CoreResult<Server> {
         let id = uuid::Uuid::new_v4().to_string();
         let auth = self.apply_auth(&id, &input.auth, None)?;
-        let s = Server { id, name: input.name, host: input.host, port: input.port, username: input.username, group: input.group.filter(|g| !g.is_empty()), auth };
+        let s = Server { id, name: input.name, host: input.host, port: input.port, username: input.username, group: input.group.filter(|g| !g.is_empty()), auth, enhanced_shell: input.enhanced_shell };
         let mut list = self.list()?;
         list.push(s.clone());
         self.save(&list)?;
@@ -94,8 +94,17 @@ impl ServerStore {
         let mut list = self.list()?;
         let pos = list.iter().position(|s| s.id == id).ok_or(CoreError::NotFound)?;
         let auth = self.apply_auth(id, &input.auth, Some(&list[pos].auth))?;
-        let s = Server { id: id.into(), name: input.name, host: input.host, port: input.port, username: input.username, group: input.group.filter(|g| !g.is_empty()), auth };
+        let s = Server { id: id.into(), name: input.name, host: input.host, port: input.port, username: input.username, group: input.group.filter(|g| !g.is_empty()), auth, enhanced_shell: input.enhanced_shell };
         list[pos] = s.clone();
+        self.save(&list)?;
+        Ok(s)
+    }
+
+    pub fn set_enhanced_shell(&self, id: &str, on: bool) -> CoreResult<Server> {
+        let mut list = self.list()?;
+        let s = list.iter_mut().find(|s| s.id == id).ok_or(CoreError::NotFound)?;
+        s.enhanced_shell = on;
+        let s = s.clone();
         self.save(&list)?;
         Ok(s)
     }
@@ -120,7 +129,7 @@ mod tests {
     use crate::secrets::MemoryStore;
 
     fn input(pw: Option<&str>) -> ServerInput {
-        ServerInput { name: "a".into(), host: "h".into(), port: 22, username: "u".into(), group: Some("g".into()), auth: AuthInput::Password { password: pw.map(Into::into) } }
+        ServerInput { name: "a".into(), host: "h".into(), port: 22, username: "u".into(), group: Some("g".into()), enhanced_shell: false, auth: AuthInput::Password { password: pw.map(Into::into) } }
     }
 
     #[test]
