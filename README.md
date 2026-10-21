@@ -6,24 +6,15 @@
 
 ## Установка
 
-**Linux / macOS**
+Linux (x86_64):
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/DrTiget/sherpa/main/install.sh | sh
 ```
 
-**Windows (PowerShell)**
+Скрипт ставит AppImage в `~/.local/bin/sherpa` (без sudo) + ярлык и иконку, докачивает при обрывах и проверяет SHA256. Параметры: `... | sh -s -- --deb` (поставить .deb), `--uninstall` (удалить), `--version v0.1.1`. Для запуска AppImage нужен `libfuse2`. Файлы также лежат на странице [Releases](https://github.com/DrTiget/sherpa/releases).
 
-```powershell
-irm https://raw.githubusercontent.com/DrTiget/sherpa/main/install.ps1 | iex
-```
-
-- Linux: ставится AppImage в `~/.local/bin/sherpa` + ярлык и иконка (без sudo, нужен `libfuse2`). Параметры: `... | sh -s -- --deb` (поставить .deb), `--uninstall` (удалить), `--version v0.1.0`. Готовые сборки только для x86_64.
-- macOS: `Sherpa.app` кладётся в `/Applications` (или `~/Applications`), карантин снимается автоматически. Universal-сборка (Apple Silicon + Intel).
-- Windows: тихая установка NSIS-установщика для текущего пользователя, права администратора не нужны.
-- Файлы можно скачать вручную на странице [Releases](https://github.com/DrTiget/sherpa/releases) (AppImage, .deb, .dmg, .msi, .exe).
-
-> Сборки **не подписаны** сертификатами разработчика: macOS Gatekeeper и Windows SmartScreen могут предупредить при ручной установке. На macOS: `xattr -dr com.apple.quarantine /Applications/Sherpa.app`; на Windows: «Подробнее» → «Выполнить в любом случае».
+Сборки для macOS и Windows пока не публикуются. Код не подписан.
 
 ## Сборка и запуск
 
