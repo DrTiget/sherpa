@@ -1,7 +1,7 @@
-# ServerGUI: улучшенная оболочка (bash fallback) в стиле Kali. ~/.bashrc не затрагивается.
+# Sherpa: улучшенная оболочка (bash fallback) в стиле Kali. ~/.bashrc не затрагивается.
 [[ $LANG == *UTF-8* || $LC_ALL == *UTF-8* ]] || export LC_CTYPE=C.UTF-8
 
-HISTFILE="$HOME/.servergui/history_bash"
+HISTFILE="$HOME/.sherpa/history_bash"
 HISTSIZE=10000; HISTFILESIZE=10000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend checkwinsize globstar 2>/dev/null

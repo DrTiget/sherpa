@@ -1,12 +1,12 @@
 //! «Улучшенная оболочка»: набор файлов (zshrc/bashrc в стиле Kali + плагины zsh), которые заливаются
-//! в ~/.servergui/shell на сервере. Больше ничего на сервере не трогаем.
+//! в ~/.sherpa/shell на сервере. Больше ничего на сервере не трогаем.
 use include_dir::{include_dir, Dir};
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 
 static ASSETS: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets/shell");
 
-pub const REMOTE_DIR: &str = "$HOME/.servergui/shell";
+pub const REMOTE_DIR: &str = "$HOME/.sherpa/shell";
 
 /// Хэш содержимого всех ресурсов — версия набора на сервере.
 pub fn version() -> String {
@@ -61,7 +61,7 @@ pub struct ShellProbe {
 }
 
 /// Одна команда-разведка на сервере. Формат вывода: version / zsh|nozsh / bash|nobash / "<ID> <ID_LIKE>".
-pub const PROBE_CMD: &str = "cat \"$HOME/.servergui/shell/.version\" 2>/dev/null; echo; \
+pub const PROBE_CMD: &str = "cat \"$HOME/.sherpa/shell/.version\" 2>/dev/null; echo; \
 command -v zsh >/dev/null 2>&1 && echo zsh || echo nozsh; \
 command -v bash >/dev/null 2>&1 && echo bash || echo nobash; \
 ( . /etc/os-release 2>/dev/null; echo \"$ID $ID_LIKE\" )";

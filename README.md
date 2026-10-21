@@ -1,4 +1,4 @@
-# ServerGUI
+# Sherpa
 
 Десктопная «графическая оболочка для серверов»: приложение ставится на ПК, подключается к серверам по SSH и показывает GUI с модулями. Сейчас реализована **основа**: список серверов, подключение (пароль / ключ / ssh-agent), проверка ключа хоста (TOFU), выполнение команды. Модули (файлы, процессы, службы) — позже.
 
@@ -13,7 +13,7 @@ npm install
 npm run tauri dev      # разработка (окно приложения + hot reload)
 npm run tauri build    # установщики/бандлы под текущую ОС
 npm run build          # только фронтенд (проверка типов + vite build)
-cargo test -p servergui-core   # тесты ядра (GUI-зависимости не нужны)
+cargo test -p sherpa-core   # тесты ядра (GUI-зависимости не нужны)
 ```
 
 Системные зависимости:
@@ -29,7 +29,7 @@ cargo test -p servergui-core   # тесты ядра (GUI-зависимости
 ```sh
 docker build -t servergui-dev -f docker/Dockerfile.dev docker
 docker/run.sh cargo test --workspace
-docker/run.sh cargo build -p servergui
+docker/run.sh cargo build -p sherpa
 ```
 
 ### Интеграционный тест (SSH по паролю и ключу)
@@ -42,7 +42,7 @@ scripts/integration.sh
 
 ## Архитектура
 
-Проект — Cargo workspace из двух крейтов. **`core/`** (`servergui-core`) не зависит от Tauri, поэтому тестируется без GUI-библиотек: `model` (сервер, способ аутентификации; в JSON только *ссылки* на секреты), `store` (CRUD серверов в `servers.json` в `app_config_dir`, запись атомарная), `secrets` (трейт `SecretStore`; в приложении — системное хранилище через keyring, в тестах — память), `known_hosts` (собственный файл known_hosts приложения), `ssh` (пул сессий на russh). **`src-tauri/`** — тонкая обвязка: состояние приложения и Tauri-команды `list/create/update/delete_server`, `test_connection`, `connect`, `disconnect`, `connection_status`, `exec`, `trust_host`.
+Проект — Cargo workspace из двух крейтов. **`core/`** (`sherpa-core`) не зависит от Tauri, поэтому тестируется без GUI-библиотек: `model` (сервер, способ аутентификации; в JSON только *ссылки* на секреты), `store` (CRUD серверов в `servers.json` в `app_config_dir`, запись атомарная), `secrets` (трейт `SecretStore`; в приложении — системное хранилище через keyring, в тестах — память), `known_hosts` (собственный файл known_hosts приложения), `ssh` (пул сессий на russh). **`src-tauri/`** — тонкая обвязка: состояние приложения и Tauri-команды `list/create/update/delete_server`, `test_connection`, `connect`, `disconnect`, `connection_status`, `exec`, `trust_host`.
 
 Соединения живут в `SshPool` (id сервера → сессия), `exec` переиспользует их и открывает новый канал на каждую команду; мёртвая сессия удаляется из пула и пересоздаётся при следующем вызове. Keepalive — каждые 30 с, обрыв после 3 пропусков. Проверка ключа хоста: в `check_server_key` ключ сверяется с known_hosts приложения. Неизвестный хост — соединение прерывается, а фронт получает ошибку `unknown_host` с отпечатком SHA256; после подтверждения пользователем вызывается `trust_host` (сохраняется ровно тот ключ, отпечаток которого показали), и действие повторяется. Несовпадение с сохранённым ключом — отказ с ошибкой `host_key_mismatch`; перезаписать запись автоматически нельзя.
 
@@ -62,11 +62,11 @@ scripts/integration.sh
 
 ### Улучшенная оболочка (в стиле Kali)
 
-Опция на сервер (по умолчанию выкл.; чекбокс в форме сервера или кнопка на панели вкладки терминала). Всё кладётся только в `~/.servergui/` на сервере: `shell/` (zshrc, bashrc, плагины) и файлы истории. `~/.bashrc`, `~/.zshrc` и системные файлы не меняются, root не нужен, интернет на сервере не нужен — файлы вшиты в приложение (`core/assets/shell`) и заливаются одним `tar` через exec-канал.
+Опция на сервер (по умолчанию выкл.; чекбокс в форме сервера или кнопка на панели вкладки терминала). Всё кладётся только в `~/.sherpa/` на сервере: `shell/` (zshrc, bashrc, плагины) и файлы истории. `~/.bashrc`, `~/.zshrc` и системные файлы не меняются, root не нужен, интернет на сервере не нужен — файлы вшиты в приложение (`core/assets/shell`) и заливаются одним `tar` через exec-канал.
 
-- Есть zsh → `ZDOTDIR=~/.servergui/shell exec zsh -i`: zsh-autosuggestions (серые подсказки по истории), zsh-syntax-highlighting, меню дополнения (`menu select`), двухстрочный промпт `┌──(user㉿host)-[~/path]` / `└─$`, цветные `ls`/`grep`, алиасы `ll`/`la`.
-- Нет zsh → `bash --rcfile ~/.servergui/shell/bashrc -i` с тем же промптом и цветами, bash-completion (если установлен), поиск по истории стрелками; в UI показывается готовая команда установки zsh под дистрибутив (apt/dnf/apk/pacman/zypper).
-- Версия набора = хэш файлов; файлы пересылаются заново только при изменении. «Удалить с сервера» стирает `~/.servergui` целиком (включая историю команд).
+- Есть zsh → `ZDOTDIR=~/.sherpa/shell exec zsh -i`: zsh-autosuggestions (серые подсказки по истории), zsh-syntax-highlighting, меню дополнения (`menu select`), двухстрочный промпт `┌──(user㉿host)-[~/path]` / `└─$`, цветные `ls`/`grep`, алиасы `ll`/`la`.
+- Нет zsh → `bash --rcfile ~/.sherpa/shell/bashrc -i` с тем же промптом и цветами, bash-completion (если установлен), поиск по истории стрелками; в UI показывается готовая команда установки zsh под дистрибутив (apt/dnf/apk/pacman/zypper).
+- Версия набора = хэш файлов; файлы пересылаются заново только при изменении. «Удалить с сервера» стирает `~/.sherpa` целиком (включая историю команд).
 - Плагины вендорены с лицензиями, версии — в `core/assets/shell/VENDORED.md`. Тема xterm.js по умолчанию — палитра Kali (Tango).
 
 ## Ограничения

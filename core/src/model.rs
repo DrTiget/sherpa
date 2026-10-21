@@ -33,7 +33,7 @@ pub struct Server {
     #[serde(default)]
     pub group: Option<String>,
     pub auth: AuthConfig,
-    /// «Улучшенная оболочка» (zsh/bash в стиле Kali из ~/.servergui). По умолчанию выкл.
+    /// «Улучшенная оболочка» (zsh/bash в стиле Kali из ~/.sherpa). По умолчанию выкл.
     #[serde(default)]
     pub enhanced_shell: bool,
 }

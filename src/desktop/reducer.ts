@@ -69,7 +69,7 @@ export function reducer(s: DesktopState, a: Action | { type: "load"; state: Desk
   }
 }
 
-const KEY = "servergui.desktop.v1";
+const KEY = "sherpa.desktop.v1";
 
 export function loadState(known: (appId: string) => boolean): DesktopState {
   try {

@@ -4390,38 +4390,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "servergui"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "servergui-core",
- "tauri",
- "tauri-build",
- "tauri-plugin-dialog",
- "tokio",
-]
-
-[[package]]
-name = "servergui-core"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "base64 0.23.1",
- "include_dir",
- "keyring",
- "russh",
- "serde",
- "serde_json",
- "sha2 0.11.1",
- "tar",
- "tempfile",
- "thiserror 2.0.21",
- "tokio",
- "uuid",
-]
-
-[[package]]
 name = "servo_arc"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4494,6 +4462,38 @@ dependencies = [
  "digest 0.11.3",
  "keccak",
  "sponge-cursor",
+]
+
+[[package]]
+name = "sherpa"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "sherpa-core",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-dialog",
+ "tokio",
+]
+
+[[package]]
+name = "sherpa-core"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "base64 0.23.1",
+ "include_dir",
+ "keyring",
+ "russh",
+ "serde",
+ "serde_json",
+ "sha2 0.11.1",
+ "tar",
+ "tempfile",
+ "thiserror 2.0.21",
+ "tokio",
+ "uuid",
 ]
 
 [[package]]

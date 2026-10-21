@@ -1,5 +1,5 @@
 //! Требует sshd (SSH_TEST_HOST/PORT/KEY, см. scripts/integration.sh); без них пропускается.
-use servergui_core::{
+use sherpa_core::{
     known_hosts::KnownHosts,
     model::*,
     monitor::{MonitorEvent, Snapshot},

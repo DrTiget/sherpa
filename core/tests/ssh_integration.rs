@@ -1,6 +1,6 @@
 //! Требует работающий sshd: переменные SSH_TEST_HOST/PORT/KEY (задаёт scripts/integration.sh).
 //! Без них тест пропускается.
-use servergui_core::{
+use sherpa_core::{
     known_hosts::KnownHosts,
     model::*,
     secrets::{MemoryStore, SecretStore},

@@ -386,7 +386,7 @@ impl SshPool {
                 .run(
                     server,
                     secrets,
-                    "d=\"$HOME/.servergui\"; mkdir -p \"$d\" && chmod 700 \"$d\" && rm -rf \"$d/shell\" && mkdir -p \"$d/shell\" && tar xf - -C \"$d/shell\"",
+                    "d=\"$HOME/.sherpa\"; mkdir -p \"$d\" && chmod 700 \"$d\" && rm -rf \"$d/shell\" && mkdir -p \"$d/shell\" && tar xf - -C \"$d/shell\"",
                     Some(&enhanced::build_tar()),
                 )
                 .await?;
@@ -409,11 +409,11 @@ impl SshPool {
         Ok(self.prepare_shell(server, secrets).await?.0)
     }
 
-    /// «Удалить с сервера»: стирает ~/.servergui целиком (файлы оболочки и история).
+    /// «Удалить с сервера»: стирает ~/.sherpa целиком (файлы оболочки и история).
     pub async fn shell_uninstall(&self, server: &Server, secrets: &dyn SecretStore) -> CoreResult<()> {
-        let r = self.run(server, secrets, "rm -rf \"$HOME/.servergui\"", None).await?;
+        let r = self.run(server, secrets, "rm -rf \"$HOME/.sherpa\"", None).await?;
         if r.exit_code != Some(0) {
-            return Err(CoreError::msg(format!("Не удалось удалить ~/.servergui: {}", r.stderr.trim())));
+            return Err(CoreError::msg(format!("Не удалось удалить ~/.sherpa: {}", r.stderr.trim())));
         }
         Ok(())
     }

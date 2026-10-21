@@ -92,7 +92,7 @@ export default function ServerForm({ server, groups, onSave, onCancel }: Props) 
       <label className="check">
         <input type="checkbox" checked={enhanced} onChange={(e) => setEnhanced(e.target.checked)} />
         Улучшенная оболочка в терминале (подсказки, подсветка, автодополнение в стиле Kali)
-        <span className="hint">Файлы кладутся только в ~/.servergui на сервере; ~/.bashrc и системные файлы не меняются. Файлы заливаются при открытии терминала.</span>
+        <span className="hint">Файлы кладутся только в ~/.sherpa на сервере; ~/.bashrc и системные файлы не меняются. Файлы заливаются при открытии терминала.</span>
       </label>
       <div className="actions">
         <button type="button" onClick={onCancel}>Отмена</button>

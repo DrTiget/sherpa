@@ -1,6 +1,6 @@
 //! «Улучшенная оболочка» против настоящего sshd. Требует SSH_TEST_HOST/PORT/KEY и SSH_TEST_EXPECT=zsh|bash
 //! (какая оболочка должна выбраться на этом сервере). Без переменных пропускается.
-use servergui_core::{
+use sherpa_core::{
     known_hosts::KnownHosts,
     model::*,
     secrets::{MemoryStore, SecretStore},
@@ -24,9 +24,9 @@ async fn read_until(rx: &mut UnboundedReceiver<TermEvent>, needle: &str, acc: &m
     }
 }
 
-/// Снимок домашнего каталога (имена и md5 файлов) без ~/.servergui.
+/// Снимок домашнего каталога (имена и md5 файлов) без ~/.sherpa.
 /// ./logs пропускаем: это журнал самого sshd в образе linuxserver (пишется при каждом входе), а не следы оболочки.
-const SNAPSHOT: &str = r#"cd "$HOME" && { find . \( -path ./.servergui -o -path ./logs \) -prune -o -print | sort; find . \( -path ./.servergui -o -path ./logs \) -prune -o -type f -exec md5sum {} \; | sort; }"#;
+const SNAPSHOT: &str = r#"cd "$HOME" && { find . \( -path ./.sherpa -o -path ./logs \) -prune -o -print | sort; find . \( -path ./.sherpa -o -path ./logs \) -prune -o -type f -exec md5sum {} \; | sort; }"#;
 
 #[tokio::test]
 async fn enhanced_shell_roundtrip() {
@@ -60,9 +60,9 @@ async fn enhanced_shell_roundtrip() {
     if let Some(h) = &st.install_hint { assert!(h.contains("zsh"), "{h}"); }
     assert!(!pool.shell_install(&srv, s).await.unwrap().uploaded);
     // порча версии → перезаливка
-    pool.exec(&srv, s, "echo old > $HOME/.servergui/shell/.version").await.unwrap();
+    pool.exec(&srv, s, "echo old > $HOME/.sherpa/shell/.version").await.unwrap();
     assert!(pool.shell_install(&srv, s).await.unwrap().uploaded);
-    assert_eq!(pool.exec(&srv, s, SNAPSHOT).await.unwrap().stdout, before, "изменилось что-то вне ~/.servergui");
+    assert_eq!(pool.exec(&srv, s, SNAPSHOT).await.unwrap().stdout, before, "изменилось что-то вне ~/.sherpa");
 
     // терминал с включённой опцией
     let srv = store.set_enhanced_shell(&srv.id, true).unwrap();
@@ -85,11 +85,11 @@ async fn enhanced_shell_roundtrip() {
             None => panic!("нет Closed"),
         }
     }
-    // после сессии (история и т.п.) вне ~/.servergui ничего не появилось
+    // после сессии (история и т.п.) вне ~/.sherpa ничего не появилось
     assert_eq!(pool.exec(&srv, s, SNAPSHOT).await.unwrap().stdout, before, "сессия оставила следы в ~");
 
     // удаление с сервера
     pool.shell_uninstall(&srv, s).await.unwrap();
-    assert_eq!(pool.exec(&srv, s, "test -e $HOME/.servergui && echo yes || echo no").await.unwrap().stdout.trim(), "no");
+    assert_eq!(pool.exec(&srv, s, "test -e $HOME/.sherpa && echo yes || echo no").await.unwrap().stdout.trim(), "no");
     assert_eq!(pool.exec(&srv, s, SNAPSHOT).await.unwrap().stdout, before);
 }

@@ -1,7 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 mod commands;
 
-use servergui_core::{known_hosts::KnownHosts, secrets::KeyringStore, ssh::SshPool, store::ServerStore};
+use sherpa_core::{known_hosts::KnownHosts, secrets::KeyringStore, ssh::SshPool, store::ServerStore};
 use std::sync::Arc;
 use tauri::Manager;
 
@@ -17,7 +17,7 @@ fn main() {
             let dir = app.path().app_config_dir()?;
             std::fs::create_dir_all(&dir)?;
             app.manage(AppState {
-                store: ServerStore::new(dir.join("servers.json"), Arc::new(KeyringStore::new("dev.servergui.app"))),
+                store: ServerStore::new(dir.join("servers.json"), Arc::new(KeyringStore::new("app.sherpa.desktop"))),
                 pool: SshPool::new(KnownHosts::new(dir.join("known_hosts"))),
             });
             Ok(())

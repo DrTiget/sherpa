@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "ServerGUI",
+  "productName": "Sherpa",
   "version": "0.1.0",
-  "identifier": "dev.servergui.app",
+  "identifier": "app.sherpa.desktop",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -10,7 +10,7 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [{ "title": "ServerGUI", "width": 1100, "height": 720, "minWidth": 800, "minHeight": 520 }],
+    "windows": [{ "title": "Sherpa", "width": 1100, "height": 720, "minWidth": 800, "minHeight": 520 }],
     "security": { "csp": null }
   },
   "bundle": {

@@ -1,10 +1,10 @@
 use crate::AppState;
-use servergui_core::{
+use sherpa_core::{
     model::{ExecResult, Server, ServerInput},
     CoreError,
 };
-use servergui_core::ssh::{ShellStatus, TerminalInfo};
-use servergui_core::{monitor::MonitorEvent, terminal::TermEvent};
+use sherpa_core::ssh::{ShellStatus, TerminalInfo};
+use sherpa_core::{monitor::MonitorEvent, terminal::TermEvent};
 use tauri::{ipc::Channel, State};
 
 type R<T> = Result<T, CoreError>;
@@ -106,7 +106,7 @@ pub async fn set_enhanced_shell(s: State<'_, AppState>, id: String, enabled: boo
     Ok(status)
 }
 
-/// «Удалить с сервера»: стирает ~/.servergui и выключает опцию.
+/// «Удалить с сервера»: стирает ~/.sherpa и выключает опцию.
 #[tauri::command]
 pub async fn uninstall_enhanced_shell(s: State<'_, AppState>, id: String) -> R<()> {
     let srv = s.store.get(&id)?;

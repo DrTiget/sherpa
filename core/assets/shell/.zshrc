@@ -1,7 +1,7 @@
-# ServerGUI: улучшенная оболочка (zsh) в стиле Kali. Файлы лежат только в ~/.servergui, ~/.zshrc не затрагивается.
+# Sherpa: улучшенная оболочка (zsh) в стиле Kali. Файлы лежат только в ~/.sherpa, ~/.zshrc не затрагивается.
 [[ $LANG == *UTF-8* || $LC_ALL == *UTF-8* ]] || export LC_CTYPE=C.UTF-8
 
-HISTFILE="$HOME/.servergui/history_zsh"
+HISTFILE="$HOME/.sherpa/history_zsh"
 HISTSIZE=10000; SAVEHIST=10000
 setopt autocd interactivecomments magicequalsubst nonomatch notify numericglobsort promptsubst
 setopt hist_expire_dups_first hist_ignore_dups hist_ignore_space hist_verify share_history
@@ -21,7 +21,7 @@ bindkey '^[[Z' reverse-menu-complete
 
 # --- автодополнение с меню ---
 autoload -Uz compinit
-compinit -u -d "${ZDOTDIR:-$HOME/.servergui/shell}/.zcompdump"
+compinit -u -d "${ZDOTDIR:-$HOME/.sherpa/shell}/.zcompdump"
 zstyle ':completion:*' menu select
 zstyle ':completion:*' auto-description 'указать: %d'
 zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
@@ -55,7 +55,7 @@ unset _c _u _p
 precmd() { print -Pn '\e]0;%n@%m: %~\a'; }
 
 # --- плагины ---
-_sg="${ZDOTDIR:-$HOME/.servergui/shell}/plugins"
+_sg="${ZDOTDIR:-$HOME/.sherpa/shell}/plugins"
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 [[ -f $_sg/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source "$_sg/zsh-autosuggestions/zsh-autosuggestions.zsh"

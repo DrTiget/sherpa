@@ -126,7 +126,7 @@ export default function TerminalTab({ server, active, onServerChanged, onUnknown
   };
   const toggleEnhanced = () => tool(async () => { await api.setEnhanced(serverId, !server.enhanced_shell); });
   const uninstall = () => {
-    if (!confirm("Удалить ~/.servergui с сервера (файлы оболочки и историю команд)? Опция будет выключена.")) return;
+    if (!confirm("Удалить ~/.sherpa с сервера (файлы оболочки и историю команд)? Опция будет выключена.")) return;
     void tool(() => api.uninstallShell(serverId));
   };
   const reconnect = () => { term.current?.write("\r\n\x1b[90m--- переподключение ---\x1b[0m\r\n"); void start(); };
@@ -146,7 +146,7 @@ export default function TerminalTab({ server, active, onServerChanged, onUnknown
         </div>
       )}
       <div className="term-tools">
-        <button disabled={toolBusy} onClick={toggleEnhanced} title="Подсказки, подсветка и автодополнение в стиле Kali (файлы в ~/.servergui на сервере)">
+        <button disabled={toolBusy} onClick={toggleEnhanced} title="Подсказки, подсветка и автодополнение в стиле Kali (файлы в ~/.sherpa на сервере)">
           Улучшенная оболочка: {server.enhanced_shell ? "вкл" : "выкл"}
         </button>
         {server.enhanced_shell && <button disabled={toolBusy} onClick={uninstall}>Удалить с сервера</button>}
