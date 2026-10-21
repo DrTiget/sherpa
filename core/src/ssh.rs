@@ -180,6 +180,9 @@ impl SshPool {
                 let hash = h.best_supported_rsa_hash().await?.flatten();
                 Ok(ok(h.authenticate_publickey(user, PrivateKeyWithHashAlg::new(Arc::new(key), hash)).await?))
             }
+            #[cfg(not(unix))]
+            AuthConfig::Agent => Err(CoreError::msg("Вход через ssh-agent пока поддерживается только на Linux и macOS — используйте пароль или ключ")),
+            #[cfg(unix)]
             AuthConfig::Agent => {
                 let mut agent = russh::keys::agent::client::AgentClient::connect_env()
                     .await
