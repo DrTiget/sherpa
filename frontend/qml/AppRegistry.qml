@@ -18,9 +18,9 @@ QtObject {
 
         { id: "tunnels", name: qsTr("Tunnels"), glyph: "⇌", cat: "network", cap: "", ready: true, source: "TunnelsWindow.qml", w: 760, h: 480, single: true },
 
-        { id: "services", name: qsTr("Services"), glyph: "⚙", cat: "system", cap: "services", ready: false, source: "", w: 860, h: 560, single: true },
+        { id: "services", name: qsTr("Services"), glyph: "⚙", cat: "system", cap: "services", ready: true, source: "ServicesWindow.qml", w: 980, h: 600, single: true },
 
-        { id: "logs", name: qsTr("Logs"), glyph: "≡", cat: "monitoring", cap: "logs", ready: false, source: "", w: 900, h: 560, single: false },
+        { id: "logs", name: qsTr("Logs"), glyph: "≡", cat: "monitoring", cap: "logs", ready: true, source: "LogsWindow.qml", w: 1000, h: 600, single: false },
 
         { id: "network", name: qsTr("Network"), glyph: "⇄", cat: "network", cap: "network", ready: false, source: "", w: 860, h: 560, single: true },
 
@@ -28,13 +28,13 @@ QtObject {
 
         { id: "firewall", name: qsTr("Firewall"), glyph: "▥", cat: "network", cap: "firewall", ready: false, source: "", w: 860, h: 560, single: true },
 
-        { id: "disks", name: qsTr("Disks"), glyph: "◍", cat: "system", cap: "disks", ready: false, source: "", w: 820, h: 540, single: true },
+        { id: "disks", name: qsTr("Disks"), glyph: "◍", cat: "system", cap: "disks", ready: true, source: "DisksWindow.qml", w: 940, h: 620, single: true },
 
-        { id: "packages", name: qsTr("Packages"), glyph: "▦", cat: "system", cap: "packages", ready: false, source: "", w: 900, h: 560, single: true },
+        { id: "packages", name: qsTr("Packages"), glyph: "▦", cat: "system", cap: "packages", ready: true, source: "PackagesWindow.qml", w: 960, h: 620, single: true },
 
-        { id: "system", name: qsTr("System"), glyph: "◈", cat: "system", cap: "system", ready: false, source: "", w: 820, h: 560, single: true },
+        { id: "system", name: qsTr("System"), glyph: "◈", cat: "system", cap: "system", ready: true, source: "SystemWindow.qml", w: 860, h: 580, single: true },
 
-        { id: "cron", name: qsTr("Scheduler"), glyph: "◷", cat: "system", cap: "cron", ready: false, source: "", w: 860, h: 540, single: true },
+        { id: "cron", name: qsTr("Scheduler"), glyph: "◷", cat: "system", cap: "cron", ready: true, source: "CronWindow.qml", w: 960, h: 580, single: true },
 
         { id: "docker", name: "Docker", glyph: "◫", cat: "dev", cap: "docker", ready: false, source: "", w: 920, h: 580, single: true },
 

@@ -157,7 +157,9 @@ private slots:
     {
         QObject *l = page()->findChild<QObject *>("launcher");
         QVERIFY(l);
-        const QVariantList apps = l->property("apps").toList();
+        QVariant listed;
+        QMetaObject::invokeMethod(l, "filtered", Q_RETURN_ARG(QVariant, listed));
+        const QVariantList apps = listed.toList();
         for (const char *id : {"services", "logs", "disks", "packages", "cron", "system"}) {
             bool found = false;
             for (const QVariant &a : apps)
@@ -242,13 +244,12 @@ private slots:
     // ---------------------------------------------------------------- Службы
     void servicesWindow()
     {
-        QObject *p = open("services");
-        QVERIFY(p);
         if (!util("services")) {
-            QTRY_VERIFY_WITH_TIMEOUT(p->property("unavailable").toBool(), 5000);
-            shot("sys-20-services-unavailable");
+            QVERIFY(!open("services"));   // реестр не открывает окно, если сервер не умеет
             return;
         }
+        QObject *p = open("services");
+        QVERIFY(p);
         QTRY_VERIFY2_WITH_TIMEOUT(len(p, "all") > 0, qPrintable("services: " + prop(p, "notice").toString()), 30000);
         QVERIFY(len(p, "rows") > 0);
         shot("sys-20-services");
@@ -272,13 +273,12 @@ private slots:
     // ---------------------------------------------------------------- Планировщик
     void cronWindow()
     {
-        QObject *p = open("cron");
-        QVERIFY(p);
-        if (!util("cron")) {
-            QTRY_VERIFY_WITH_TIMEOUT(p->property("unavailable").toBool(), 5000);
-            shot("sys-30-cron-unavailable");
+                if (!util("cron")) {
+            QVERIFY(!open("cron"));   // реестр не открывает окно, если сервер не умеет
             return;
         }
+        QObject *p = open("cron");
+        QVERIFY(p);
         QTRY_VERIFY_WITH_TIMEOUT(!prop(p, "loading").toBool(), 20000);
         const QVariantList before = p->property("jobs").toList();
         QMetaObject::invokeMethod(child(p, "cronAdd"), "clicked");
@@ -332,13 +332,12 @@ private slots:
     // ---------------------------------------------------------------- Логи
     void logsWindow()
     {
-        QObject *p = open("logs");
-        QVERIFY(p);
-        if (!util("logs")) {
-            QTRY_VERIFY_WITH_TIMEOUT(p->property("unavailable").toBool(), 5000);
-            shot("sys-40-logs-unavailable");
+                if (!util("logs")) {
+            QVERIFY(!open("logs"));   // реестр не открывает окно, если сервер не умеет
             return;
         }
+        QObject *p = open("logs");
+        QVERIFY(p);
         QTRY_VERIFY_WITH_TIMEOUT(!prop(p, "loading").toBool(), 30000);
         QTRY_VERIFY_WITH_TIMEOUT(prop(p, "sources").toMap().contains("files"), 10000);
         shot("sys-40-logs");
@@ -396,13 +395,12 @@ private slots:
     // ---------------------------------------------------------------- Пакеты
     void packagesWindow()
     {
-        QObject *p = open("packages");
-        QVERIFY(p);
-        if (!util("packages")) {
-            QTRY_VERIFY_WITH_TIMEOUT(p->property("unavailable").toBool(), 5000);
-            shot("sys-50-packages-unavailable");
+                if (!util("packages")) {
+            QVERIFY(!open("packages"));   // реестр не открывает окно, если сервер не умеет
             return;
         }
+        QObject *p = open("packages");
+        QVERIFY(p);
         QTRY_VERIFY_WITH_TIMEOUT(!prop(p, "manager").toString().isEmpty(), 20000);
         QTRY_VERIFY_WITH_TIMEOUT(len(p, "installed") > 10, 40000);
         p->setProperty("tab", "installed");
@@ -485,9 +483,14 @@ private slots:
     void windowsCoexist()
     {
         closeAll();
+        int n = 0;
         for (const char *k : {"disks", "logs", "cron", "services", "packages", "system"})
-            QVERIFY(open(k, false));
-        QCOMPARE(page()->property("wins").toList().size(), 6);
+            if (util(k)) {
+                QVERIFY(open(k, false));
+                ++n;
+            }
+        QVERIFY(n >= 2);
+        QCOMPARE(page()->property("wins").toList().size(), n);
         QTest::qWait(800);
         shot("sys-70-all-windows");
         // раскладка сохраняется и восстанавливается
@@ -496,20 +499,24 @@ private slots:
         QTRY_VERIFY_WITH_TIMEOUT(be->desk()->desktops().isEmpty(), 5000);
         QMetaObject::invokeMethod(win, "openDesktop", Q_ARG(QVariant, connId), Q_ARG(QVariant, false));
         QTRY_VERIFY_WITH_TIMEOUT(desk() && desk()->state() == "ready", 30000);
-        QTRY_COMPARE_WITH_TIMEOUT(page()->property("wins").toList().size(), 6, 10000);
+        QTRY_COMPARE_WITH_TIMEOUT(page()->property("wins").toList().size(), n, 10000);
     }
     void russian()
     {
         be->setLanguage("ru");
         closeAll();
-        for (const char *k : {"system", "services"})
-            open(k, false);
+        for (const char *k : {"system", "services", "disks"})
+            if (util(k))
+                open(k, false);
         QTest::qWait(2500);
         shot("sys-80-ru-system-services");
         be->setLanguage("en");
     }
     void cleanupTestCase()
     {
+        if (page() && desk())
+            closeAll();
+        QTest::qWait(300);
         if (be)
             be->client()->runBlocking({"daemon", "stop", "--force"});
         delete engine;
