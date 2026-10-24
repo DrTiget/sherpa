@@ -20,6 +20,11 @@ cp /src/packaging/sherpa.svg /work/sherpa.svg
 export QMAKE="$QT_ROOT/bin/qmake" VERSION
 export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so"
 export QML_SOURCES_PATHS=/src/frontend/qml
+# Драйверы Qt SQL, кроме sqlite, не нужны: linuxdeploy-plugin-qt тянул бы клиентские библиотеки
+# MySQL/PostgreSQL/ODBC/Mimer, которых нет в образе. Убираем их из локальной копии Qt.
+for f in "$QT_ROOT"/plugins/sqldrivers/*.so; do
+    case "$f" in *sqlite*) ;; *) rm -f "$f" ;; esac
+done
 linuxdeploy --appdir "$APPDIR" --plugin qt \
     -e "$APPDIR/usr/bin/sherpa" -d /work/sherpa.desktop -i /work/sherpa.svg
 # libOpenGL/libGLdispatch (glvnd) linuxdeploy не бандлит (в excludelist), а в чистой Ubuntu их может не быть
