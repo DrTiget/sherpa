@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Sherpa
+Comment=SSH server manager
+Exec=sherpa
+Icon=sherpa
+Categories=Network;System;
+Terminal=false
