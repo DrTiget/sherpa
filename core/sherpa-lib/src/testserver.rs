@@ -1,6 +1,8 @@
 //! Тестовый SSH-сервер на russh::server (только для тестов, фича `test-util`).
 //! Пускает пользователя `u` по паролю `pw` или по заданному публичному ключу;
-//! `exec` отвечает эхом команды и кодом 0.
+//! `exec` отвечает эхом команды (или `Options::exec`), PTY-шелл — эхом ввода:
+//! `READY <cols>x<rows>` при старте, `RESIZE …` при смене размера, `exit` —
+//! выход с кодом 0, `flood:<N>` — N байт `x` и строка `FLOOD-END`.
 
 use std::net::SocketAddr;
 use std::sync::Arc;
@@ -14,10 +16,15 @@ use tokio::sync::oneshot;
 pub const USER: &str = "u";
 pub const PASSWORD: &str = "pw";
 
+/// Ответ на `exec`: команда → (stdout, код выхода).
+pub type ExecResponder = Arc<dyn Fn(&str) -> (String, u32) + Send + Sync>;
+
 #[derive(Clone)]
 struct H {
     allowed_key: Option<PublicKey>,
     password_allowed: bool,
+    exec: Option<ExecResponder>,
+    size: (u32, u32),
 }
 
 impl russh::server::Handler for H {
@@ -50,22 +57,87 @@ impl russh::server::Handler for H {
         Ok(())
     }
 
+    async fn pty_request(
+        &mut self,
+        _channel: ChannelId,
+        _term: &str,
+        cols: u32,
+        rows: u32,
+        _pw: u32,
+        _ph: u32,
+        _modes: &[(russh::Pty, u32)],
+        _session: &mut Session,
+    ) -> Result<(), Self::Error> {
+        self.size = (cols, rows);
+        Ok(())
+    }
+
+    async fn shell_request(&mut self, channel: ChannelId, session: &mut Session) -> Result<(), Self::Error> {
+        session.data(
+            channel,
+            format!("READY {}x{}\r\n", self.size.0, self.size.1).into_bytes(),
+        )?;
+        Ok(())
+    }
+
+    async fn window_change_request(
+        &mut self,
+        channel: ChannelId,
+        cols: u32,
+        rows: u32,
+        _pw: u32,
+        _ph: u32,
+        session: &mut Session,
+    ) -> Result<(), Self::Error> {
+        self.size = (cols, rows);
+        session.data(channel, format!("RESIZE {cols}x{rows}\r\n").into_bytes())?;
+        Ok(())
+    }
+
+    async fn data(&mut self, channel: ChannelId, data: &[u8], session: &mut Session) -> Result<(), Self::Error> {
+        let text = String::from_utf8_lossy(data).to_string();
+        if let Some(n) = text.trim().strip_prefix("flood:") {
+            let n: usize = n.parse().unwrap_or(0);
+            let handle = session.handle();
+            tokio::spawn(async move {
+                let chunk = vec![b'x'; 16 * 1024];
+                let mut left = n;
+                while left > 0 {
+                    let k = left.min(chunk.len());
+                    if handle.data(channel, chunk[..k].to_vec()).await.is_err() {
+                        return;
+                    }
+                    left -= k;
+                }
+                let _ = handle.data(channel, b"\r\nFLOOD-END\r\n".to_vec()).await;
+            });
+            return Ok(());
+        }
+        session.data(channel, data.to_vec())?;
+        if text.trim() == "exit" {
+            session.exit_status_request(channel, 0)?;
+            session.eof(channel)?;
+            session.close(channel)?;
+        }
+        Ok(())
+    }
+
     async fn exec_request(
         &mut self,
         channel: ChannelId,
         data: &[u8],
         session: &mut Session,
     ) -> Result<(), Self::Error> {
-        session.data(channel, bytes_of(data))?;
-        session.exit_status_request(channel, 0)?;
+        let (out, code) = match &self.exec {
+            Some(f) => f(&String::from_utf8_lossy(data)),
+            None => (String::from_utf8_lossy(data).into_owned(), 0),
+        };
+        session.data(channel, out.into_bytes())?;
+        session.exit_status_request(channel, code)?;
         session.eof(channel)?;
         session.close(channel)?;
         Ok(())
     }
-}
-
-fn bytes_of(d: &[u8]) -> Vec<u8> {
-    d.to_vec()
 }
 
 pub struct TestServer {
@@ -104,6 +176,8 @@ pub struct Options {
     pub seed: u8,
     pub allowed_key: Option<PublicKey>,
     pub password_allowed: bool,
+    /// Ответы на `exec` (по умолчанию — эхо команды).
+    pub exec: Option<ExecResponder>,
 }
 
 impl Default for Options {
@@ -113,6 +187,7 @@ impl Default for Options {
             seed: 1,
             allowed_key: None,
             password_allowed: true,
+            exec: None,
         }
     }
 }
@@ -134,6 +209,8 @@ pub fn start(opts: Options) -> TestServer {
     let handler = H {
         allowed_key: opts.allowed_key,
         password_allowed: opts.password_allowed,
+        exec: opts.exec,
+        size: (80, 24),
     };
     let std_listener = std::net::TcpListener::bind(("127.0.0.1", opts.port)).expect("bind test server");
     std_listener.set_nonblocking(true).expect("nonblocking");

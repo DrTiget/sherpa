@@ -15,6 +15,15 @@ impl Env {
         }
     }
 
+    /// Окружение с заданным `core.toml` и выполненным `init`.
+    pub fn with_config(toml: &str) -> Self {
+        let e = Env::new();
+        std::fs::write(e.path("core.toml"), toml).unwrap();
+        let (v, code) = e.run(&["init"]);
+        assert_eq!(code, 0, "{v}");
+        e
+    }
+
     pub fn initialized() -> Self {
         let e = Env::new();
         let (v, code) = e.run(&["init"]);
@@ -33,6 +42,7 @@ impl Env {
             .env("SHERPA_KEY_FILE", self.path("sherpa.key"))
             .env("HOME", self.dir.path())
             .env("USERPROFILE", self.dir.path())
+            .env("XDG_RUNTIME_DIR", self.dir.path().join("run"))
             .env_remove("SHERPA_LOG");
         c
     }

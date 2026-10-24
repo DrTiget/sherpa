@@ -16,3 +16,5 @@ predicates = "3.1.4"
 serde_json = "1.0.154"
 tempfile = "3.27.0"
 sherpa-lib = { path = "../sherpa-lib", features = ["test-util"] }
+tokio = { version = "1.54.1", features = ["macros", "rt-multi-thread", "time"] }
+base64 = "0.23.1"
