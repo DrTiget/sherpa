@@ -1,0 +1,22 @@
+{
+   "blockdevices": [
+      {
+         "name": "ploop55556",
+         "kname": "ploop55556",
+         "type": "disk",
+         "size": 161061273600,
+         "fstype": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "ploop55556p1",
+               "kname": "ploop55556p1",
+               "type": "part",
+               "size": 161059176960,
+               "fstype": "ext4",
+               "mountpoint": "/"
+            }
+         ]
+      }
+   ]
+}

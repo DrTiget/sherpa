@@ -3,6 +3,9 @@
 
 pub mod capabilities;
 pub mod monitor;
+pub mod disk;
+pub mod log;
+pub mod cron;
 
 use crate::error::CoreError;
 use crate::ssh::ExecOutput;

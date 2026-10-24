@@ -1,0 +1,2 @@
+Filesystem            1-blocks         Used   Available Capacity Mounted on
+/dev/ploop55556p1 158397317120 107606269952 44224864256      71% /
