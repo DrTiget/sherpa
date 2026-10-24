@@ -70,6 +70,9 @@ impl CommandGroup for Init {
                 )?;
                 store
                     .conn
+                    .execute("DELETE FROM desktop_documents WHERE secret IS NOT NULL", [])?;
+                store
+                    .conn
                     .execute("DELETE FROM meta WHERE key='key_last_export_at'", [])?;
                 tracing::warn!("new key file created, saved secrets erased");
             }

@@ -65,6 +65,20 @@ pub const MIGRATIONS: &[&str] = &[
         UNIQUE (host, port, fingerprint)
     );
     "#,
+    // Библиотеки рабочего стола и журнал: отдельные пространства имён.
+    r#"
+    CREATE TABLE desktop_documents (
+        kind TEXT NOT NULL, id TEXT NOT NULL, connection_id TEXT,
+        body TEXT NOT NULL, secret BLOB, updated_at TEXT NOT NULL,
+        PRIMARY KEY(kind, id)
+    );
+    CREATE INDEX desktop_documents_connection ON desktop_documents(connection_id);
+    CREATE TABLE desktop_audit (
+        id TEXT PRIMARY KEY, timestamp TEXT NOT NULL, client TEXT NOT NULL,
+        connection_id TEXT, method TEXT NOT NULL, outcome TEXT NOT NULL
+    );
+    CREATE INDEX desktop_audit_time ON desktop_audit(timestamp);
+    "#,
 ];
 
 pub fn latest() -> u32 {

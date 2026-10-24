@@ -84,7 +84,8 @@ impl Store {
     pub fn has_secrets(&self) -> CoreResult<bool> {
         Ok(self.conn.query_row(
             "SELECT EXISTS(SELECT 1 FROM connections WHERE secret_password IS NOT NULL
-                OR secret_key_text IS NOT NULL OR secret_passphrase IS NOT NULL)",
+                OR secret_key_text IS NOT NULL OR secret_passphrase IS NOT NULL)
+                OR EXISTS(SELECT 1 FROM desktop_documents WHERE secret IS NOT NULL)",
             [],
             |r| r.get(0),
         )?)
