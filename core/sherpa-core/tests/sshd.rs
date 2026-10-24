@@ -1,5 +1,6 @@
 //! Проверка против настоящего OpenSSH sshd (без root, на случайном порту).
 //! Если sshd нет или он не стартует — тест пропускается с сообщением.
+#![cfg(unix)]
 
 mod common;
 
@@ -33,7 +34,6 @@ fn openssh_pub(private: &str) -> String {
 }
 
 #[test]
-#[cfg(unix)]
 fn real_openssh_server() {
     let Some(sshd) = find_sshd() else {
         eprintln!("SKIP: sshd not found");
