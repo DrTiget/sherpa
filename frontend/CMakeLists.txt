@@ -64,6 +64,8 @@ set(SHERPA_QML
     qml/TransferConflictDialog.qml
 )
 
+include(qml/sysutils.cmake)
+
 # Интерфейс — статическая QML-библиотека: её используют и приложение, и тесты.
 qt_add_library(sherpa_ui STATIC)
 qt_add_qml_module(sherpa_ui

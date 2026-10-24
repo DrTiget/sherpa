@@ -8,6 +8,7 @@
 #include <QJSValue>
 #include <QObject>
 #include <QTimer>
+#include <QUrl>
 #include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
 
@@ -72,6 +73,11 @@ public:
     Q_INVOKABLE void rpcRaw(const QString &method, const QVariantMap &params, const QJSValue &cb);
     bool hasMethod(const QString &m) const { return m_daemon->hasMethod(m); }
 
+    // Помощники утилит: вывод pkg.output (base64), буфер обмена, сохранение текста в локальный файл
+    Q_INVOKABLE QString decodeBase64(const QString &b64) const;
+    Q_INVOKABLE void copyText(const QString &text) const;
+    Q_INVOKABLE bool saveText(const QUrl &url, const QString &text) const;
+
     void handleEvent(const QVariantMap &ev);
     void onDaemonLost();
     void onDaemonBack();
@@ -90,6 +96,10 @@ signals:
     // Любое событие демона этого сервера (transfer, tunnel, log…) — для окон утилит
     void eventReceived(const QVariantMap &ev);
     void requestDone(int token, bool ok, const QVariant &data, const QString &errorText);
+    // Код и параметры ошибки запроса (перед requestDone): утилиты по коду решают, что делать (priv.required…)
+    void requestFailed(int token, const QString &code, const QVariantMap &params);
+    // Любое событие демона этого стола и события без connection_id (log.line, disk.scan.*): окна фильтруют по subscription/operation
+    void utilityEvent(const QVariantMap &ev);
 
 private:
     void setState(const QString &s);

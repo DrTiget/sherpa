@@ -1,5 +1,9 @@
 #include "DesktopManager.h"
 
+#include <QClipboard>
+#include <QFile>
+#include <QGuiApplication>
+
 #include "ErrorText.h"
 
 #include <QDir>
@@ -199,6 +203,8 @@ int DesktopState::call(const QString &method, const QVariantMap &params)
     QVariantMap p = params;
     p.insert("connection_id", m_id);
     m_daemon->request(method, p, [this, token](const DaemonReply &r) {
+        if (!r.ok)
+            emit requestFailed(token, r.error.code, r.error.params);
         emit requestDone(token, r.ok, r.data,
                          r.ok ? QString() : ErrorText::text(r.error.code, r.error.params, r.error.message));
     });
@@ -229,10 +235,31 @@ void DesktopState::rpcRaw(const QString &method, const QVariantMap &params, cons
     m_daemon->request(method, params, [eng, cb](const DaemonReply &r) { callJs(eng, cb, r); });
 }
 
+QString DesktopState::decodeBase64(const QString &b64) const
+{
+    return QString::fromUtf8(QByteArray::fromBase64(b64.toLatin1()));
+}
+
+void DesktopState::copyText(const QString &text) const
+{
+    if (QClipboard *c = QGuiApplication::clipboard())
+        c->setText(text);
+}
+
+bool DesktopState::saveText(const QUrl &url, const QString &text) const
+{
+    QFile f(url.isLocalFile() ? url.toLocalFile() : url.toString());
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return false;
+    f.write(text.toUtf8());
+    return true;
+}
+
 void DesktopState::handleEvent(const QVariantMap &ev)
 {
     emit eventReceived(ev);
     const QString name = ev.value("event").toString();
+    emit utilityEvent(ev);
     if (name == "hostkey_prompt" || name == "auth_prompt") {
         m_prompt = ev;
         m_prompt.insert("type", name == "hostkey_prompt" ? "hostkey" : "auth");
@@ -434,6 +461,12 @@ void DesktopManager::onEvent(const QVariantMap &ev)
     const QString name = ev.value("event").toString();
     if (name == "daemon_shutdown")
         return;
+    if (conn.isEmpty() && !(name == "error" && ev.contains("subscription"))) {
+        // события подписок без connection_id (log.line, ошибки операций): окна сами фильтруют по subscription
+        for (auto *d2 : std::as_const(m_desktops))
+            emit d2->utilityEvent(ev);
+        return;
+    }
     if (DesktopState *d = m_desktops.value(conn)) {
         d->handleEvent(ev);
     } else if (name == "error" && ev.contains("subscription")) {

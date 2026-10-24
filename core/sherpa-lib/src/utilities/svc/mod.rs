@@ -21,7 +21,7 @@ pub fn plan(method: &str, p: &Value) -> CoreResult<Plan> {
         "list" => (
             "systemctl",
             format!(
-                r#"files=$(systemctl list-unit-files --type=service --no-legend --no-pager) || exit $?; loaded=$(systemctl list-units --all --type=service --plain --no-legend --no-pager) || exit $?; units=$(printf '%s\n%s\n' "$files" "$loaded" | awk '{{print $1}}' | sort -u); set -f; set --; for unit in $units; do set -- "$@" "$unit"; done; [ "$#" -eq 0 ] || systemctl show --no-pager --property={PROPERTIES} -- "$@""#
+                r#"files=$(systemctl list-unit-files --type=service --no-legend --no-pager) || exit $?; loaded=$(systemctl list-units --all --type=service --plain --no-legend --no-pager) || exit $?; units=$(printf '%s\n%s\n' "$files" "$loaded" | awk '{{print $1}}' | grep -v '@\.' | sort -u); set -f; set --; for unit in $units; do set -- "$@" "$unit"; done; [ "$#" -eq 0 ] || systemctl show --no-pager --property={PROPERTIES} -- "$@""#
             ),
         ),
         "status" => (

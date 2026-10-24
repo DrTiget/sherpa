@@ -45,7 +45,7 @@ pub fn plan(method: &str, p: &Value) -> CoreResult<Plan> {
         }
         "sys.time.get" => (
             "timedatectl",
-            "timedatectl show --no-pager --property=Timezone,TimeUSec,RTCTimeUSec,NTP,NTPSynchronized,CanNTP".into(),
+            "timedatectl show --no-pager -p Timezone -p TimeUSec -p RTCTimeUSec -p NTP -p NTPSynchronized -p CanNTP".into(),
         ),
         "sys.time.set_zone" => {
             let z = req_str(p, "timezone")?;
