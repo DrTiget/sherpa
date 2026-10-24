@@ -121,6 +121,7 @@ impl MethodGroup for DockerMethods {
         let conn = cx.conn(&req_str(&p, "connection_id")?).await?;
         if write {
             conn.ensure_writable()?;
+            cx.state.confirmations.consume(cx.client.id, method, &p)?;
         }
         if (method == "docker.logs" && opt_bool(&p, "follow")?)
             || (method == "docker.stats" && opt_bool(&p, "subscribe")?)
@@ -236,5 +237,58 @@ mod tests {
             .unwrap()
             .0
             .contains("'a'\\''; reboot'"));
+    }
+}
+
+#[cfg(test)]
+mod behavior_tests {
+    use super::*;
+    use crate::ssh::FakeExec;
+    #[tokio::test]
+    async fn logs_keep_both_streams() {
+        let mut f = FakeExec::new().on("docker logs", "2026-10-24T10:00:00Z ready\n", 0);
+        f.rules[0].1.stderr = b"2026-10-24T10:00:01Z warning\n".to_vec();
+        let d = collect(&f, "docker.logs", &json!({"id":"web","tail":99999}))
+            .await
+            .unwrap();
+        assert_eq!(d["lines"].as_array().unwrap().len(), 2);
+        assert!(f.calls()[0].contains("--tail 5000"));
+    }
+    #[tokio::test]
+    async fn inspect_omits_secrets() {
+        let f = FakeExec::new().on(
+            "docker inspect",
+            r#"[{"Id":"abc","Config":{"Env":["PASSWORD=secret"],"Cmd":["secret"]},"Name":"/web"}]"#,
+            0,
+        );
+        let d = collect(&f, "docker.inspect", &json!({"id":"web"})).await.unwrap();
+        assert_eq!(d["items"][0]["Id"], "abc");
+        assert!(!d.to_string().contains("secret"));
+    }
+    #[tokio::test]
+    async fn failed_and_malformed() {
+        let f = FakeExec::new().on("docker ps", "", 1);
+        assert_eq!(
+            collect(&f, "docker.ps", &json!({})).await.unwrap_err().code,
+            "remote.command_failed"
+        );
+        let f = FakeExec::new().on("docker ps", "junk", 0);
+        assert_eq!(
+            collect(&f, "docker.ps", &json!({})).await.unwrap_err().code,
+            "remote.bad_output"
+        );
+    }
+    #[tokio::test]
+    async fn mutations_are_explicit() {
+        for action in ["start", "stop", "restart", "pause", "rm"] {
+            let method = format!("docker.{action}");
+            let f = FakeExec::new().on(&format!("docker {action}"), "web\n", 0);
+            assert!(collect(&f, &method, &json!({"id":"web"})).await.is_err());
+            assert!(f.calls().is_empty());
+            assert_eq!(
+                collect(&f, &method, &json!({"id":"web","confirm":true})).await.unwrap()["completed"],
+                true
+            );
+        }
     }
 }

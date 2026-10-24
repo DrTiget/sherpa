@@ -841,7 +841,8 @@ MonitorData:
 ### 4.9 Docker, веб-серверы и базы данных — `docker.*`, `web.*`, `db.*`
 
 Все вызовы требуют `connection_id`, кроме `docker.unsubscribe`.
-Изменяющие вызовы проверяют `readonly` и требуют **`confirm: true`**;
+Изменяющие вызовы проверяют `readonly`, требуют **`confirm: true`** и
+одноразовый **`confirm_token`** из `danger.prepare` (§4, общие подтверждения);
 фронт передаёт его после диалога с перечнем объектов и именем сервера
 (для остановки на Prod — после ввода имени сервера).
 Docker и веб-команды выполняются через `priv.*` (root/sudo).
@@ -888,7 +889,7 @@ WebSite nginx: `{path, names: [строка], root: строка|null, listen: [
 Apache: `{names: [строка], source: строка}` из `apachectl -S`.
 WebCertificate: `{name?, domains?, path, expires_at, subject?, source?}`;
 `expires_at` — RFC3339, `source: "config"` для обнаруженных вне certbot.
-Источники конфигов SSL: `/etc/nginx`, `/etc/apache2`, `/etc/httpd`, `*.conf`.
+Источники конфигов SSL: `/etc/nginx`, `/etc/apache2`, `/etc/httpd` (включая Debian sites-available/default).
 
 Database SQL: `{name, size_bytes, owner: строка|null}` (owner у PostgreSQL).
 Redis: `{name: "db0", size_bytes: null, keys, expires, avg_ttl}` — Redis

@@ -245,3 +245,15 @@ fn openssl_date(text: &str) -> CoreResult<String> {
         .format(&time::format_description::well_known::Rfc3339)
         .map_err(|_| CoreError::new("remote.bad_output", "Invalid certificate date"))
 }
+
+#[cfg(test)]
+mod vhost_tests {
+    use super::*;
+    #[test]
+    fn inline_directives_and_nested_location() {
+        let d=sites("# configuration file /etc/nginx/nginx.conf:\nhttp { server { listen 443 ssl; server_name example.org; root '/srv/www root'; location / { proxy_pass http://127.0.0.1; } } }\n","nginx").unwrap();
+        assert_eq!(d["items"][0]["root"], "/srv/www root");
+        assert_eq!(d["items"][0]["ssl"], true);
+        assert_eq!(d["items"][0]["listen"], json!(["443 ssl"]));
+    }
+}

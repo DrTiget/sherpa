@@ -125,6 +125,7 @@ impl MethodGroup for DbMethods {
         let c = cx.conn(&req_str(&p, "connection_id")?).await?;
         if write {
             c.ensure_writable()?;
+            cx.state.confirmations.consume(cx.client.id, method, &p)?;
         }
         decode(method, &p, &c.exec(&cmd).await?)
     }
@@ -166,5 +167,50 @@ mod tests {
                 .code,
             "remote.command_failed"
         );
+    }
+}
+
+#[cfg(test)]
+mod behavior_tests {
+    use super::*;
+    use crate::ssh::FakeExec;
+    #[tokio::test]
+    async fn kill_is_query_cancel() {
+        let f = FakeExec::new().on("psql", "t\n", 0);
+        assert_eq!(
+            collect(&f, "db.kill", &json!({"engine":"postgres","id":42,"confirm":true}))
+                .await
+                .unwrap()["completed"],
+            true
+        );
+        assert!(f.calls()[0].contains("pg_cancel_backend(42)"));
+        let f = FakeExec::new().on("psql", "f\n", 0);
+        assert_eq!(
+            collect(&f, "db.kill", &json!({"engine":"postgres","id":42,"confirm":true}))
+                .await
+                .unwrap_err()
+                .code,
+            "db.cancel_failed"
+        );
+    }
+    #[test]
+    fn dump_is_private_atomic_and_quoted() {
+        for engine in ["mysql", "mariadb", "postgres", "redis"] {
+            let (cmd,write)=command("db.dump",&json!({"engine":engine,"database":"test'; touch /tmp/bad","path":"/var/backups/my dump","confirm":true})).unwrap();
+            assert!(
+                write
+                    && cmd.contains("umask 077")
+                    && cmd.contains("mktemp")
+                    && cmd.contains("ln -- \"$tmp\" '/var/backups/my dump'")
+            );
+            assert!(cmd.contains("trap 'rm -f"));
+        }
+    }
+    #[tokio::test]
+    async fn database_failures_hide_stderr() {
+        let mut f = FakeExec::new().on("mysql", "", 1);
+        f.rules[0].1.stderr = b"password=secret".to_vec();
+        let error = collect(&f, "db.list", &json!({"engine":"mysql"})).await.unwrap_err();
+        assert!(!serde_json::to_string(&error).unwrap().contains("secret"));
     }
 }
