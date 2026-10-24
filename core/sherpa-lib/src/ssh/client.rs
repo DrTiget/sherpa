@@ -34,7 +34,14 @@ pub struct ConnectOptions {
 
 impl ConnectOptions {
     pub fn new(timeout: Duration, known: Vec<HostKey>) -> Self {
-        Self { timeout, known, accept_new: false, accept_once_fingerprint: None, probe_only: false, key_type: None }
+        Self {
+            timeout,
+            known,
+            accept_new: false,
+            accept_once_fingerprint: None,
+            probe_only: false,
+            key_type: None,
+        }
     }
 }
 
@@ -45,7 +52,10 @@ pub struct Session {
 
 impl Session {
     pub async fn close(self) {
-        let _ = self.handle.disconnect(russh::Disconnect::ByApplication, "bye", "en").await;
+        let _ = self
+            .handle
+            .disconnect(russh::Disconnect::ByApplication, "bye", "en")
+            .await;
     }
 }
 
@@ -82,7 +92,10 @@ impl client::Handler for Verifier {
         let PublicKeyOrCertificate::PublicKey { key, .. } = key else {
             return Ok(false);
         };
-        let p = Presented { key_type: keys::key_type(&key.algorithm()), fingerprint: keys::fingerprint(key) };
+        let p = Presented {
+            key_type: keys::key_type(&key.algorithm()),
+            fingerprint: keys::fingerprint(key),
+        };
         let verdict = hostkey::verify(&self.known, &p);
         let mut st = self.state.lock().expect("verify state");
         st.presented = Some(p.clone());
@@ -158,7 +171,12 @@ fn host_key_algorithms(opts: &ConnectOptions) -> Vec<russh::keys::Algorithm> {
         return default.into_iter().filter(|a| &ty(a) == t).collect();
     }
     // Сначала — типы, которые уже знаем: так сервер предъявит знакомый ключ.
-    let known: Vec<&str> = opts.known.iter().filter(|k| k.state == "trusted").map(|k| k.key_type.as_str()).collect();
+    let known: Vec<&str> = opts
+        .known
+        .iter()
+        .filter(|k| k.state == "trusted")
+        .map(|k| k.key_type.as_str())
+        .collect();
     let (mut first, rest): (Vec<_>, Vec<_>) = default.into_iter().partition(|a| known.contains(&ty(a).as_str()));
     first.extend(rest);
     first
@@ -256,7 +274,10 @@ async fn connect_inner(
         probe_only: opts.probe_only,
         state: state.clone(),
     };
-    let tap = BannerTap { inner: tcp, buf: banner.clone() };
+    let tap = BannerTap {
+        inner: tcp,
+        buf: banner.clone(),
+    };
     let handle = match client::connect_stream(Arc::new(config), tap, handler).await {
         Ok(h) => h,
         Err(e) => return Err(handshake_error(host, port, e, &state, &banner, opts.timeout)),
@@ -287,11 +308,15 @@ fn handshake_error(
         russh::Error::NoCommonAlgo { kind, theirs, .. } => {
             CoreError::new("ssh.no_common_algorithm", format!("No common {kind:?} algorithm"))
                 .with("kind", format!("{kind:?}").to_lowercase())
-                .with("server", theirs.iter().map(|n| n.to_string()).collect::<Vec<_>>().join(","))
+                .with(
+                    "server",
+                    theirs.iter().map(|n| n.to_string()).collect::<Vec<_>>().join(","),
+                )
         }
         russh::Error::IO(io) => {
             if ssh_banner.is_none() && first_line.is_some() {
-                CoreError::new("ssh.not_ssh", "The server is not an SSH server").with("banner", first_line.unwrap_or_default())
+                CoreError::new("ssh.not_ssh", "The server is not an SSH server")
+                    .with("banner", first_line.unwrap_or_default())
             } else {
                 io_error(host, port, &io, timeout)
             }
@@ -301,7 +326,8 @@ fn handshake_error(
         }
         russh::Error::Disconnect | russh::Error::HUP => {
             if ssh_banner.is_none() && first_line.is_some() {
-                CoreError::new("ssh.not_ssh", "The server is not an SSH server").with("banner", first_line.unwrap_or_default())
+                CoreError::new("ssh.not_ssh", "The server is not an SSH server")
+                    .with("banner", first_line.unwrap_or_default())
             } else {
                 CoreError::new("ssh.disconnected", "The server closed the connection").with("reason", e.to_string())
             }
@@ -316,8 +342,11 @@ fn auth_io(e: russh::Error) -> CoreError {
         russh::Error::Disconnect | russh::Error::HUP => {
             CoreError::new("ssh.disconnected", "The server closed the connection").with("reason", e.to_string())
         }
-        other => CoreError::new("ssh.handshake_failed", format!("Authentication exchange failed: {other}"))
-            .with("reason", other.to_string()),
+        other => CoreError::new(
+            "ssh.handshake_failed",
+            format!("Authentication exchange failed: {other}"),
+        )
+        .with("reason", other.to_string()),
     }
 }
 
@@ -341,7 +370,12 @@ async fn authenticate(s: &mut Session, t: &Target) -> Result<(), CoreError> {
                 CoreError::new("auth.secret_required", "Password is not saved").with("kind", "password")
             })?;
             if allowed(MethodKind::Password) {
-                return match s.handle.authenticate_password(user, pw.expose()).await.map_err(auth_io)? {
+                return match s
+                    .handle
+                    .authenticate_password(user, pw.expose())
+                    .await
+                    .map_err(auth_io)?
+                {
                     AuthResult::Success => Ok(()),
                     AuthResult::Failure { remaining_methods, .. } => Err(rejected(user, &remaining_methods)),
                 };
@@ -375,9 +409,12 @@ async fn authenticate(s: &mut Session, t: &Target) -> Result<(), CoreError> {
 }
 
 fn not_allowed(method: &str, methods: &russh::MethodSet) -> CoreError {
-    CoreError::new("auth.method_not_allowed", format!("Server does not allow {method} authentication"))
-        .with("method", method)
-        .with("methods", methods_json(methods))
+    CoreError::new(
+        "auth.method_not_allowed",
+        format!("Server does not allow {method} authentication"),
+    )
+    .with("method", method)
+    .with("methods", methods_json(methods))
 }
 
 /// Пароль через keyboard-interactive: отвечаем паролем на каждый скрытый запрос.

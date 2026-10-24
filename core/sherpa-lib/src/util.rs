@@ -8,7 +8,9 @@ use crate::error::{CoreError, CoreResult};
 
 /// Текущее время UTC в RFC 3339 с точностью до секунды.
 pub fn now() -> String {
-    let t = OffsetDateTime::now_utc().replace_nanosecond(0).unwrap_or(OffsetDateTime::UNIX_EPOCH);
+    let t = OffsetDateTime::now_utc()
+        .replace_nanosecond(0)
+        .unwrap_or(OffsetDateTime::UNIX_EPOCH);
     t.format(&Rfc3339).unwrap_or_default()
 }
 
@@ -34,8 +36,7 @@ pub fn merge(base: Value, top: Option<Value>) -> CoreResult<Value> {
             }
         }
         Some(_) => {
-            return Err(CoreError::new("request.invalid_json", "stdin must contain a JSON object")
-                .with("offset", 0));
+            return Err(CoreError::new("request.invalid_json", "stdin must contain a JSON object").with("offset", 0));
         }
     }
     Ok(Value::Object(base))
@@ -56,18 +57,9 @@ pub fn obj(pairs: Vec<(&str, Option<Value>)>) -> Value {
 pub fn parse<T: serde::de::DeserializeOwned>(v: Value) -> CoreResult<T> {
     serde_json::from_value(v).map_err(|e| {
         let msg = e.to_string();
-        let field = msg
-            .split('`')
-            .nth(1)
-            .unwrap_or("input")
-            .to_string();
+        let field = msg.split('`').nth(1).unwrap_or("input").to_string();
         CoreError::invalid(&field, msg)
     })
-}
-
-/// Тройное состояние поля в патче: нет / null / значение.
-pub fn patch_field<'a>(m: &'a Map<String, Value>, key: &str) -> Option<&'a Value> {
-    m.get(key)
 }
 
 pub fn opt_str(v: &Value, field: &str) -> CoreResult<Option<String>> {

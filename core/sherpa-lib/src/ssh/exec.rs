@@ -28,7 +28,9 @@ pub trait RemoteExec {
 
 impl RemoteExec for Session {
     async fn exec(&self, command: &str) -> CoreResult<ExecOutput> {
-        let fail = |e: russh::Error| CoreError::new("ssh.channel_failed", format!("Channel failed: {e}")).with("reason", e.to_string());
+        let fail = |e: russh::Error| {
+            CoreError::new("ssh.channel_failed", format!("Channel failed: {e}")).with("reason", e.to_string())
+        };
         let mut ch = self.handle.channel_open_session().await.map_err(fail)?;
         ch.exec(true, command).await.map_err(fail)?;
         let mut out = ExecOutput::default();

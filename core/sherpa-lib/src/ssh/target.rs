@@ -16,7 +16,10 @@ pub enum KeySource {
 #[derive(Debug, Clone)]
 pub enum AuthMaterial {
     Password(Option<Secret>),
-    Key { source: KeySource, passphrase: Option<Secret> },
+    Key {
+        source: KeySource,
+        passphrase: Option<Secret>,
+    },
 }
 
 #[derive(Debug, Clone)]

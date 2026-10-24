@@ -37,7 +37,10 @@ pub enum Verdict {
 }
 
 pub fn verify(known: &[HostKey], p: &Presented) -> Verdict {
-    if known.iter().any(|k| k.state == "rejected" && k.fingerprint == p.fingerprint) {
+    if known
+        .iter()
+        .any(|k| k.state == "rejected" && k.fingerprint == p.fingerprint)
+    {
         return Verdict::Rejected;
     }
     let trusted = known.iter().filter(|k| k.state == "trusted");
@@ -77,7 +80,10 @@ pub fn verdict_error(host: &str, port: u16, p: &Presented, v: &Verdict) -> Optio
         Verdict::Mismatch { known } => Some(
             base("hostkey.mismatch", "Host key has changed")
                 .with("known_fingerprint", known.fingerprint.clone())
-                .with("known_accepted_at", known.accepted_at.clone().map(Value::from).unwrap_or(Value::Null)),
+                .with(
+                    "known_accepted_at",
+                    known.accepted_at.clone().map(Value::from).unwrap_or(Value::Null),
+                ),
         ),
     }
 }
@@ -193,7 +199,10 @@ mod tests {
     use crate::store::testutil::temp_store;
 
     fn p(t: &str, f: &str) -> Presented {
-        Presented { key_type: t.into(), fingerprint: f.into() }
+        Presented {
+            key_type: t.into(),
+            fingerprint: f.into(),
+        }
     }
 
     #[test]
@@ -206,14 +215,23 @@ mod tests {
         // другой порт — другой адрес
         assert_eq!(verify(&for_addr(&s, "h", 2222).unwrap(), &a), Verdict::Unknown);
         let b = p("ssh-ed25519", "SHA256:b");
-        assert!(matches!(verify(&for_addr(&s, "h", 22).unwrap(), &b), Verdict::Mismatch { .. }));
+        assert!(matches!(
+            verify(&for_addr(&s, "h", 22).unwrap(), &b),
+            Verdict::Mismatch { .. }
+        ));
         assert_eq!(trust(&mut s, "h", 22, &b, false).unwrap_err().code, "hostkey.mismatch");
         let hk = trust(&mut s, "h", 22, &b, true).unwrap();
         assert_eq!(hk.replaced_fingerprint.as_deref(), Some("SHA256:a"));
         reject(&s, "h", 22, "SHA256:c", Some("ssh-rsa")).unwrap();
-        assert_eq!(verify(&for_addr(&s, "h", 22).unwrap(), &p("ssh-rsa", "SHA256:c")), Verdict::Rejected);
+        assert_eq!(
+            verify(&for_addr(&s, "h", 22).unwrap(), &p("ssh-rsa", "SHA256:c")),
+            Verdict::Rejected
+        );
         // новый тип ключа при известном другом — неизвестный, а не подмена
-        assert_eq!(verify(&for_addr(&s, "h", 22).unwrap(), &p("ecdsa-sha2-nistp256", "SHA256:d")), Verdict::Unknown);
+        assert_eq!(
+            verify(&for_addr(&s, "h", 22).unwrap(), &p("ecdsa-sha2-nistp256", "SHA256:d")),
+            Verdict::Unknown
+        );
         assert_eq!(forget(&s, "h", 22, None).unwrap()["forgotten"], 2);
         assert_eq!(forget(&s, "h", 22, None).unwrap_err().code, "hostkey.not_found");
     }

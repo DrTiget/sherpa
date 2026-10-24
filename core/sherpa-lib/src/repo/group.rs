@@ -48,7 +48,10 @@ pub fn all(store: &Store) -> CoreResult<Vec<Group>> {
 }
 
 pub fn get(store: &Store, id: &str) -> CoreResult<Group> {
-    all(store)?.into_iter().find(|g| g.id == id).ok_or_else(|| not_found(id))
+    all(store)?
+        .into_iter()
+        .find(|g| g.id == id)
+        .ok_or_else(|| not_found(id))
 }
 
 pub fn ensure_exists(store: &Store, id: &str) -> CoreResult<()> {
@@ -100,9 +103,11 @@ fn check_name_free(store: &Store, name: &str, parent: Option<&str>, except: Opti
         )
         .optional()?;
     match taken {
-        Some(_) => Err(CoreError::new("group.name_taken", format!("Group name is taken: {name}"))
-            .with("name", name)
-            .with("parent_id", parent.map(Value::from).unwrap_or(Value::Null))),
+        Some(_) => Err(
+            CoreError::new("group.name_taken", format!("Group name is taken: {name}"))
+                .with("name", name)
+                .with("parent_id", parent.map(Value::from).unwrap_or(Value::Null)),
+        ),
         None => Ok(()),
     }
 }
@@ -135,9 +140,11 @@ pub fn update(store: &Store, id: &str, name: Option<&str>, parent: Option<Option
         Some(Some(p)) => {
             ensure_exists(store, p)?;
             if subtree(store, id)?.contains(p) {
-                return Err(CoreError::new("group.cycle", "Group cannot be moved into its descendant")
-                    .with("id", id)
-                    .with("parent_id", p));
+                return Err(
+                    CoreError::new("group.cycle", "Group cannot be moved into its descendant")
+                        .with("id", id)
+                        .with("parent_id", p),
+                );
             }
             Some(p.to_string())
         }
@@ -157,7 +164,10 @@ pub fn delete(store: &mut Store, id: &str, mode: &str) -> CoreResult<Value> {
     let mut deleted_connections = 0usize;
     match mode {
         "move_to_parent" => {
-            tx.execute("UPDATE connections SET group_id = ?2 WHERE group_id = ?1", params![id, g.parent_id])?;
+            tx.execute(
+                "UPDATE connections SET group_id = ?2 WHERE group_id = ?1",
+                params![id, g.parent_id],
+            )?;
             // Подгруппы переезжают к родителю; при конфликте имени — ошибка.
             let mut st = tx.prepare("SELECT name_lc, name FROM groups WHERE parent_id = ?1")?;
             let children = st
@@ -171,12 +181,17 @@ pub fn delete(store: &mut Store, id: &str, mode: &str) -> CoreResult<Value> {
                     |r| r.get(0),
                 )?;
                 if clash {
-                    return Err(CoreError::new("group.name_taken", format!("Group name is taken: {name}"))
-                        .with("name", name)
-                        .with("parent_id", g.parent_id.clone().map(Value::from).unwrap_or(Value::Null)));
+                    return Err(
+                        CoreError::new("group.name_taken", format!("Group name is taken: {name}"))
+                            .with("name", name)
+                            .with("parent_id", g.parent_id.clone().map(Value::from).unwrap_or(Value::Null)),
+                    );
                 }
             }
-            tx.execute("UPDATE groups SET parent_id = ?2 WHERE parent_id = ?1", params![id, g.parent_id])?;
+            tx.execute(
+                "UPDATE groups SET parent_id = ?2 WHERE parent_id = ?1",
+                params![id, g.parent_id],
+            )?;
             tx.execute("DELETE FROM groups WHERE id = ?1", [id])?;
         }
         "delete_connections" => {
@@ -228,7 +243,10 @@ mod tests {
         let b = create(&s, "DB", Some(&a.id)).unwrap();
         assert_eq!(create(&s, "prod", None).unwrap_err().code, "group.name_taken");
         create(&s, "DB", None).unwrap(); // другой уровень — можно
-        assert_eq!(update(&s, &a.id, None, Some(Some(&b.id))).unwrap_err().code, "group.cycle");
+        assert_eq!(
+            update(&s, &a.id, None, Some(Some(&b.id))).unwrap_err().code,
+            "group.cycle"
+        );
         let c = create(&s, "Inner", Some(&b.id)).unwrap();
         delete(&mut s, &b.id, "move_to_parent").unwrap();
         assert_eq!(get(&s, &c.id).unwrap().parent_id.as_deref(), Some(a.id.as_str()));

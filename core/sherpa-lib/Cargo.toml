@@ -16,7 +16,7 @@ rand = "0.9.5"
 rusqlite = { version = "0.40.2", features = ["bundled"] }
 russh = "0.64"
 serde = { version = "1.0.229", features = ["derive"] }
-serde_json = "1.0.154"
+serde_json = { version = "1.0.154", features = ["preserve_order"] }
 sha2 = "0.10.9"
 thiserror = "2.0.21"
 time = { version = "0.3.41", features = ["formatting", "parsing", "macros"] }
@@ -28,3 +28,7 @@ zeroize = "1.8.2"
 
 [dev-dependencies]
 tempfile = "3.27.0"
+
+[features]
+# Встроенный тестовый SSH-сервер для интеграционных тестов.
+test-util = []

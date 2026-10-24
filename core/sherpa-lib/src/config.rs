@@ -52,7 +52,9 @@ fn config_dir() -> PathBuf {
 
 fn data_dir() -> PathBuf {
     if cfg!(windows) {
-        dirs::data_local_dir().unwrap_or_else(|| PathBuf::from(".")).join("Sherpa")
+        dirs::data_local_dir()
+            .unwrap_or_else(|| PathBuf::from("."))
+            .join("Sherpa")
     } else {
         dirs::data_dir().unwrap_or_else(|| PathBuf::from(".")).join("sherpa")
     }
@@ -85,9 +87,7 @@ impl Settings {
                 .check_concurrency
                 .unwrap_or(DEFAULT_CHECK_CONCURRENCY)
                 .clamp(1, 100),
-            daemon_idle_timeout_sec: file
-                .daemon_idle_timeout_sec
-                .unwrap_or(DEFAULT_DAEMON_IDLE_TIMEOUT_SEC),
+            daemon_idle_timeout_sec: file.daemon_idle_timeout_sec.unwrap_or(DEFAULT_DAEMON_IDLE_TIMEOUT_SEC),
             config_path,
             config_exists: exists,
         })
@@ -97,9 +97,7 @@ impl Settings {
 fn read_config(path: &Path) -> CoreResult<(ConfigFile, bool)> {
     let text = match std::fs::read_to_string(path) {
         Ok(t) => t,
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
-            return Ok((ConfigFile::default(), false))
-        }
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok((ConfigFile::default(), false)),
         Err(e) if e.kind() == std::io::ErrorKind::PermissionDenied => {
             return Err(CoreError::fs("store.permission_denied", path, &e))
         }
@@ -158,7 +156,11 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let cfg = dir.path().join("core.toml");
         std::fs::write(&cfg, "db = \"a\"\nbogus = 1\n").unwrap();
-        let e = Settings::load(&Overrides { config: Some(cfg), ..Default::default() }).unwrap_err();
+        let e = Settings::load(&Overrides {
+            config: Some(cfg),
+            ..Default::default()
+        })
+        .unwrap_err();
         assert_eq!(e.code, "config.invalid");
     }
 }

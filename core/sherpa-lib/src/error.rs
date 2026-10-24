@@ -8,7 +8,8 @@ use serde_json::{Map, Value};
 pub struct CoreError {
     pub code: String,
     pub message: String,
-    pub params: Map<String, Value>,
+    /// В `Box`, чтобы `Result<_, CoreError>` оставался компактным.
+    pub params: Box<Map<String, Value>>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub details: Vec<CoreError>,
 }
@@ -20,7 +21,7 @@ impl CoreError {
         Self {
             code: code.into(),
             message: message.into(),
-            params: Map::new(),
+            params: Box::default(),
             details: Vec::new(),
         }
     }

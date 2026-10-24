@@ -23,8 +23,10 @@ impl Store {
     /// Открыть существующее хранилище (с автоматическими миграциями).
     pub fn open(settings: &Settings) -> CoreResult<Store> {
         if !settings.db_path.exists() {
-            return Err(CoreError::new("store.not_initialized", "Store is not initialized, run `init`")
-                .with("db", settings.db_path.display().to_string()));
+            return Err(
+                CoreError::new("store.not_initialized", "Store is not initialized, run `init`")
+                    .with("db", settings.db_path.display().to_string()),
+            );
         }
         let conn = Connection::open_with_flags(&settings.db_path, OpenFlags::SQLITE_OPEN_READ_WRITE)
             .map_err(|e| map_open_err(settings, e))?;
@@ -38,6 +40,11 @@ impl Store {
             crypto::create_private_dir(dir)?;
         }
         let conn = Connection::open(&settings.db_path).map_err(|e| map_open_err(settings, e))?;
+        #[cfg(unix)]
+        if !existed {
+            use std::os::unix::fs::PermissionsExt;
+            let _ = std::fs::set_permissions(&settings.db_path, std::fs::Permissions::from_mode(0o600));
+        }
         Ok((Self::finish_open(conn, settings)?, !existed))
     }
 
@@ -90,8 +97,10 @@ impl Store {
             let key = MasterKey::load(path)?;
             match self.meta_get("key_fingerprint")? {
                 Some(fp) if fp != key.fingerprint() => {
-                    return Err(CoreError::new("crypto.key_mismatch", "Key file does not match the database")
-                        .with("path", path.display().to_string()));
+                    return Err(
+                        CoreError::new("crypto.key_mismatch", "Key file does not match the database")
+                            .with("path", path.display().to_string()),
+                    );
                 }
                 Some(_) => {}
                 None => self.meta_set("key_fingerprint", &key.fingerprint())?,
@@ -147,9 +156,11 @@ fn migrate(conn: &mut Connection) -> CoreResult<()> {
     let current = schema_version(conn)?;
     let latest = migrations::latest();
     if current > latest {
-        return Err(CoreError::new("store.schema_too_new", "Database was created by a newer core")
-            .with("schema", current)
-            .with("supported", latest));
+        return Err(
+            CoreError::new("store.schema_too_new", "Database was created by a newer core")
+                .with("schema", current)
+                .with("supported", latest),
+        );
     }
     for v in current..latest {
         let tx = conn.transaction()?;

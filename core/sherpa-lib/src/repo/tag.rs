@@ -68,14 +68,18 @@ pub fn rename(store: &mut Store, old: &str, new: &str) -> CoreResult<Value> {
     if old != new {
         tx.execute("DELETE FROM connection_tags WHERE tag = ?1", [&old])?;
     }
-    let count: i64 = tx.query_row("SELECT COUNT(*) FROM connection_tags WHERE tag = ?1", [&new], |r| r.get(0))?;
+    let count: i64 = tx.query_row("SELECT COUNT(*) FROM connection_tags WHERE tag = ?1", [&new], |r| {
+        r.get(0)
+    })?;
     tx.commit()?;
     Ok(json!({ "tag": { "name": new, "connection_count": count } }))
 }
 
 pub fn delete(store: &Store, tag: &str) -> CoreResult<Value> {
     let tag = normalize(tag)?;
-    let n = store.conn.execute("DELETE FROM connection_tags WHERE tag = ?1", [&tag])?;
+    let n = store
+        .conn
+        .execute("DELETE FROM connection_tags WHERE tag = ?1", [&tag])?;
     if n == 0 {
         return Err(not_found(&tag));
     }
@@ -91,6 +95,9 @@ mod tests {
         assert_eq!(normalize("  Prod ").unwrap(), "prod");
         assert!(normalize("a b").is_err());
         assert!(normalize("").is_err());
-        assert_eq!(normalize_all(&["B".into(), "a".into(), "b".into()]).unwrap(), vec!["a", "b"]);
+        assert_eq!(
+            normalize_all(&["B".into(), "a".into(), "b".into()]).unwrap(),
+            vec!["a", "b"]
+        );
     }
 }

@@ -54,14 +54,14 @@ impl MasterKey {
 
     pub fn load(path: &Path) -> CoreResult<MasterKey> {
         let text = Zeroizing::new(std::fs::read_to_string(path).map_err(|e| match e.kind() {
-            std::io::ErrorKind::NotFound => CoreError::new("store.key_file_missing", "Key file not found")
-                .with("path", path.display().to_string()),
+            std::io::ErrorKind::NotFound => {
+                CoreError::new("store.key_file_missing", "Key file not found").with("path", path.display().to_string())
+            }
             std::io::ErrorKind::PermissionDenied => CoreError::fs("store.permission_denied", path, &e),
             _ => CoreError::fs("fs.read_failed", path, &e),
         })?);
         let invalid = || {
-            CoreError::new("crypto.key_file_invalid", "Key file is invalid")
-                .with("path", path.display().to_string())
+            CoreError::new("crypto.key_file_invalid", "Key file is invalid").with("path", path.display().to_string())
         };
         let mut lines = text.lines();
         if lines.next().map(str::trim) != Some(HEADER) {
@@ -91,12 +91,26 @@ impl MasterKey {
             .map_err(|e| CoreError::fs("fs.write_failed", path, &e))
     }
 
+    /// Экспорт копии ключа (`keyfile export`): права 600, в stdout не выводится.
+    pub fn export_to(&self, path: &Path, overwrite: bool) -> CoreResult<()> {
+        if overwrite && path.exists() {
+            std::fs::remove_file(path).map_err(|e| CoreError::fs("fs.write_failed", path, &e))?;
+        }
+        self.write_new(path)
+    }
+
     pub fn encrypt(&self, aad: &str, plain: &[u8]) -> CoreResult<Vec<u8>> {
         let cipher = XChaCha20Poly1305::new(self.bytes.as_ref().into());
         let mut nonce = [0u8; NONCE_LEN];
         rand::rng().fill_bytes(&mut nonce);
         let ct = cipher
-            .encrypt(XNonce::from_slice(&nonce), Payload { msg: plain, aad: aad.as_bytes() })
+            .encrypt(
+                XNonce::from_slice(&nonce),
+                Payload {
+                    msg: plain,
+                    aad: aad.as_bytes(),
+                },
+            )
             .map_err(|_| CoreError::internal("encryption failed"))?;
         let mut out = Vec::with_capacity(1 + NONCE_LEN + ct.len());
         out.push(BLOB_VERSION);
@@ -115,7 +129,10 @@ impl MasterKey {
         cipher
             .decrypt(
                 XNonce::from_slice(&blob[1..1 + NONCE_LEN]),
-                Payload { msg: &blob[1 + NONCE_LEN..], aad: aad.as_bytes() },
+                Payload {
+                    msg: &blob[1 + NONCE_LEN..],
+                    aad: aad.as_bytes(),
+                },
             )
             .map(Zeroizing::new)
             .map_err(|_| fail())
@@ -130,9 +147,12 @@ pub fn permission_warning(path: &Path) -> Option<Warning> {
         let mode = std::fs::metadata(path).ok()?.permissions().mode() & 0o777;
         if mode & 0o077 != 0 {
             return Some(
-                CoreError::new("crypto.key_file_insecure", format!("Key file permissions are too open: {mode:o}"))
-                    .with("path", path.display().to_string())
-                    .with("mode", format!("{mode:o}")),
+                CoreError::new(
+                    "crypto.key_file_insecure",
+                    format!("Key file permissions are too open: {mode:o}"),
+                )
+                .with("path", path.display().to_string())
+                .with("mode", format!("{mode:o}")),
             );
         }
         None
@@ -175,8 +195,9 @@ pub fn open_private_new(path: &Path) -> CoreResult<std::fs::File> {
         o.mode(0o600);
     }
     o.open(path).map_err(|e| match e.kind() {
-        std::io::ErrorKind::AlreadyExists => CoreError::new("fs.exists", "File already exists")
-            .with("path", path.display().to_string()),
+        std::io::ErrorKind::AlreadyExists => {
+            CoreError::new("fs.exists", "File already exists").with("path", path.display().to_string())
+        }
         std::io::ErrorKind::PermissionDenied => CoreError::fs("store.permission_denied", path, &e),
         _ => CoreError::fs("fs.write_failed", path, &e),
     })
@@ -191,7 +212,10 @@ mod tests {
         let k = MasterKey::generate();
         let blob = k.encrypt("conn:1:password", b"hunter2").unwrap();
         assert_eq!(&*k.decrypt("conn:1:password", &blob).unwrap(), b"hunter2");
-        assert_eq!(k.decrypt("conn:2:password", &blob).unwrap_err().code, "crypto.decrypt_failed");
+        assert_eq!(
+            k.decrypt("conn:2:password", &blob).unwrap_err().code,
+            "crypto.decrypt_failed"
+        );
         let other = MasterKey::generate();
         assert!(other.decrypt("conn:1:password", &blob).is_err());
     }

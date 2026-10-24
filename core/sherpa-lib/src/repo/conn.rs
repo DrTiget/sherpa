@@ -51,7 +51,12 @@ pub struct Status {
 
 impl Status {
     pub fn unknown() -> Self {
-        Status { state: "unknown".into(), checked_at: None, latency_ms: None, error: None }
+        Status {
+            state: "unknown".into(),
+            checked_at: None,
+            latency_ms: None,
+            error: None,
+        }
     }
 }
 
@@ -196,7 +201,9 @@ pub fn get(store: &Store, id: &str) -> CoreResult<Conn> {
 }
 
 pub fn all(store: &Store) -> CoreResult<Vec<Conn>> {
-    let mut st = store.conn.prepare(&format!("SELECT {COLS} FROM connections ORDER BY name_lc"))?;
+    let mut st = store
+        .conn
+        .prepare(&format!("SELECT {COLS} FROM connections ORDER BY name_lc"))?;
     let mut rows = st.query_map([], from_row)?.collect::<Result<Vec<_>, _>>()?;
     drop(st);
     for c in rows.iter_mut() {
@@ -208,7 +215,11 @@ pub fn all(store: &Store) -> CoreResult<Vec<Conn>> {
 pub fn find_by_name(store: &Store, name: &str) -> CoreResult<Option<String>> {
     Ok(store
         .conn
-        .query_row("SELECT id FROM connections WHERE name_lc = ?1", [name.trim().to_lowercase()], |r| r.get(0))
+        .query_row(
+            "SELECT id FROM connections WHERE name_lc = ?1",
+            [name.trim().to_lowercase()],
+            |r| r.get(0),
+        )
         .optional()?)
 }
 
@@ -283,7 +294,9 @@ fn validate_port(p: i64) -> CoreResult<u16> {
 
 fn validate_description(d: Option<String>) -> CoreResult<Option<String>> {
     match d {
-        Some(d) if d.chars().count() > MAX_DESCRIPTION_LEN => Err(CoreError::too_long("description", MAX_DESCRIPTION_LEN)),
+        Some(d) if d.chars().count() > MAX_DESCRIPTION_LEN => {
+            Err(CoreError::too_long("description", MAX_DESCRIPTION_LEN))
+        }
         Some(d) if d.trim().is_empty() => Ok(None),
         d => Ok(d),
     }
@@ -296,9 +309,11 @@ fn empty_to_none(s: Option<String>) -> Option<String> {
 fn check_name_free(store: &Store, name: &str, except: Option<&str>) -> CoreResult<()> {
     if let Some(existing) = find_by_name(store, name)? {
         if Some(existing.as_str()) != except {
-            return Err(CoreError::new("conn.name_taken", format!("Connection name is taken: {name}"))
-                .with("name", name)
-                .with("existing_id", existing));
+            return Err(
+                CoreError::new("conn.name_taken", format!("Connection name is taken: {name}"))
+                    .with("name", name)
+                    .with("existing_id", existing),
+            );
         }
     }
     Ok(())
@@ -308,7 +323,10 @@ fn check_name_free(store: &Store, name: &str, except: Option<&str>) -> CoreResul
 /// Зашифрованный ключ без фразы допустим — тип станет известен позже.
 pub fn inspect_key_text(text: &str, passphrase: Option<&str>) -> CoreResult<(Option<String>, Option<String>)> {
     match crate::ssh::keys::decode_key(text, passphrase) {
-        Ok(k) => Ok((Some(crate::ssh::keys::key_type(&k.algorithm())), Some(crate::ssh::keys::fingerprint(k.public_key())))),
+        Ok(k) => Ok((
+            Some(crate::ssh::keys::key_type(&k.algorithm())),
+            Some(crate::ssh::keys::fingerprint(k.public_key())),
+        )),
         Err(e) if e.code == "auth.secret_required" => Ok((None, None)),
         Err(e) => Err(e),
     }
@@ -377,7 +395,11 @@ impl ConnDraft {
         self.auth_method = method;
         self.password = SecretChange::Clear;
         self.key_text = SecretChange::Clear;
-        self.passphrase = a.passphrase.clone().map(SecretChange::Set).unwrap_or(SecretChange::Clear);
+        self.passphrase = a
+            .passphrase
+            .clone()
+            .map(SecretChange::Set)
+            .unwrap_or(SecretChange::Clear);
         self.key_path = None;
         self.key_type = None;
         self.public_fingerprint = None;
@@ -404,7 +426,13 @@ impl ConnDraft {
     }
 }
 
-fn write_secret(store: &mut Store, id: &str, field: &str, ch: &SecretChange, cur: Option<Vec<u8>>) -> CoreResult<Option<Vec<u8>>> {
+fn write_secret(
+    store: &mut Store,
+    id: &str,
+    field: &str,
+    ch: &SecretChange,
+    cur: Option<Vec<u8>>,
+) -> CoreResult<Option<Vec<u8>>> {
     match ch {
         SecretChange::Keep => Ok(cur),
         SecretChange::Clear => Ok(None),
@@ -413,11 +441,14 @@ fn write_secret(store: &mut Store, id: &str, field: &str, ch: &SecretChange, cur
 }
 
 fn set_tags(store: &Store, id: &str, tags: &[String]) -> CoreResult<()> {
-    store.conn.execute("DELETE FROM connection_tags WHERE connection_id = ?1", [id])?;
+    store
+        .conn
+        .execute("DELETE FROM connection_tags WHERE connection_id = ?1", [id])?;
     for t in tags {
-        store
-            .conn
-            .execute("INSERT INTO connection_tags(connection_id, tag) VALUES (?1, ?2)", [id, t])?;
+        store.conn.execute(
+            "INSERT INTO connection_tags(connection_id, tag) VALUES (?1, ?2)",
+            [id, t],
+        )?;
     }
     Ok(())
 }
@@ -436,8 +467,23 @@ pub fn insert(store: &mut Store, d: ConnDraft) -> CoreResult<Conn> {
             group_id, source, created_at, updated_at)
          VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16,?17,?17)",
         params![
-            id, d.name, d.name.to_lowercase(), d.host, d.port, d.user, d.auth_method.as_str(), d.key_path,
-            d.key_type, d.public_fingerprint, pw, kt, pp, d.description, d.group_id, d.source, ts
+            id,
+            d.name,
+            d.name.to_lowercase(),
+            d.host,
+            d.port,
+            d.user,
+            d.auth_method.as_str(),
+            d.key_path,
+            d.key_type,
+            d.public_fingerprint,
+            pw,
+            kt,
+            pp,
+            d.description,
+            d.group_id,
+            d.source,
+            ts
         ],
     )?;
     set_tags(store, &id, &d.tags)?;
@@ -446,7 +492,16 @@ pub fn insert(store: &mut Store, d: ConnDraft) -> CoreResult<Conn> {
 
 /// Частичное обновление (merge patch, §3.3).
 pub fn update(store: &mut Store, id: &str, patch: &Map<String, Value>) -> CoreResult<Conn> {
-    const ALLOWED: &[&str] = &["name", "host", "port", "user", "auth", "description", "group_id", "tags"];
+    const ALLOWED: &[&str] = &[
+        "name",
+        "host",
+        "port",
+        "user",
+        "auth",
+        "description",
+        "group_id",
+        "tags",
+    ];
     if let Some(k) = patch.keys().find(|k| !ALLOWED.contains(&k.as_str())) {
         return Err(CoreError::invalid(k, "unknown field"));
     }
@@ -475,7 +530,10 @@ pub fn update(store: &mut Store, id: &str, patch: &Map<String, Value>) -> CoreRe
         d.host = validate_host(&opt_str(v, "host")?.unwrap_or_default())?;
     }
     if let Some(v) = patch.get("port") {
-        d.port = validate_port(v.as_i64().ok_or_else(|| CoreError::invalid("port", "expected integer"))?)?;
+        d.port = validate_port(
+            v.as_i64()
+                .ok_or_else(|| CoreError::invalid("port", "expected integer"))?,
+        )?;
     }
     if let Some(v) = patch.get("user") {
         d.user = empty_to_none(opt_str(v, "user")?);
@@ -492,7 +550,8 @@ pub fn update(store: &mut Store, id: &str, patch: &Map<String, Value>) -> CoreRe
     if let Some(v) = patch.get("tags") {
         let tags: Vec<String> = match v {
             Value::Null => vec![],
-            v => serde_json::from_value(v.clone()).map_err(|_| CoreError::invalid("tags", "expected array of strings"))?,
+            v => serde_json::from_value(v.clone())
+                .map_err(|_| CoreError::invalid("tags", "expected array of strings"))?,
         };
         d.tags = tag::normalize_all(&tags)?;
     }
@@ -512,8 +571,22 @@ pub fn update(store: &mut Store, id: &str, patch: &Map<String, Value>) -> CoreRe
             secret_passphrase=?13, description=?14, group_id=?15, updated_at=?16
          WHERE id=?1",
         params![
-            id, d.name, d.name.to_lowercase(), d.host, d.port, d.user, d.auth_method.as_str(), d.key_path,
-            d.key_type, d.public_fingerprint, pw, kt, pp, d.description, d.group_id, now()
+            id,
+            d.name,
+            d.name.to_lowercase(),
+            d.host,
+            d.port,
+            d.user,
+            d.auth_method.as_str(),
+            d.key_path,
+            d.key_type,
+            d.public_fingerprint,
+            pw,
+            kt,
+            pp,
+            d.description,
+            d.group_id,
+            now()
         ],
     )?;
     if addr_changed {
@@ -529,7 +602,9 @@ pub fn update(store: &mut Store, id: &str, patch: &Map<String, Value>) -> CoreRe
 }
 
 fn apply_auth_patch(store: &mut Store, cur: &Conn, d: &mut ConnDraft, v: &Value) -> CoreResult<()> {
-    let m = v.as_object().ok_or_else(|| CoreError::invalid("auth", "expected object"))?;
+    let m = v
+        .as_object()
+        .ok_or_else(|| CoreError::invalid("auth", "expected object"))?;
     const AUTH_FIELDS: &[&str] = &["method", "password", "key_path", "key_text", "passphrase"];
     if let Some(k) = m.keys().find(|k| !AUTH_FIELDS.contains(&k.as_str())) {
         return Err(CoreError::invalid(&format!("auth.{k}"), "unknown field"));
@@ -543,7 +618,10 @@ fn apply_auth_patch(store: &mut Store, cur: &Conn, d: &mut ConnDraft, v: &Value)
         })
     };
     let method = match m.get("method") {
-        Some(v) => AuthMethod::parse(v.as_str().ok_or_else(|| CoreError::invalid("auth.method", "expected string"))?)?,
+        Some(v) => AuthMethod::parse(
+            v.as_str()
+                .ok_or_else(|| CoreError::invalid("auth.method", "expected string"))?,
+        )?,
         None => cur.auth_method,
     };
     if method != cur.auth_method {
@@ -558,7 +636,9 @@ fn apply_auth_patch(store: &mut Store, cur: &Conn, d: &mut ConnDraft, v: &Value)
         }
         AuthMethod::KeyFile => {
             if let Some(v) = m.get("key_path") {
-                d.key_path = Some(empty_to_none(opt_str(v, "auth.key_path")?).ok_or_else(|| CoreError::required("auth.key_path"))?);
+                d.key_path = Some(
+                    empty_to_none(opt_str(v, "auth.key_path")?).ok_or_else(|| CoreError::required("auth.key_path"))?,
+                );
             }
             d.passphrase = secret("passphrase")?;
         }
@@ -615,7 +695,11 @@ pub fn duplicate(store: &mut Store, id: &str, name: Option<&str>) -> CoreResult<
         None => {
             let mut i = 1;
             loop {
-                let cand = if i == 1 { format!("{} (copy)", src.name) } else { format!("{} (copy {i})", src.name) };
+                let cand = if i == 1 {
+                    format!("{} (copy)", src.name)
+                } else {
+                    format!("{} (copy {i})", src.name)
+                };
                 if find_by_name(store, &cand)?.is_none() {
                     break cand;
                 }
@@ -696,7 +780,11 @@ pub fn list(store: &Store, f: &ListFilter) -> CoreResult<(Vec<Conn>, usize)> {
     let groups = match &f.group_id {
         Some(g) => {
             group::ensure_exists(store, g)?;
-            Some(if f.recursive { group::subtree(store, g)? } else { [g.clone()].into() })
+            Some(if f.recursive {
+                group::subtree(store, g)?
+            } else {
+                [g.clone()].into()
+            })
         }
         None => None,
     };
@@ -711,18 +799,26 @@ pub fn list(store: &Store, f: &ListFilter) -> CoreResult<(Vec<Conn>, usize)> {
     let mut items: Vec<Conn> = all(store)?
         .into_iter()
         .filter(|c| {
-            q.as_ref().is_none_or(|q| c.name.to_lowercase().contains(q) || c.host.to_lowercase().contains(q))
+            q.as_ref()
+                .is_none_or(|q| c.name.to_lowercase().contains(q) || c.host.to_lowercase().contains(q))
                 && host.as_ref().is_none_or(|h| c.host.to_lowercase().contains(h))
                 && tags.iter().all(|t| c.tags.contains(t))
                 && (!f.no_group || c.group_id.is_none())
-                && groups.as_ref().is_none_or(|g| c.group_id.as_ref().is_some_and(|id| g.contains(id)))
+                && groups
+                    .as_ref()
+                    .is_none_or(|g| c.group_id.as_ref().is_some_and(|id| g.contains(id)))
                 && f.status.as_ref().is_none_or(|s| &c.status.state == s)
         })
         .collect();
     match f.sort.as_deref().unwrap_or("name") {
         "name" => items.sort_by_key(|c| c.name.to_lowercase()),
         "host" => items.sort_by(|a, b| a.host.cmp(&b.host).then(a.port.cmp(&b.port))),
-        "status" => items.sort_by(|a, b| a.status.state.cmp(&b.status.state).then(a.name.to_lowercase().cmp(&b.name.to_lowercase()))),
+        "status" => items.sort_by(|a, b| {
+            a.status
+                .state
+                .cmp(&b.status.state)
+                .then(a.name.to_lowercase().cmp(&b.name.to_lowercase()))
+        }),
         "last_checked" => items.sort_by(|a, b| a.status.checked_at.cmp(&b.status.checked_at)),
         other => return Err(CoreError::invalid_args("--sort", format!("unknown sort {other}"))),
     }
@@ -752,16 +848,30 @@ mod tests {
     #[test]
     fn crud_and_secrets_hidden() {
         let (_d, mut s) = temp_store();
-        let c = mk(&mut s, json!({"name":"web-1","host":"10.0.0.5","tags":["Prod","nginx"],
-            "auth":{"method":"password","password":"s3cr3t"}})).unwrap();
+        let c = mk(
+            &mut s,
+            json!({"name":"web-1","host":"10.0.0.5","tags":["Prod","nginx"],
+            "auth":{"method":"password","password":"s3cr3t"}}),
+        )
+        .unwrap();
         let j = c.to_json();
         assert_eq!(j["auth"]["has_password"], true);
         assert!(!j.to_string().contains("s3cr3t"));
         assert_eq!(j["tags"], json!(["nginx", "prod"]));
-        assert_eq!(mk(&mut s, json!({"name":"WEB-1","host":"x"})).unwrap_err().code, "conn.name_taken");
-        assert_eq!(mk(&mut s, json!({"name":"p","host":"x","port":70000})).unwrap_err().code, "validation.out_of_range");
+        assert_eq!(
+            mk(&mut s, json!({"name":"WEB-1","host":"x"})).unwrap_err().code,
+            "conn.name_taken"
+        );
+        assert_eq!(
+            mk(&mut s, json!({"name":"p","host":"x","port":70000}))
+                .unwrap_err()
+                .code,
+            "validation.out_of_range"
+        );
 
-        let pw = s.decrypt_string(&Conn::aad(&c.id, "password"), c.secret_password.as_ref().unwrap()).unwrap();
+        let pw = s
+            .decrypt_string(&Conn::aad(&c.id, "password"), c.secret_password.as_ref().unwrap())
+            .unwrap();
         assert_eq!(pw.expose(), "s3cr3t");
 
         let patch = json!({"port": 2222, "auth": {"password": null}, "description": "d"});
@@ -783,8 +893,16 @@ mod tests {
         let (_d, mut s) = temp_store();
         let g = group::create(&s, "G", None).unwrap();
         let sub = group::create(&s, "S", Some(&g.id)).unwrap();
-        mk(&mut s, json!({"name":"web-1","host":"10.0.0.1","tags":["prod","web"],"group_id":g.id})).unwrap();
-        mk(&mut s, json!({"name":"db-1","host":"db.local","tags":["prod"],"group_id":sub.id})).unwrap();
+        mk(
+            &mut s,
+            json!({"name":"web-1","host":"10.0.0.1","tags":["prod","web"],"group_id":g.id}),
+        )
+        .unwrap();
+        mk(
+            &mut s,
+            json!({"name":"db-1","host":"db.local","tags":["prod"],"group_id":sub.id}),
+        )
+        .unwrap();
         mk(&mut s, json!({"name":"misc","host":"10.9.9.9"})).unwrap();
         let f = |v: Value| list(&s, &serde_json::from_value(v).unwrap()).unwrap().1;
         assert_eq!(f(json!({})), 3);
@@ -801,12 +919,19 @@ mod tests {
     #[test]
     fn switching_auth_method_drops_old_secrets() {
         let (_d, mut s) = temp_store();
-        let c = mk(&mut s, json!({"name":"a","host":"h","auth":{"method":"password","password":"x"}})).unwrap();
+        let c = mk(
+            &mut s,
+            json!({"name":"a","host":"h","auth":{"method":"password","password":"x"}}),
+        )
+        .unwrap();
         let patch = json!({"auth":{"method":"key_file","key_path":"/k"}});
         let u = update(&mut s, &c.id, patch.as_object().unwrap()).unwrap();
         assert!(u.secret_password.is_none());
         assert_eq!(u.key_path.as_deref(), Some("/k"));
         let bad = json!({"auth":{"method":"key_text"}});
-        assert_eq!(update(&mut s, &c.id, bad.as_object().unwrap()).unwrap_err().code, "validation.required");
+        assert_eq!(
+            update(&mut s, &c.id, bad.as_object().unwrap()).unwrap_err().code,
+            "validation.required"
+        );
     }
 }

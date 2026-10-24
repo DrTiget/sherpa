@@ -24,22 +24,29 @@ pub fn decode_key(text: &str, passphrase: Option<&str>) -> CoreResult<PrivateKey
     match russh::keys::decode_secret_key(text, None) {
         Ok(k) => Ok(k),
         Err(russh::keys::Error::KeyIsEncrypted) => match passphrase {
-            None => Err(CoreError::new("auth.secret_required", "Key passphrase is required").with("kind", "passphrase")),
+            None => {
+                Err(CoreError::new("auth.secret_required", "Key passphrase is required").with("kind", "passphrase"))
+            }
             Some(p) => russh::keys::decode_secret_key(text, Some(p))
                 .map_err(|_| CoreError::new("auth.passphrase_wrong", "Wrong key passphrase")),
         },
-        Err(e) => Err(CoreError::new("auth.key_invalid", format!("Key is not recognized: {e}")).with("reason", e.to_string())),
+        Err(e) => {
+            Err(CoreError::new("auth.key_invalid", format!("Key is not recognized: {e}")).with("reason", e.to_string()))
+        }
     }
 }
 
 pub fn read_key_file(path: &Path) -> CoreResult<zeroize::Zeroizing<String>> {
-    std::fs::read_to_string(path).map(zeroize::Zeroizing::new).map_err(|e| match e.kind() {
-        std::io::ErrorKind::NotFound => CoreError::new("auth.key_file_not_found", "Key file not found")
-            .with("path", path.display().to_string()),
-        _ => CoreError::new("auth.key_file_unreadable", format!("Cannot read key file: {e}"))
-            .with("path", path.display().to_string())
-            .with("reason", e.to_string()),
-    })
+    std::fs::read_to_string(path)
+        .map(zeroize::Zeroizing::new)
+        .map_err(|e| match e.kind() {
+            std::io::ErrorKind::NotFound => {
+                CoreError::new("auth.key_file_not_found", "Key file not found").with("path", path.display().to_string())
+            }
+            _ => CoreError::new("auth.key_file_unreadable", format!("Cannot read key file: {e}"))
+                .with("path", path.display().to_string())
+                .with("reason", e.to_string()),
+        })
 }
 
 /// Сгенерировать ключ Ed25519 в формате OpenSSH (с фразой — шифрованный).
@@ -53,7 +60,12 @@ pub fn generate_ed25519_openssh(passphrase: Option<&str>) -> CoreResult<zeroize:
         let mut salt = vec![0u8; 16];
         rand::rng().fill_bytes(&mut salt);
         key = key
-            .encrypt_with(Cipher::Aes256Ctr, Kdf::Bcrypt { salt, rounds: 16 }, rand::rng().next_u32(), p)
+            .encrypt_with(
+                Cipher::Aes256Ctr,
+                Kdf::Bcrypt { salt, rounds: 16 },
+                rand::rng().next_u32(),
+                p,
+            )
             .map_err(CoreError::internal)?;
     }
     key.to_openssh(LineEnding::LF).map_err(CoreError::internal)
