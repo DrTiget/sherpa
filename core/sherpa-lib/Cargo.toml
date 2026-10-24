@@ -6,6 +6,7 @@ license.workspace = true
 authors.workspace = true
 
 [dependencies]
+async-trait = "0.1.92"
 base64 = "0.23.1"
 chacha20poly1305 = "0.10.1"
 clap = { version = "4.6.7", features = ["derive", "env"] }
@@ -32,3 +33,6 @@ tempfile = "3.27.0"
 [features]
 # Встроенный тестовый SSH-сервер для интеграционных тестов.
 test-util = []
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Security", "Win32_Security_Authorization", "Win32_System_Threading"] }

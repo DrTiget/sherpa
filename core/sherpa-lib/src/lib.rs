@@ -9,6 +9,7 @@ pub mod ssh;
 pub mod sshconfig;
 pub mod store;
 pub mod util;
+pub mod utilities;
 
 pub use commands::run_cli;
 

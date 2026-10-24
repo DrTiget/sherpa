@@ -5,6 +5,7 @@
 
 pub mod check;
 pub mod conn;
+pub mod daemon;
 pub mod group;
 pub mod hostkey;
 pub mod import;
@@ -43,6 +44,7 @@ pub fn registry() -> Vec<&'static dyn CommandGroup> {
         &status::Status,
         &hostkey::HostKey,
         &import::Import,
+        &daemon::Daemon,
     ]
 }
 

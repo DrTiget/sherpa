@@ -5,8 +5,10 @@
 pub mod client;
 pub mod exec;
 pub mod keys;
+pub mod pool;
 pub mod target;
 
 pub use client::{connect, ConnectOptions, ConnectOutcome, Session};
-pub use exec::{ExecOutput, RemoteExec};
+pub use exec::{shell_quote, ExecOutput, FakeExec, RemoteExec};
+pub use pool::{Pool, PooledConn};
 pub use target::{AuthMaterial, KeySource, Target};

@@ -1,16 +1,17 @@
 //! Единый тип ошибки ядра (CORE_API §1.4, §5).
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
 /// Ошибка ядра: стабильный код, английский текст, параметры для локализации.
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CoreError {
     pub code: String,
     pub message: String,
+    #[serde(default)]
     /// В `Box`, чтобы `Result<_, CoreError>` оставался компактным.
     pub params: Box<Map<String, Value>>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub details: Vec<CoreError>,
 }
 
