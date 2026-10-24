@@ -16,6 +16,7 @@ public:
     QProcess proc;
     int port = 0;
     QString clientKeyPath, otherKeyPath, user;
+    QString extraConfig; // дополнительные строки sshd_config
 
     static QString find()
     {
@@ -69,6 +70,7 @@ public:
                                  "PasswordAuthentication no\nKbdInteractiveAuthentication no\nPubkeyAuthentication yes\n"
                                  "UsePAM no\nStrictModes no\nPermitRootLogin yes\nLogLevel ERROR\nSubsystem sftp internal-sftp\n")
                       .arg(port).arg(dir.filePath("host_key"), dir.filePath("authorized_keys"), dir.filePath("sshd.pid")).toUtf8());
+        cfg.write(extraConfig.toUtf8());
         cfg.close();
         proc.start(find(), {"-D", "-e", "-f", dir.filePath("sshd_config")});
         if (!proc.waitForStarted(5000))

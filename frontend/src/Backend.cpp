@@ -396,6 +396,16 @@ QVariantMap Backend::selected() const
     return m_selectedId.isEmpty() ? QVariantMap() : m_servers.raw(m_selectedId);
 }
 
+QVariantList Backend::allServers() const
+{
+    QVariantList out;
+    for (const QString &id : m_servers.allIds()) {
+        const QVariantMap r = serverById(id);
+        out.append(QVariantMap{{"id", id}, {"name", r.value("name")}, {"group_id", r.value("group_id")}, {"group_name", r.value("group_name")}});
+    }
+    return out;
+}
+
 QVariantMap Backend::serverById(const QString &id) const { return m_servers.raw(id); }
 
 QString Backend::groupName(const QString &id) const { return m_groupNames.value(id); }

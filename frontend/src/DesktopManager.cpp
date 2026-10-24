@@ -255,6 +255,18 @@ bool DesktopState::saveText(const QUrl &url, const QString &text) const
     return true;
 }
 
+int DesktopState::callRaw(const QString &method, const QVariantMap &params)
+{
+    const int token = m_nextToken++;
+    m_daemon->request(method, params, [this, token](const DaemonReply &r) {
+        if (!r.ok)
+            emit requestFailed(token, r.error.code, r.error.params);
+        const QVariant payload = r.ok ? r.data : QVariant(QVariantMap{{"code", r.error.code}, {"params", r.error.params}});
+        emit requestDone(token, r.ok, payload, r.ok ? QString() : ErrorText::text(r.error.code, r.error.params, r.error.message));
+    });
+    return token;
+}
+
 void DesktopState::handleEvent(const QVariantMap &ev)
 {
     emit eventReceived(ev);
@@ -461,6 +473,11 @@ void DesktopManager::onEvent(const QVariantMap &ev)
     const QString name = ev.value("event").toString();
     if (name == "daemon_shutdown")
         return;
+    if (name.startsWith("multi.")) { // результаты по серверам идут окну, откуда запущена пачка (сверка по run)
+        for (auto *d2 : std::as_const(m_desktops))
+            emit d2->utilityEvent(ev);
+        return;
+    }
     if (conn.isEmpty() && !(name == "error" && ev.contains("subscription"))) {
         // события подписок без connection_id (log.line, ошибки операций): окна сами фильтруют по subscription
         for (auto *d2 : std::as_const(m_desktops))

@@ -67,6 +67,8 @@ public:
     Q_INVOKABLE TerminalSession *newTerminal();
     // Мини-запрос к демону из QML (для утилит): method, params → сигнал requestDone
     Q_INVOKABLE int call(const QString &method, const QVariantMap &params);
+    // То же без подстановки connection_id (multi.run, danger.prepare с готовыми params)
+    Q_INVOKABLE int callRaw(const QString &method, const QVariantMap &params);
     // Запрос к демону с обратным вызовом: cb(ok, data, errorCode, errorText, errorParams). connection_id подставляется сам.
     Q_INVOKABLE void rpc(const QString &method, const QVariantMap &params, const QJSValue &cb);
     // То же без connection_id (transfer.cancel, tunnel.stop, danger.prepare…)

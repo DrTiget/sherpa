@@ -39,3 +39,8 @@ add_executable(tst_sysutils tst_sysutils.cpp)
 target_link_libraries(tst_sysutils PRIVATE sherpa_ui sherpa_uiplugin Qt6::Test Qt6::Quick Qt6::QuickControls2)
 add_test(NAME sysutils COMMAND tst_sysutils)
 set_tests_properties(sysutils PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 600)
+
+add_executable(tst_tools tst_tools.cpp)
+target_link_libraries(tst_tools PRIVATE sherpa_ui sherpa_uiplugin Qt6::Test Qt6::Quick Qt6::QuickControls2)
+add_test(NAME tools COMMAND tst_tools)
+set_tests_properties(tools PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 600)

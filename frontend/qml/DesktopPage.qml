@@ -25,6 +25,7 @@ Item {
     property int zCounter: 10
     property bool restored: false
     property alias area: area
+    property alias widgets: widgets
 
     // ------------------------------------------------------------ окна
     Component { id: winComp; SWindow { area: page.area } }
@@ -134,13 +135,14 @@ Item {
     }
 
     function layoutData() {
-        return { windows: wins.map(w => ({ kind: w.kind, x: w.win.normalRect.x, y: w.win.normalRect.y, w: w.win.normalRect.width, h: w.win.normalRect.height,
+        return { widgets: widgets.config, windows: wins.map(w => ({ kind: w.kind, x: w.win.normalRect.x, y: w.win.normalRect.y, w: w.win.normalRect.width, h: w.win.normalRect.height,
                                             state: w.win.wstate === "snapped" ? "normal" : w.win.wstate })) }
     }
     Timer { id: saveTimer; interval: 700; onTriggered: if (page.restored) page.desk.saveLayout(page.layoutData()) }
     function restoreLayout() {
         if (restored || !desk.layoutReady) return
         restored = true
+        widgets.config = desk.layout.widgets || {}
         const l = desk.layout.windows || []
         for (const w of l) {
             if (AppRegistry.byId(w.kind) && !AppRegistry.byId(w.kind).noRestore)
@@ -198,11 +200,24 @@ Item {
         acceptedButtons: Qt.RightButton | Qt.LeftButton
         onPressed: (m) => { if (m.button === Qt.RightButton && page.working) { ctx.popup() } else page.activate(null) }
     }
+    DesktopWidgets {
+        id: widgets
+        desktop: page.desk
+        anchors.left: parent.left; anchors.right: parent.right; anchors.top: parent.top
+        anchors.bottom: taskbar.top
+        visible: page.working
+        onChanged: saveTimer.restart()
+    }
     SMenu {
         id: ctx
         MenuItem { text: qsTr("New terminal"); onTriggered: page.newTerminal() }
         MenuItem { text: qsTr("Resource monitor"); onTriggered: page.openWindow("monitor") }
         MenuItem { text: qsTr("Show desktop"); onTriggered: page.showDesktop() }
+        MenuSeparator { }
+        MenuItem { text: (widgets.isOn("cpu") ? "✓  " : "     ") + qsTr("Widget: CPU"); onTriggered: widgets.setOn("cpu", !widgets.isOn("cpu")) }
+        MenuItem { text: (widgets.isOn("server") ? "✓  " : "     ") + qsTr("Widget: Server"); onTriggered: widgets.setOn("server", !widgets.isOn("server")) }
+        MenuItem { text: (widgets.isOn("disks") ? "✓  " : "     ") + qsTr("Widget: Disks"); onTriggered: widgets.setOn("disks", !widgets.isOn("disks")) }
+        MenuItem { text: (widgets.isOn("alerts") ? "✓  " : "     ") + qsTr("Widget: Alerts"); onTriggered: widgets.setOn("alerts", !widgets.isOn("alerts")) }
     }
 
     // ------------------------------------------------------------ область окон

@@ -113,6 +113,8 @@ public:
     Q_INVOKABLE void duplicateConnection(const QString &id);
     Q_INVOKABLE void hostKeyFor(const QString &host, int port);
     Q_INVOKABLE QVariantMap serverById(const QString &id) const;
+    // Все подключения без учёта фильтра: [{id, name, group_id, group_name}] (мультисервер, сравнение)
+    Q_INVOKABLE QVariantList allServers() const;
 
     // --- группы
     Q_INVOKABLE void createGroup(const QString &name);

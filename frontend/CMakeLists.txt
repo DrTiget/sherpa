@@ -65,6 +65,7 @@ set(SHERPA_QML
 )
 
 include(qml/sysutils.cmake)
+include(qml/tools/tools.cmake)
 
 # Интерфейс — статическая QML-библиотека: её используют и приложение, и тесты.
 qt_add_library(sherpa_ui STATIC)
@@ -84,6 +85,7 @@ qt_add_qml_module(sherpa_ui
         src/TerminalItem.cpp src/TerminalItem.h
         src/LocalFs.cpp src/LocalFs.h
         src/CodeHighlighter.cpp src/CodeHighlighter.h
+        ${SHERPA_TOOLS_SOURCES}
 )
 target_link_libraries(sherpa_ui PUBLIC Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
 target_include_directories(sherpa_ui PUBLIC src)

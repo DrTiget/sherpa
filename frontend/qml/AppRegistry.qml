@@ -22,11 +22,11 @@ QtObject {
 
         { id: "logs", name: qsTr("Logs"), glyph: "≡", cat: "monitoring", cap: "logs", ready: true, source: "LogsWindow.qml", w: 1000, h: 600, single: false },
 
-        { id: "network", name: qsTr("Network"), glyph: "⇄", cat: "network", cap: "network", ready: false, source: "", w: 860, h: 560, single: true },
+        { id: "network", name: qsTr("Network"), glyph: "⇄", cat: "network", cap: "network", ready: true, source: "tools/NetworkWindow.qml", w: 900, h: 560, single: true },
 
-        { id: "nettools", name: qsTr("Network tools"), glyph: "⌁", cat: "network", cap: "nettools", ready: false, source: "", w: 800, h: 520, single: true },
+        { id: "nettools", name: qsTr("Network tools"), glyph: "⌁", cat: "network", cap: "nettools", ready: true, source: "tools/NettoolsWindow.qml", w: 760, h: 520, single: true },
 
-        { id: "firewall", name: qsTr("Firewall"), glyph: "▥", cat: "network", cap: "firewall", ready: false, source: "", w: 860, h: 560, single: true },
+        { id: "firewall", name: qsTr("Firewall"), glyph: "▥", cat: "network", cap: "firewall", ready: true, source: "tools/FirewallWindow.qml", w: 900, h: 560, single: true },
 
         { id: "disks", name: qsTr("Disks"), glyph: "◍", cat: "system", cap: "disks", ready: true, source: "DisksWindow.qml", w: 940, h: 620, single: true },
 
@@ -36,23 +36,25 @@ QtObject {
 
         { id: "cron", name: qsTr("Scheduler"), glyph: "◷", cat: "system", cap: "cron", ready: true, source: "CronWindow.qml", w: 960, h: 580, single: true },
 
-        { id: "docker", name: "Docker", glyph: "◫", cat: "dev", cap: "docker", ready: false, source: "", w: 920, h: 580, single: true },
+        { id: "docker", name: "Docker", glyph: "◫", cat: "dev", cap: "docker", ready: true, source: "tools/DockerWindow.qml", w: 980, h: 600, single: true },
 
-        { id: "databases", name: qsTr("Databases"), glyph: "▤", cat: "dev", cap: "db", ready: false, source: "", w: 900, h: 560, single: true },
+        { id: "databases", name: qsTr("Databases"), glyph: "▤", cat: "dev", cap: "db", ready: true, source: "tools/DatabasesWindow.qml", w: 900, h: 560, single: true },
 
-        { id: "web", name: qsTr("Web servers"), glyph: "◎", cat: "dev", cap: "web", ready: false, source: "", w: 900, h: 560, single: true },
+        { id: "web", name: qsTr("Web servers"), glyph: "◎", cat: "dev", cap: "web", ready: true, source: "tools/WebWindow.qml", w: 900, h: 560, single: true },
 
-        { id: "security", name: qsTr("Security"), glyph: "⛨", cat: "system", cap: "security", ready: false, source: "", w: 860, h: 560, single: true },
+        { id: "security", name: qsTr("Security"), glyph: "⛨", cat: "system", cap: "security", ready: true, source: "tools/SecurityWindow.qml", w: 900, h: 580, single: true },
 
-        { id: "backup", name: qsTr("Backups"), glyph: "⎘", cat: "files", cap: "backup", ready: false, source: "", w: 860, h: 560, single: true },
+        { id: "backup", name: qsTr("Backups"), glyph: "⎘", cat: "files", cap: "backup", ready: true, source: "tools/BackupWindow.qml", w: 980, h: 620, single: true },
 
-        { id: "snippets", name: qsTr("Snippets"), glyph: "{}", cat: "dev", cap: "snippet", ready: false, source: "", w: 800, h: 520, single: true },
+        { id: "snippets", name: qsTr("Snippets"), glyph: "{}", cat: "dev", cap: "snippet", ready: true, source: "tools/SnippetsWindow.qml", w: 980, h: 640, single: true },
 
-        { id: "diff", name: qsTr("Compare configs"), glyph: "≠", cat: "dev", cap: "diff", ready: false, source: "", w: 900, h: 560, single: false },
+        { id: "multi", name: qsTr("Multi-server"), glyph: "⫴", cat: "dev", cap: "multi", ready: true, source: "tools/MultiWindow.qml", w: 980, h: 620, single: true },
 
-        { id: "notes", name: qsTr("Notes"), glyph: "✎", cat: "dev", cap: "notes", ready: false, source: "", w: 760, h: 520, single: true },
+        { id: "diff", name: qsTr("Compare configs"), glyph: "≠", cat: "dev", cap: "diff", ready: true, source: "tools/DiffWindow.qml", w: 980, h: 600, single: false },
 
-        { id: "audit", name: qsTr("Sherpa journal"), glyph: "☰", cat: "monitoring", cap: "audit", ready: false, source: "", w: 860, h: 520, single: true }
+        { id: "notes", name: qsTr("Notes"), glyph: "✎", cat: "dev", cap: "notes", ready: true, source: "tools/NotesWindow.qml", w: 900, h: 580, single: true },
+
+        { id: "audit", name: qsTr("Sherpa journal"), glyph: "☰", cat: "monitoring", cap: "audit", ready: true, source: "tools/AuditWindow.qml", w: 900, h: 540, single: true }
     ]
 
     function byId(id) {
