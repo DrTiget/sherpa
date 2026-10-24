@@ -29,7 +29,6 @@ Item {
     // ------------------------------------------------------------ окна
     Component { id: winComp; SWindow { area: page.area } }
     Component { id: termComp; TerminalWindow { } }
-    Component { id: monComp; MonitorWindow { } }
 
     function activeWin() { for (const w of wins) if (w.win.active) return w.win; return null }
     function refreshList() {
@@ -44,33 +43,41 @@ Item {
     function cascade() { const n = wins.length; return { x: 40 + (n % 8) * 28, y: 30 + (n % 8) * 28 } }
 
     function openWindow(kind, rect, wstate, session) {
-        if (kind === "monitor") {
-            const ex = findKind("monitor")
+        const app = AppRegistry.byId(kind)
+        if (!app || !AppRegistry.enabledFor(app, desk.capabilities)) return null
+        if (app.single) {
+            const ex = findKind(kind)
             if (ex) { activate(ex.win); return ex.win }
         }
         const c = cascade()
-        const r = rect || { x: c.x, y: c.y, w: kind === "terminal" ? 760 : 820, h: kind === "terminal" ? 460 : 560 }
+        const r = rect || { x: c.x, y: c.y, w: app.w, h: app.h }
+        const isTerm = kind === "terminal"
         const id = "w" + (nextWid++)
         const win = winComp.createObject(area, {
             x: Math.max(0, Math.min(r.x, Math.max(0, area.width - 200))), y: Math.max(0, Math.min(r.y, Math.max(0, area.height - 80))),
             width: r.w, height: r.h,
-            glyph: kind === "terminal" ? ">_" : "▤",
+            glyph: app.glyph,
             subtitle: desk.name, prod: page.prod,
-            contentTransparent: kind === "terminal",
-            accent: kind === "terminal" ? Theme.cyan : Theme.green
+            contentTransparent: isTerm,
+            accent: isTerm ? Theme.cyan : Theme.green
         })
         win.normalRect = Qt.rect(win.x, win.y, win.width, win.height)
-        if (kind !== "terminal") win.title = Qt.binding(() => qsTr("Resource monitor"))
+        if (!isTerm) win.title = Qt.binding(() => AppRegistry.byId(kind).name)
         let content
-        if (kind === "terminal") {
+        if (isTerm) {
             const s = session || desk.newTerminal()
             content = termComp.createObject(win.contentItem, { session: s })
             content.anchors.fill = win.contentItem
             win.title = Qt.binding(() => s.title !== "" ? s.title : qsTr("Terminal"))
             content.editConnection.connect(() => page.editConnectionRequested(desk.connectionId))
         } else {
-            content = monComp.createObject(win.contentItem, { desktop: desk })
+            const comp = Qt.createComponent(app.source)
+            if (comp.status !== Component.Ready) { console.warn("cannot load", app.source, comp.errorString()); win.destroy(); return null }
+            content = comp.createObject(win.contentItem, { desktop: desk })
+            if (!content) { win.destroy(); return null }
             content.anchors.fill = win.contentItem
+            // окна утилит могут просить открыть другое окно (например, «Терминал здесь»)
+            if (content.openApp) content.openApp.connect((id2, args) => page.openApp(id2, args))
         }
         const entry = { id: id, kind: kind, win: win, session: kind === "terminal" ? content.session : null }
         wins = wins.concat([entry])
@@ -109,6 +116,8 @@ Item {
     }
     function showDesktop() { for (const w of wins) w.win.minimize(); activate(null) }
     function newTerminal() { return openWindow("terminal") }
+    // Открыть утилиту по id с необязательными аргументами (окно сможет прочитать `startArgs`)
+    function openApp(id, args) { const w = openWindow(id); if (w && args) { const c = w.contentItem.children[0]; if (c && c.startWith) c.startWith(args) } return w }
 
     function layoutData() {
         return { windows: wins.map(w => ({ kind: w.kind, x: w.win.normalRect.x, y: w.win.normalRect.y, w: w.win.normalRect.width, h: w.win.normalRect.height,
@@ -120,7 +129,7 @@ Item {
         restored = true
         const l = desk.layout.windows || []
         for (const w of l) {
-            if (w.kind === "terminal" || w.kind === "monitor")
+            if (AppRegistry.byId(w.kind))
                 openWindow(w.kind, { x: w.x, y: w.y, w: w.w, h: w.h }, w.state)
         }
         if (startWithTerminal && !findKind("terminal")) newTerminal()
@@ -230,7 +239,7 @@ Item {
         desk: page.desk
         x: 8
         y: page.height - taskbar.height - height - 6
-        onLaunch: (id) => { if (id === "terminal") page.newTerminal(); else page.openWindow(id) }
+        onLaunch: (id) => page.openWindow(id)
         onReconnectRequested: page.desk.retryNow()
         onCloseDesktopRequested: page.closeDesktopRequested()
     }

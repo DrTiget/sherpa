@@ -10,10 +10,11 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 option(SHERPA_BUILD_TESTS "Build tests" ON)
 
-set_source_files_properties(qml/Theme.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+set_source_files_properties(qml/Theme.qml qml/AppRegistry.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 set(SHERPA_QML
     qml/Theme.qml
+    qml/AppRegistry.qml
     qml/Main.qml
     qml/HomePage.qml
     qml/Sidebar.qml

@@ -22,21 +22,6 @@ Popup {
     property string category: "all"
     property string query: ""
 
-    readonly property var apps: [
-        { id: "terminal", name: qsTr("Terminal"), glyph: ">_", cat: "system", ready: true },
-        { id: "monitor", name: qsTr("Resource monitor"), glyph: "▤", cat: "monitoring", ready: true },
-        { id: "files", name: qsTr("Files"), glyph: "▣", cat: "files", ready: false },
-        { id: "services", name: qsTr("Services"), glyph: "⚙", cat: "system", ready: false },
-        { id: "logs", name: qsTr("Logs"), glyph: "≡", cat: "monitoring", ready: false },
-        { id: "network", name: qsTr("Network"), glyph: "⇄", cat: "network", ready: false },
-        { id: "firewall", name: qsTr("Firewall"), glyph: "▥", cat: "network", ready: false },
-        { id: "disks", name: qsTr("Disks"), glyph: "◍", cat: "system", ready: false },
-        { id: "packages", name: qsTr("Packages"), glyph: "▦", cat: "system", ready: false },
-        { id: "cron", name: qsTr("Scheduler"), glyph: "◷", cat: "system", ready: false },
-        { id: "docker", name: "Docker", glyph: "◫", cat: "dev", ready: false },
-        { id: "databases", name: qsTr("Databases"), glyph: "▤", cat: "dev", ready: false },
-        { id: "web", name: qsTr("Web servers"), glyph: "◎", cat: "dev", ready: false }
-    ]
     readonly property var cats: [
         { id: "fav", name: qsTr("Favorites") }, { id: "system", name: qsTr("System") }, { id: "network", name: qsTr("Network") },
         { id: "files", name: qsTr("Files") }, { id: "monitoring", name: qsTr("Monitoring") }, { id: "dev", name: qsTr("Development") },
@@ -44,13 +29,10 @@ Popup {
     ]
     function filtered() {
         const q = query.toLowerCase()
-        return apps.filter(a => (category === "all" || (category === "fav" ? (a.id === "terminal" || a.id === "monitor") : a.cat === category))
+        return AppRegistry.apps.filter(a => (category === "all" || (category === "fav" ? (a.id === "terminal" || a.id === "monitor") : a.cat === category))
                                 && (q === "" || a.name.toLowerCase().indexOf(q) >= 0 || a.id.indexOf(q) >= 0))
     }
-    function capsOk(a) {
-        const u = desk.capabilities.utilities
-        return !u || u[a.id] !== false
-    }
+    function capsOk(a) { return AppRegistry.enabledFor(a, desk.capabilities) }
     onOpened: search.forceFocus()
     onAboutToShow: { query = ""; search.text = "" }
 
@@ -68,7 +50,7 @@ Popup {
             Layout.fillWidth: true; Layout.margins: 14
             placeholderText: qsTr("Search utilities, services, files…")
             onEdited: root.query = text
-            onAccepted: { const f = root.filtered().filter(a => a.ready && root.capsOk(a)); if (f.length) { root.launch(f[0].id); root.close() } }
+            onAccepted: { const f = root.filtered().filter(a => root.capsOk(a)); if (f.length) { root.launch(f[0].id); root.close() } }
         }
         RowLayout {
             Layout.fillWidth: true; Layout.fillHeight: true
@@ -95,7 +77,7 @@ Popup {
                 model: root.filtered()
                 delegate: Item {
                     required property var modelData
-                    readonly property bool on: modelData.ready && root.capsOk(modelData)
+                    readonly property bool on: root.capsOk(modelData)
                     width: grid.cellWidth; height: grid.cellHeight
                     Rectangle {
                         anchors.fill: parent; anchors.margins: 4; radius: 8
