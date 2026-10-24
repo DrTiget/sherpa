@@ -1,0 +1,1342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ru_RU">
+<context>
+    <name>Backend</name>
+    <message>
+        <location filename="../src/Backend.cpp" line="529"/>
+        <source>%1 (copy)</source>
+        <translation>%1 (копия)</translation>
+    </message>
+    <message>
+        <location filename="../src/Backend.cpp" line="722"/>
+        <source>Host key saved</source>
+        <translation>Ключ хоста сохранён</translation>
+    </message>
+    <message>
+        <location filename="../src/Backend.cpp" line="807"/>
+        <source>Key file copy saved</source>
+        <translation>Копия ключ-файла сохранена</translation>
+    </message>
+</context>
+<context>
+    <name>ConfirmDialog</name>
+    <message>
+        <location filename="../qml/ConfirmDialog.qml" line="8"/>
+        <source>OK</source>
+        <translation>ОК</translation>
+    </message>
+    <message>
+        <location filename="../qml/ConfirmDialog.qml" line="26"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+</context>
+<context>
+    <name>Errors</name>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="14"/>
+        <source>Unknown core command: {command}</source>
+        <translation>Неизвестная команда ядра: {command}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="15"/>
+        <source>Invalid arguments: {arg} ({reason})</source>
+        <translation>Неверные аргументы: {arg} ({reason})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="16"/>
+        <source>Core received invalid JSON</source>
+        <translation>Ядро получило некорректный JSON</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="17"/>
+        <source>Secrets must not be passed as arguments</source>
+        <translation>Секреты нельзя передавать аргументами</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="18"/>
+        <source>Too many items at once: {given} (maximum {max})</source>
+        <translation>Слишком много за раз: {given} (максимум {max})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="19"/>
+        <source>The core protocol version is not supported (core supports {min}–{max}, the app needs {required}). Update Sherpa.</source>
+        <translation>Версия протокола ядра не поддерживается (ядро: {min}–{max}, приложению нужна {required}). Обновите Sherpa.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="20"/>
+        <source>The terminal service expects a handshake</source>
+        <translation>Служба терминала ждёт рукопожатия</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="21"/>
+        <source>Unknown terminal service method: {method}</source>
+        <translation>Неизвестный метод службы терминала: {method}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="22"/>
+        <source>Internal core error (trace {trace_id}). Details are in the core log.</source>
+        <translation>Внутренняя ошибка ядра (trace {trace_id}). Подробности — в логе ядра.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="24"/>
+        <source>This field is required</source>
+        <translation>Обязательное поле</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="25"/>
+        <source>Invalid value</source>
+        <translation>Некорректное значение</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="26"/>
+        <source>Too long (maximum {max} characters)</source>
+        <translation>Слишком длинно (максимум {max} символов)</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="27"/>
+        <source>Must be between {min} and {max}</source>
+        <translation>Должно быть от {min} до {max}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="29"/>
+        <source>The storage has not been created yet</source>
+        <translation>Хранилище ещё не создано</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="30"/>
+        <source>The key file is missing: {path}. Saved secrets cannot be read without it. Restore it from a backup copy.</source>
+        <translation>Ключ-файл отсутствует: {path}. Без него сохранённые секреты не прочитать. Восстановите его из копии.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="31"/>
+        <source>No permission to access {path}</source>
+        <translation>Нет прав на {path}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="32"/>
+        <source>The database is busy: {path}. Try again in a moment.</source>
+        <translation>База занята: {path}. Повторите через мгновение.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="33"/>
+        <source>The database file is damaged: {path}</source>
+        <translation>Файл базы повреждён: {path}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="34"/>
+        <source>The database was created by a newer version of Sherpa (schema {schema}, supported {supported}). Update the app.</source>
+        <translation>База создана более новой версией Sherpa (схема {schema}, поддерживается {supported}). Обновите приложение.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="35"/>
+        <source>Database migration failed ({from} → {to})</source>
+        <translation>Ошибка миграции базы ({from} → {to})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="36"/>
+        <source>The key file does not match the database: {path}</source>
+        <translation>Ключ-файл не подходит к базе: {path}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="37"/>
+        <source>The key file is damaged or has the wrong size: {path}</source>
+        <translation>Ключ-файл повреждён или неверного размера: {path}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="38"/>
+        <source>The key file permissions are too broad ({mode}): {path}. Restrict access to your user only.</source>
+        <translation>Права ключ-файла слишком широкие ({mode}): {path}. Оставьте доступ только своему пользователю.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="39"/>
+        <source>Could not decrypt a saved secret ({field})</source>
+        <translation>Не удалось расшифровать сохранённый секрет ({field})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="40"/>
+        <source>Core config error in {path}, line {line}: {reason}</source>
+        <translation>Ошибка конфига ядра в {path}, строка {line}: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="41"/>
+        <source>File not found: {path}</source>
+        <translation>Файл не найден: {path}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="42"/>
+        <source>The file already exists: {path}</source>
+        <translation>Файл уже существует: {path}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="43"/>
+        <source>Could not read {path}: {reason}</source>
+        <translation>Не удалось прочитать {path}: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="44"/>
+        <source>Could not write {path}: {reason}</source>
+        <translation>Не удалось записать {path}: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="46"/>
+        <source>The server no longer exists (it may have been deleted)</source>
+        <translation>Сервера больше нет (возможно, его удалили)</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="47"/>
+        <source>A server named “{name}” already exists</source>
+        <translation>Сервер с именем «{name}» уже существует</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="48"/>
+        <source>The group was not found</source>
+        <translation>Группа не найдена</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="49"/>
+        <source>A group named “{name}” already exists</source>
+        <translation>Группа «{name}» уже существует</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="50"/>
+        <source>A group cannot be moved into its own subgroup</source>
+        <translation>Группу нельзя переместить в её же подгруппу</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="51"/>
+        <source>Tag “{name}” was not found</source>
+        <translation>Тег «{name}» не найден</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="52"/>
+        <source>Invalid tag name: “{name}”</source>
+        <translation>Недопустимое имя тега: «{name}»</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="54"/>
+        <source>Host name “{host}” cannot be resolved</source>
+        <translation>Имя хоста «{host}» не разрешается</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="55"/>
+        <source>Connection refused by {host}:{port} — the SSH port is closed</source>
+        <translation>{host}:{port} отклонил соединение — порт SSH закрыт</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="56"/>
+        <source>Host {host} is unreachable</source>
+        <translation>Хост {host} недоступен</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="57"/>
+        <source>Timed out after {timeout_sec} s connecting to {host}:{port}</source>
+        <translation>Таймаут {timeout_sec} с при подключении к {host}:{port}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="58"/>
+        <source>The connection to {host} was reset by the remote side</source>
+        <translation>Соединение с {host} разорвано удалённой стороной</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="60"/>
+        <source>SSH handshake failed: {reason}</source>
+        <translation>Ошибка SSH-рукопожатия: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="61"/>
+        <source>No common SSH algorithms ({kind}); the server offers: {server}</source>
+        <translation>Нет общих алгоритмов SSH ({kind}); сервер предлагает: {server}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="62"/>
+        <source>This port is not an SSH server (banner: {banner})</source>
+        <translation>На этом порту не SSH-сервер (баннер: {banner})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="63"/>
+        <source>The server refused to open a channel: {reason}</source>
+        <translation>Сервер отказал в открытии канала: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="64"/>
+        <source>The server closed the connection: {reason}</source>
+        <translation>Сервер закрыл соединение: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="66"/>
+        <source>Authentication rejected for {user}: wrong password or the key was not accepted (server allows: {methods})</source>
+        <translation>Вход отклонён для {user}: неверный пароль или ключ не принят (сервер разрешает: {methods})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="67"/>
+        <source>The server does not allow “{method}” login (allowed: {methods})</source>
+        <translation>Сервер не разрешает вход способом «{method}» (разрешено: {methods})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="68"/>
+        <source>The password or key passphrase is not saved. Edit the server and enter it.</source>
+        <translation>Пароль или парольная фраза не сохранены. Измените сервер и введите их.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="69"/>
+        <source>The key is not recognised or its format is unsupported: {reason}</source>
+        <translation>Ключ не распознан или формат не поддерживается: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="70"/>
+        <source>Wrong key passphrase</source>
+        <translation>Неверная парольная фраза ключа</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="71"/>
+        <source>The key file was not found: {path}</source>
+        <translation>Файл ключа не найден: {path}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="72"/>
+        <source>Cannot read the key file {path}: {reason}</source>
+        <translation>Не удаётся прочитать файл ключа {path}: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="73"/>
+        <location filename="../src/ErrorText.cpp" line="103"/>
+        <source>Cancelled</source>
+        <translation>Отменено</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="75"/>
+        <source>The server host key is not trusted yet ({fingerprint})</source>
+        <translation>Ключ хоста сервера ещё не подтверждён ({fingerprint})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="76"/>
+        <source>The server host key has changed! This may be a man-in-the-middle attack.</source>
+        <translation>Ключ хоста сервера изменился! Возможна атака «человек посередине».</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="77"/>
+        <source>This host key was rejected earlier ({fingerprint})</source>
+        <translation>Этот ключ хоста был отклонён ранее ({fingerprint})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="78"/>
+        <source>The server presented a different key than the one you confirmed. Nothing was saved; check again.</source>
+        <translation>Сервер предъявил не тот ключ, который вы подтвердили. Ничего не сохранено; проверьте ещё раз.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="79"/>
+        <source>No saved host key for {host}:{port}</source>
+        <translation>Нет сохранённого ключа хоста для {host}:{port}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="81"/>
+        <source>SSH config syntax error in {file}, line {line}: {reason}</source>
+        <translation>Синтаксическая ошибка SSH-конфига в {file}, строка {line}: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="82"/>
+        <source>Circular Include in {file}</source>
+        <translation>Циклический Include в {file}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="83"/>
+        <source>Include nesting is too deep in {file}</source>
+        <translation>Слишком глубокая вложенность Include в {file}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="84"/>
+        <source>Match block skipped ({file}, line {line}): not supported</source>
+        <translation>Блок Match пропущен ({file}, строка {line}): не поддерживается</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="85"/>
+        <source>{key}: several IdentityFile entries, the first one is used</source>
+        <translation>{key}: несколько IdentityFile, взят первый</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="86"/>
+        <source>The file changed since the preview: {path}. Build the preview again.</source>
+        <translation>Файл изменился после предпросмотра: {path}. Повторите предпросмотр.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="87"/>
+        <source>Host “{key}” is not in the file</source>
+        <translation>Хоста «{key}» нет в файле</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="89"/>
+        <source>Could not start the terminal service: {reason}</source>
+        <translation>Не удалось запустить службу терминала: {reason}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="90"/>
+        <source>The terminal service is not running</source>
+        <translation>Служба терминала не запущена</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="91"/>
+        <source>The terminal service is already running (pid {pid})</source>
+        <translation>Служба терминала уже запущена (pid {pid})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="92"/>
+        <source>The terminal service does not respond</source>
+        <translation>Служба терминала не отвечает</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="93"/>
+        <source>There are {count} active sessions</source>
+        <translation>Активных сессий: {count}</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="94"/>
+        <source>The session was not found</source>
+        <translation>Сессия не найдена</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="95"/>
+        <source>The session is not connected</source>
+        <translation>Сессия не подключена</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="96"/>
+        <source>The prompt is no longer relevant</source>
+        <translation>Запрос уже неактуален</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="97"/>
+        <source>Session limit reached ({max})</source>
+        <translation>Достигнут лимит сессий ({max})</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="100"/>
+        <source>The sherpa-core program was not found. Reinstall Sherpa or set the SHERPA_CORE variable.</source>
+        <translation>Программа sherpa-core не найдена. Переустановите Sherpa или задайте переменную SHERPA_CORE.</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="101"/>
+        <source>The core returned an unreadable response</source>
+        <translation>Ядро вернуло нечитаемый ответ</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="102"/>
+        <source>The core process crashed</source>
+        <translation>Процесс ядра аварийно завершился</translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorText.cpp" line="127"/>
+        <source>Error %1</source>
+        <translation>Ошибка %1</translation>
+    </message>
+</context>
+<context>
+    <name>FatalPage</name>
+    <message>
+        <location filename="../qml/FatalPage.qml" line="12"/>
+        <source>Cannot start</source>
+        <translation>Не удалось запустить</translation>
+    </message>
+    <message>
+        <location filename="../qml/FatalPage.qml" line="15"/>
+        <source>Retry</source>
+        <translation>Повторить</translation>
+    </message>
+</context>
+<context>
+    <name>FirstRunPage</name>
+    <message>
+        <location filename="../qml/FirstRunPage.qml" line="14"/>
+        <source>Save key file copy</source>
+        <translation>Сохранение копии ключ-файла</translation>
+    </message>
+    <message>
+        <location filename="../qml/FirstRunPage.qml" line="48"/>
+        <source>Welcome to Sherpa</source>
+        <translation>Добро пожаловать в Sherpa</translation>
+    </message>
+    <message>
+        <location filename="../qml/FirstRunPage.qml" line="51"/>
+        <source>Passwords and keys are encrypted with a key file. Without it saved secrets cannot be restored — keep a copy somewhere safe.</source>
+        <translation>Пароли и ключи шифруются ключ-файлом. Без него сохранённые секреты не восстановить — сохраните копию в надёжном месте.</translation>
+    </message>
+    <message>
+        <location filename="../qml/FirstRunPage.qml" line="58"/>
+        <source>Later</source>
+        <translation>Позже</translation>
+    </message>
+    <message>
+        <location filename="../qml/FirstRunPage.qml" line="59"/>
+        <source>Save copy…</source>
+        <translation>Сохранить копию…</translation>
+    </message>
+    <message>
+        <location filename="../qml/FirstRunPage.qml" line="63"/>
+        <source>Import from ~/.ssh/config</source>
+        <translation>Импорт из ~/.ssh/config</translation>
+    </message>
+</context>
+<context>
+    <name>HomePage</name>
+    <message>
+        <location filename="../qml/HomePage.qml" line="37"/>
+        <source>Search by name, host or tag</source>
+        <translation>Поиск по имени, хосту или тегу</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="40"/>
+        <source>Search</source>
+        <translation>Поиск</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="46"/>
+        <source>Check all</source>
+        <translation>Проверить все</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="50"/>
+        <source>Cancel check</source>
+        <translation>Отменить проверку</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="51"/>
+        <source>Settings</source>
+        <translation>Настройки</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="52"/>
+        <source>Add</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="63"/>
+        <source>Retry</source>
+        <translation>Повторить</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="73"/>
+        <source>No backup copy of the key file yet — without it saved secrets cannot be restored.</source>
+        <translation>Копии ключ-файла ещё нет — без него сохранённые секреты не восстановить.</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="74"/>
+        <source>Save copy…</source>
+        <translation>Сохранить копию…</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="85"/>
+        <source>Checked %1 of %2</source>
+        <translation>Проверено %1 из %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="128"/>
+        <source>online</source>
+        <translation>онлайн</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="129"/>
+        <source>error</source>
+        <translation>ошибка</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="130"/>
+        <source>offline</source>
+        <translation>офлайн</translation>
+    </message>
+    <message>
+        <location filename="../qml/HomePage.qml" line="131"/>
+        <source>shown %1 of %2</source>
+        <translation>показано %1 из %2</translation>
+    </message>
+</context>
+<context>
+    <name>HostKeyDialog</name>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="16"/>
+        <source>Server key has changed</source>
+        <translation>Ключ сервера изменился</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="16"/>
+        <source>New server key</source>
+        <translation>Новый ключ сервера</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="39"/>
+        <source>The host key of %1 differs from the one you trusted before. Someone may be intercepting the connection (man-in-the-middle). Do not continue unless you know the server was reinstalled.</source>
+        <translation>Ключ хоста %1 отличается от того, которому вы доверяли раньше. Возможно, соединение перехватывают (атака «человек посередине»). Не продолжайте, если не знаете, что сервер переустанавливали.</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="40"/>
+        <source>You are connecting to %1 for the first time. Check the fingerprint with the server administrator before trusting it.</source>
+        <translation>Вы подключаетесь к %1 впервые. Сверьте отпечаток с администратором сервера, прежде чем доверять.</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="48"/>
+        <source>Server</source>
+        <translation>Сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="50"/>
+        <source>Algorithm</source>
+        <translation>Алгоритм</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="52"/>
+        <source>Was</source>
+        <translation>Был</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="58"/>
+        <source>accepted %1</source>
+        <translation>принят %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="63"/>
+        <source>Now</source>
+        <translation>Стал</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="63"/>
+        <source>Fingerprint</source>
+        <translation>Отпечаток</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="77"/>
+        <source>I understand the risk and want to replace the saved key</source>
+        <translation>Я понимаю риск и хочу заменить сохранённый ключ</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="83"/>
+        <source>Reject and remember</source>
+        <translation>Отклонить и запомнить</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="85"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="87"/>
+        <source>Accept new key</source>
+        <translation>Принять новый ключ</translation>
+    </message>
+    <message>
+        <location filename="../qml/HostKeyDialog.qml" line="87"/>
+        <source>Trust and connect</source>
+        <translation>Доверять и подключиться</translation>
+    </message>
+</context>
+<context>
+    <name>ImportDialog</name>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="18"/>
+        <source>Import from ~/.ssh/config</source>
+        <translation>Импорт из ~/.ssh/config</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="60"/>
+        <source>Choose SSH config</source>
+        <translation>Выбор SSH-конфига</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="69"/>
+        <source>Config file</source>
+        <translation>Файл конфига</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="70"/>
+        <source>Browse…</source>
+        <translation>Обзор…</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="78"/>
+        <source>Reading config…</source>
+        <translation>Чтение конфига…</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="78"/>
+        <source>Importing…</source>
+        <translation>Импорт…</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="90"/>
+        <source>Select all</source>
+        <translation>Выбрать все</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="91"/>
+        <source>Clear</source>
+        <translation>Снять</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="96"/>
+        <source>No hosts found in this file.</source>
+        <translation>В этом файле нет хостов.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="137"/>
+        <source>line %1</source>
+        <translation>строка %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="141"/>
+        <source>new</source>
+        <translation>новый</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="141"/>
+        <source>exists — skipped</source>
+        <translation>есть — пропущен</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="154"/>
+        <source>Wildcard hosts (Host *) are not shown as servers; their values are applied as defaults. Include files are expanded.</source>
+        <translation>Хосты с шаблонами (Host *) не показаны как серверы; их значения применены по умолчанию. Include раскрыты.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="168"/>
+        <source>Created: %1</source>
+        <translation>Создано: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="169"/>
+        <source>Skipped: %1</source>
+        <translation>Пропущено: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="170"/>
+        <source>Errors: %1</source>
+        <translation>Ошибок: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="179"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="180"/>
+        <source>Preview</source>
+        <translation>Предпросмотр</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="185"/>
+        <source>Import (%1)</source>
+        <translation>Импортировать (%1)</translation>
+    </message>
+    <message>
+        <location filename="../qml/ImportDialog.qml" line="193"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>Main</name>
+    <message>
+        <location filename="../qml/Main.qml" line="67"/>
+        <source>Starting core…</source>
+        <translation>Запуск ядра…</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="85"/>
+        <source>Delete server “%1”? Its saved secrets will be removed too.</source>
+        <translation>Удалить сервер «%1»? Сохранённые секреты тоже будут удалены.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="88"/>
+        <source>New group</source>
+        <translation>Новая группа</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="98"/>
+        <source>Rename…</source>
+        <translation>Переименовать…</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="98"/>
+        <source>Rename group</source>
+        <translation>Переименовать группу</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="99"/>
+        <location filename="../qml/Main.qml" line="117"/>
+        <source>Delete group</source>
+        <translation>Удалить группу</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="99"/>
+        <source>Delete group “%1”? Its servers move to the parent group.</source>
+        <translation>Удалить группу «%1»? Её серверы перейдут в родительскую группу.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="109"/>
+        <source>Delete server</source>
+        <translation>Удалить сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="110"/>
+        <location filename="../qml/Main.qml" line="118"/>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="126"/>
+        <source>Group name</source>
+        <translation>Название группы</translation>
+    </message>
+</context>
+<context>
+    <name>NameDialog</name>
+    <message>
+        <location filename="../qml/NameDialog.qml" line="7"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../qml/NameDialog.qml" line="10"/>
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../qml/NameDialog.qml" line="19"/>
+        <source>This field is required</source>
+        <translation>Обязательное поле</translation>
+    </message>
+    <message>
+        <location filename="../qml/NameDialog.qml" line="36"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+</context>
+<context>
+    <name>SBanner</name>
+    <message>
+        <location filename="../qml/SBanner.qml" line="43"/>
+        <source>Dismiss</source>
+        <translation>Скрыть</translation>
+    </message>
+</context>
+<context>
+    <name>SChip</name>
+    <message>
+        <location filename="../qml/SChip.qml" line="45"/>
+        <source>Remove %1</source>
+        <translation>Убрать %1</translation>
+    </message>
+</context>
+<context>
+    <name>SDialog</name>
+    <message>
+        <location filename="../qml/SDialog.qml" line="92"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>SStatusDot</name>
+    <message>
+        <location filename="../qml/SStatusDot.qml" line="38"/>
+        <source>checking</source>
+        <translation>проверка</translation>
+    </message>
+</context>
+<context>
+    <name>STagInput</name>
+    <message>
+        <location filename="../qml/STagInput.qml" line="72"/>
+        <source>prod, nginx…</source>
+        <translation>prod, nginx…</translation>
+    </message>
+</context>
+<context>
+    <name>STextField</name>
+    <message>
+        <location filename="../qml/STextField.qml" line="83"/>
+        <source>hide</source>
+        <translation>скрыть</translation>
+    </message>
+    <message>
+        <location filename="../qml/STextField.qml" line="83"/>
+        <source>show</source>
+        <translation>показать</translation>
+    </message>
+</context>
+<context>
+    <name>ServerCard</name>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="26"/>
+        <source>Select a server</source>
+        <translation>Выберите сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="27"/>
+        <source>Details and actions appear here.</source>
+        <translation>Здесь появятся сведения и действия.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="51"/>
+        <source>checking…</source>
+        <translation>проверка…</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="66"/>
+        <source>Terminal (soon)</source>
+        <translation>Терминал (скоро)</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="67"/>
+        <source>Check</source>
+        <translation>Проверить</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="68"/>
+        <source>Edit</source>
+        <translation>Изменить</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="69"/>
+        <source>Duplicate</source>
+        <translation>Дублировать</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="70"/>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="86"/>
+        <source>Host</source>
+        <translation>Хост</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="88"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="90"/>
+        <source>User</source>
+        <translation>Пользователь</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="92"/>
+        <source>Sign-in</source>
+        <translation>Вход</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="97"/>
+        <source>password</source>
+        <translation>пароль</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="97"/>
+        <source>not saved</source>
+        <translation>не сохранён</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="98"/>
+        <source>key file</source>
+        <translation>ключ-файл</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="99"/>
+        <source>key text</source>
+        <translation>текст ключа</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="102"/>
+        <source>Group</source>
+        <translation>Группа</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="104"/>
+        <source>Tags</source>
+        <translation>Теги</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="110"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="112"/>
+        <source>Host key</source>
+        <translation>Ключ хоста</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerCard.qml" line="113"/>
+        <source>not saved yet</source>
+        <translation>ещё не сохранён</translation>
+    </message>
+</context>
+<context>
+    <name>ServerFormDialog</name>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="23"/>
+        <source>Edit: %1</source>
+        <translation>Изменение: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="23"/>
+        <source>New server</source>
+        <translation>Новый сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="30"/>
+        <source>No group</source>
+        <translation>Без группы</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="35"/>
+        <source>New group…</source>
+        <translation>Новая группа…</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="85"/>
+        <location filename="../qml/ServerFormDialog.qml" line="86"/>
+        <location filename="../qml/ServerFormDialog.qml" line="89"/>
+        <location filename="../qml/ServerFormDialog.qml" line="91"/>
+        <location filename="../qml/ServerFormDialog.qml" line="92"/>
+        <source>This field is required</source>
+        <translation>Обязательное поле</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="88"/>
+        <source>Port must be between 1 and 65535</source>
+        <translation>Порт должен быть от 1 до 65535</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="151"/>
+        <source>Discard changes?</source>
+        <translation>Отбросить изменения?</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="152"/>
+        <source>The form has unsaved changes. Close it anyway?</source>
+        <translation>В форме есть несохранённые изменения. Всё равно закрыть?</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="153"/>
+        <source>Discard</source>
+        <translation>Отбросить</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="160"/>
+        <source>Choose private key</source>
+        <translation>Выбор закрытого ключа</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="167"/>
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="172"/>
+        <source>Host</source>
+        <translation>Хост</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="173"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="174"/>
+        <source>User</source>
+        <translation>Пользователь</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="177"/>
+        <source>Sign-in method</source>
+        <translation>Способ входа</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="181"/>
+        <location filename="../qml/ServerFormDialog.qml" line="190"/>
+        <source>Password</source>
+        <translation>Пароль</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="182"/>
+        <source>Key file</source>
+        <translation>Ключ-файл</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="183"/>
+        <source>Key text</source>
+        <translation>Текст ключа</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="193"/>
+        <source>Saved. Leave empty to keep it unchanged.</source>
+        <translation>Сохранён. Оставьте пустым, чтобы не менять.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="193"/>
+        <source>Optional: if empty, it is not saved</source>
+        <translation>Необязательно: пустой пароль не сохраняется</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="199"/>
+        <source>Key file path</source>
+        <translation>Путь к ключ-файлу</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="200"/>
+        <source>Browse…</source>
+        <translation>Обзор…</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="206"/>
+        <location filename="../qml/ServerFormDialog.qml" line="229"/>
+        <source>Private key text</source>
+        <translation>Текст закрытого ключа</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="227"/>
+        <source>Saved. Paste a new key to replace it.</source>
+        <translation>Сохранён. Вставьте новый ключ, чтобы заменить.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="239"/>
+        <source>Key passphrase</source>
+        <translation>Парольная фраза ключа</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="241"/>
+        <source>Leave empty to keep it unchanged</source>
+        <translation>Оставьте пустым, чтобы не менять</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="241"/>
+        <source>Only if the key is protected</source>
+        <translation>Только если ключ защищён</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="250"/>
+        <source>Group</source>
+        <translation>Группа</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="257"/>
+        <source>New group name</source>
+        <translation>Название новой группы</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="261"/>
+        <source>Tags</source>
+        <translation>Теги</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="262"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="275"/>
+        <source>Checking…</source>
+        <translation>Проверка…</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="291"/>
+        <source>Save and check</source>
+        <translation>Сохранить и проверить</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="297"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="297"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerFormDialog.qml" line="300"/>
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+</context>
+<context>
+    <name>ServerList</name>
+    <message>
+        <location filename="../qml/ServerList.qml" line="71"/>
+        <source>checking</source>
+        <translation>проверка</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerList.qml" line="104"/>
+        <source>No servers yet</source>
+        <translation>Серверов пока нет</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerList.qml" line="105"/>
+        <source>Add a server or import hosts from your SSH config.</source>
+        <translation>Добавьте сервер или импортируйте хосты из SSH-конфига.</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerList.qml" line="106"/>
+        <source>Add server</source>
+        <translation>Добавить сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerList.qml" line="107"/>
+        <source>Import from ~/.ssh/config</source>
+        <translation>Импорт из ~/.ssh/config</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerList.qml" line="115"/>
+        <source>Nothing found</source>
+        <translation>Ничего не найдено</translation>
+    </message>
+    <message>
+        <location filename="../qml/ServerList.qml" line="116"/>
+        <source>Reset filter</source>
+        <translation>Сбросить фильтр</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="9"/>
+        <source>Settings</source>
+        <translation>Настройки</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="15"/>
+        <source>Save key file copy</source>
+        <translation>Сохранение копии ключ-файла</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="26"/>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="32"/>
+        <source>Theme</source>
+        <translation>Тема</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="35"/>
+        <source>System</source>
+        <translation>Системная</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="35"/>
+        <source>Dark</source>
+        <translation>Тёмная</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="35"/>
+        <source>Light</source>
+        <translation>Светлая</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="39"/>
+        <source>Window transparency and blur</source>
+        <translation>Прозрачность и размытие окон</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="45"/>
+        <source>Check timeout, s</source>
+        <translation>Таймаут проверки, с</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="51"/>
+        <source>Key file</source>
+        <translation>Ключ-файл</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="55"/>
+        <source>No backup copy has been saved yet. Without the key file saved secrets cannot be restored.</source>
+        <translation>Копия ещё не сохранялась. Без ключ-файла сохранённые секреты не восстановить.</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="56"/>
+        <source>Saved secrets are encrypted with this file.</source>
+        <translation>Сохранённые секреты зашифрованы этим файлом.</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="59"/>
+        <source>Export copy…</source>
+        <translation>Экспортировать копию…</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsDialog.qml" line="62"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>Sidebar</name>
+    <message>
+        <location filename="../qml/Sidebar.qml" line="58"/>
+        <source>All servers</source>
+        <translation>Все серверы</translation>
+    </message>
+    <message>
+        <location filename="../qml/Sidebar.qml" line="66"/>
+        <source>Groups</source>
+        <translation>Группы</translation>
+    </message>
+    <message>
+        <location filename="../qml/Sidebar.qml" line="71"/>
+        <source>New group</source>
+        <translation>Новая группа</translation>
+    </message>
+    <message>
+        <location filename="../qml/Sidebar.qml" line="87"/>
+        <source>Without group</source>
+        <translation>Без группы</translation>
+    </message>
+    <message>
+        <location filename="../qml/Sidebar.qml" line="91"/>
+        <source>Tags</source>
+        <translation>Теги</translation>
+    </message>
+    <message>
+        <location filename="../qml/Sidebar.qml" line="109"/>
+        <source>Import from ~/.ssh/config</source>
+        <translation>Импорт из ~/.ssh/config</translation>
+    </message>
+</context>
+<context>
+    <name>TabHost</name>
+    <message>
+        <location filename="../qml/TabHost.qml" line="24"/>
+        <source>Servers</source>
+        <translation>Серверы</translation>
+    </message>
+</context>
+<context>
+    <name>Theme</name>
+    <message>
+        <location filename="../qml/Theme.qml" line="77"/>
+        <source>online</source>
+        <translation>онлайн</translation>
+    </message>
+    <message>
+        <location filename="../qml/Theme.qml" line="78"/>
+        <source>offline</source>
+        <translation>офлайн</translation>
+    </message>
+    <message>
+        <location filename="../qml/Theme.qml" line="79"/>
+        <source>auth failed</source>
+        <translation>ошибка входа</translation>
+    </message>
+    <message>
+        <location filename="../qml/Theme.qml" line="80"/>
+        <source>error</source>
+        <translation>ошибка</translation>
+    </message>
+    <message>
+        <location filename="../qml/Theme.qml" line="81"/>
+        <source>not checked</source>
+        <translation>не проверялся</translation>
+    </message>
+</context>
+</TS>

@@ -1,0 +1,2 @@
+FROM ubuntu:25.10
+RUN apt-get update && apt-get install -y --no-install-recommends g++ cmake ninja-build qt6-base-dev qt6-declarative-dev qt6-declarative-dev-tools qt6-shadertools-dev qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools qml6-module-qtquick qml6-module-qtquick-controls qml6-module-qtquick-layouts qml6-module-qtquick-window qml6-module-qttest qml6-module-qtqml-workerscript qml6-module-qtquick-templates qml6-module-qtquick-dialogs qml6-module-qtcore fonts-jetbrains-mono fonts-inter libgl1-mesa-dri libxkbcommon0 libegl1 xvfb xauth && rm -rf /var/lib/apt/lists/*
