@@ -18,15 +18,17 @@ core/
         ├── store/      SQLite + миграции, ключ-файл и шифрование секретов
         ├── ssh/        общий SSH-слой: подключение, TOFU, авторизация, exec
         ├── sshconfig.rs  разбор ~/.ssh/config для импорта
-        ├── daemon/     задел демона терминальных сессий (следующий этап)
+        ├── daemon/     демон: транспорт, протокол, сессии, реестр методов (MethodGroup)
+        ├── utilities/  утилиты рабочего стола (monitor, capabilities) — docs/UTILITY_GUIDE.md
         ├── config.rs, error.rs, protocol.rs, secret.rs, util.rs
         └── testserver.rs тестовый SSH-сервер (фича test-util)
 ```
 
 Новая группа команд (например, `monitor`) — модуль в `commands/` с
 `impl CommandGroup` и строка в `commands::registry()`. Конверт ответа, коды
-ошибок и выхода, stdin-параметры — общие. Удалённые команды выполняются через
-`ssh::RemoteExec` поверх `ssh::Session`.
+ошибок и выхода, stdin-параметры — общие. Методы демона — так же:
+`impl MethodGroup` + строка в `daemon::registry::registry()`. Удалённые
+команды — через `ssh::RemoteExec` поверх соединения пула (`ssh::PooledConn`).
 
 ## Сборка и проверки
 
@@ -81,6 +83,11 @@ sherpa-core hostkey accept --host 10.0.0.5 --key-type ssh-ed25519 --fingerprint 
 sherpa-core hostkey accept --host 10.0.0.5 --key-type ssh-ed25519 --fingerprint SHA256:… --replace
 sherpa-core hostkey reject --host 10.0.0.5 --fingerprint SHA256:…
 sherpa-core hostkey forget --host 10.0.0.5
+
+# Демон (терминал, рабочий стол): протокол — CORE_API §4
+sherpa-core daemon ensure
+sherpa-core daemon status
+sherpa-core daemon stop --force
 
 # Импорт ~/.ssh/config
 sherpa-core import ssh-config preview

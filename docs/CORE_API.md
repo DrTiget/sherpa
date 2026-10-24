@@ -612,20 +612,21 @@ sherpa-core import ssh-config apply --input -
 
 ---
 
-## 4. Демон терминала
+## 4. Демон
+
+Демон держит долгие операции: терминальные сессии, соединения рабочего
+стола, подписки утилит. Разовые команды §3 работают без него.
 
 ### 4.1 Запуск и обнаружение
 
-- Демон — `sherpa-core daemon` (тот же бинарник). Фронт не запускает его
-  вручную, а вызывает:
-
 ```
-sherpa-core daemon ensure
+sherpa-core daemon ensure          # запустить, если не работает (ждёт ≤ 5 с)
+sherpa-core daemon status          # {running, pid, endpoint, sessions, clients, connections, uptime_sec, …}
+sherpa-core daemon stop [--force]  # без --force — отказ daemon.sessions_active при сессиях
+sherpa-core daemon run             # сам демон (так его запускает ensure; `daemon` без подкоманды — то же)
 ```
 
-  Команда проверяет, жив ли демон (рукопожатие по сокету), при
-  необходимости запускает его отсоединённым процессом и ждёт готовности
-  (≤ 5 с). Ответ:
+Ответ `ensure`:
 
 ```json
 { "ok": true, "protocol": 1, "data": {
@@ -633,148 +634,207 @@ sherpa-core daemon ensure
   "started": true, "core_version": "0.1.0", "protocol": 1 } }
 ```
 
-- Адрес сокета:
+- `ensure` запускает тот же бинарник отсоединённым процессом
+  (`--config/--db/--key-file` передаются явно), stderr демона пишется в
+  `daemon.log` рядом с lock-файлом. Если работает демон другой версии и у
+  него нет сессий — он перезапускается; с сессиями — остаётся старый.
+- Адрес:
   - Linux: `$XDG_RUNTIME_DIR/sherpa/daemon.sock` (каталог 700, сокет 600);
     без `XDG_RUNTIME_DIR` — `~/.local/state/sherpa/daemon.sock`.
-  - Windows: named pipe `\\.\pipe\sherpa-core-<SID пользователя>` с DACL
-    только для текущего пользователя.
-  - Если задан нестандартный `--db`, к имени добавляется короткий хеш пути
-    БД, чтобы разные хранилища не делили один демон.
-- Один демон на пользователя/хранилище: эксклюзивный lock-файл рядом с
-  сокетом; второй экземпляр завершается с `daemon.already_running`.
-- Устаревший сокет (процесса нет) удаляется при старте.
-- `sherpa-core daemon status` — `{running, pid, endpoint, sessions, uptime_sec}`.
-  `sherpa-core daemon stop [--force]` — без `--force` отказ
-  (`daemon.sessions_active`), если есть сессии.
-- Авто-завершение: нет ни одной сессии и ни одного клиента дольше
-  `daemon_idle_timeout_sec` (по умолчанию 300 с).
-- Если версия демона отличается от версии бинарника фронта (`hello`
-  вернул другой `core_version`), а сессий нет — фронт вызывает
-  `daemon stop` и `ensure` заново; с сессиями — работает со старым, если
-  протокол совместим.
+  - Windows: named pipe `\\.\pipe\sherpa-core-<пользователь>`, DACL — только
+    владелец и SYSTEM, удалённые клиенты отклоняются.
+  - Нестандартный `--db` → к имени добавляется `-<8 hex>` от пути БД: у
+    разных хранилищ разные демоны.
+- Один демон на хранилище: эксклюзивный lock-файл `daemon.lock` (в нём pid);
+  второй экземпляр — `daemon.already_running` с `pid`. Старый файл сокета
+  удаляет новый демон после захвата lock-файла.
+- Авто-выход: нет сессий и нет подключённых клиентов дольше
+  `daemon_idle_timeout_sec` (по умолчанию 300, `0` — не выходить). Любой
+  клиент (в т. ч. `daemon status`) продлевает жизнь.
+- Перед выходом демон шлёт клиентам `daemon_shutdown`, закрывает сессии
+  (`closed`, `reason: client`) и соединения.
 
 ### 4.2 Протокол поверх сокета
 
-JSON Lines: один JSON-объект на строку, `\n`-разделитель, UTF-8, строка
-≤ 1 МиБ. Сообщения трёх видов:
+JSON Lines: объект на строку, `\n`, UTF-8, строка ≤ 1 МиБ.
 
 | Вид | Направление | Форма |
 |-----|-------------|-------|
 | Запрос | клиент → демон | `{"id": 7, "method": "...", "params": {...}}` |
-| Ответ | демон → клиент | `{"id": 7, "ok": true, "data": {...}}` или `{"id": 7, "ok": false, "error": {...}}` |
-| Событие | демон → клиент | `{"event": "...", "session": "s1", ...}` (без `id`) |
+| Ответ | демон → клиент | `{"id": 7, "ok": true, "data": ...}` / `{"id": 7, "ok": false, "error": {...}}` |
+| Событие | демон → клиент | `{"event": "...", ...}` (без `id`) |
 
-- `id` — число, уникальное в пределах соединения клиента.
-- `error` — тот же формат, что в §1.4.
-- Бинарные данные терминала (ввод и вывод) — **base64** (стандартный, с
-  паддингом) в поле `data_b64`.
-- Один клиент может держать много сессий. Сессия принадлежит клиенту,
-  который её открыл; при обрыве соединения клиента сессии **не**
-  закрываются сразу, а ждут переподключения `session.attach` 30 с
-  (решение на подтверждение), затем закрываются.
+- `id` — любое JSON-значение, возвращается в ответе как есть. Запросы
+  выполняются параллельно; порядок ответов не гарантирован — сверяйте `id`.
+- Первым должен быть `hello`, иначе `protocol.hello_required`.
+- `error` — формат §1.4. Невалидная строка — ответ с `id: null` и
+  `request.invalid_json`.
+- Бинарные данные — base64 (стандартный, с паддингом) в `data_b64`.
+- Исходящая очередь клиента ограничена (32 сообщения ≈ до 1,4 МиБ вывода).
+  Пока клиент не читает, демон не читает SSH-каналы его сессий
+  (backpressure): данные не теряются, сервер притормаживается окном SSH.
 
-### 4.3 Методы
+Методы сгруппированы по префиксу (`session.*`, `desktop.*`, `monitor.*`…);
+список — `daemon.methods`. Новая утилита добавляет свою группу (см.
+`docs/UTILITY_GUIDE.md`).
 
-**`hello`** — первым сообщением, иначе `protocol.hello_required`.
+### 4.3 Служебные методы
+
+| Метод | Параметры | Ответ |
+|-------|-----------|-------|
+| `hello` | `protocol` (обяз.), `client` | `{protocol, core_version, daemon_pid, sessions: [id]}` |
+| `ping` | — | `{pong: true}` |
+| `daemon.status` | — | как `sherpa-core daemon status` |
+| `daemon.stop` | `force` | `{stopping: true, sessions}`; демон выходит через ~100 мс |
+| `daemon.methods` | — | `{items: ["hello", "ping", "session.open", …]}` |
 
 ```json
-{"id":1,"method":"hello","params":{"protocol":1,"client":"sherpa-gtk/0.1.0"}}
+{"id":1,"method":"hello","params":{"protocol":1,"client":"sherpa-qt/0.1.0"}}
 {"id":1,"ok":true,"data":{"protocol":1,"core_version":"0.1.0","daemon_pid":4242,"sessions":["s1"]}}
 ```
 
-**`session.open`** — открыть PTY-сессию к подключению.
+### 4.4 Терминал: `session.*`
 
-```json
-{"id":2,"method":"session.open","params":{
-  "connection_id":"c1","cols":120,"rows":34,"term":"xterm-256color",
-  "env":{"LANG":"ru_RU.UTF-8"},
-  "secrets":{"password":"..."}   // необязательно, разовые секреты
-}}
-{"id":2,"ok":true,"data":{"session":"s1"}}
-```
+| Метод | Параметры | Ответ |
+|-------|-----------|-------|
+| `session.open` | `connection_id`, `cols` (80), `rows` (24), `term` (`xterm-256color`), `env` `{k: v}`, `secrets` `{password, passphrase}` | `{session}` сразу; дальше — события |
+| `session.input` | `session`, `data_b64` | `null` |
+| `session.resize` | `session`, `cols`, `rows` (1–10000) | `null` |
+| `session.close` | `session` | `null`; затем `closed` с `reason: client` |
+| `session.list` | — | `{items: [Session §6.6]}` |
+| `session.attach` | `session` | `{session, replay_bytes}`; затем `output` с `replay: true` (хвост до 64 КиБ) и неотвеченный вопрос, если был |
+| `session.hostkey_answer` | `prompt_id`, `decision`: `accept` \| `accept_once` \| `reject` \| `cancel`, `session` (необяз.) | `null` |
+| `session.auth_answer` | `prompt_id`, `responses: [строка]`, `save` (bool) **или** `cancel: true`; `session` (необяз.) | `null` |
 
-Ответ приходит сразу; ход подключения — событиями. Секреты в `params` —
-допустимы: сокет доступен только владельцу.
+- Сессия принадлежит клиенту, который её открыл (или подхватил `attach`).
+  Чужая сессия для `input/resize/close` — `session.not_found`.
+- Клиент отключился → сессия «отцеплена» и ждёт `session.attach` 30 с, затем
+  закрывается (`reason: client`). Вывод за это время копится в хвосте 64 КиБ.
+- Терминал идёт поверх общего соединения пула (§4.6): второй терминал к тому
+  же серверу не открывает новое SSH-соединение.
+- Вывод склеивается: событие не чаще чем раз в ~10 мс, не больше 32 КиБ.
+- `decision`: `accept` — сохранить ключ (при смене — заменить) и продолжить;
+  `accept_once` — продолжить без сохранения; `reject` — запомнить отклонение
+  (`hostkey reject`) и закрыть; `cancel` — закрыть.
+- `auth_prompt` приходит, если пароль/фраза не сохранены или отвергнуты
+  (до 3 попыток). `save: true` — сохранить введённое в подключение.
+  `cancel: true` → ошибка `auth.cancelled`.
+- Неотвеченный вопрос ждёт 300 с, затем считается отменой. Ответ на уже
+  неактуальный вопрос — `session.prompt_expired`.
+- Успешное подключение и ошибка подключения обновляют статус (§3.7).
 
-**`session.input`**
-
-```json
-{"id":3,"method":"session.input","params":{"session":"s1","data_b64":"bHMgLWxhCg=="}}
-```
-
-Ответ `{"id":3,"ok":true,"data":null}` (клиент может не ждать каждого).
-
-**`session.resize`**
-
-```json
-{"id":4,"method":"session.resize","params":{"session":"s1","cols":160,"rows":40}}
-```
-
-**`session.hostkey_answer`** — ответ на событие `hostkey_prompt`.
-
-```json
-{"id":5,"method":"session.hostkey_answer","params":{"session":"s1","prompt_id":"p1","decision":"accept"}}
-```
-
-`decision`: `accept` (сохранить и продолжить), `accept_once` (продолжить
-без сохранения), `reject` (запомнить отклонение и закрыть), `cancel`
-(закрыть без запоминания). Для изменённого ключа `accept` означает
-замену сохранённого.
-
-**`session.auth_answer`** — ответ на `auth_prompt` (пароль/фраза не сохранены
-или отвергнуты; keyboard-interactive).
-
-```json
-{"id":6,"method":"session.auth_answer","params":{"session":"s1","prompt_id":"p2",
-  "responses":["s3cr3t"],"save":false}}
-```
-
-`save: true` — сохранить введённый пароль/фразу в подключение.
-
-**`session.close`**
-
-```json
-{"id":7,"method":"session.close","params":{"session":"s1"}}
-```
-
-**`session.list`** — `{"items":[{"session":"s1","connection_id":"c1","state":"connected","opened_at":"...","cols":120,"rows":34,"attached":true}]}`.
-
-**`session.attach`** — подхватить сессию после переподключения клиента
-(`{"session":"s1"}`); демон досылает хвост вывода из буфера (до 64 КиБ).
-
-**`ping`** — `{"data":{"pong":true}}`.
-
-### 4.4 События
+### 4.5 События
 
 | `event` | Поля | Когда |
 |---------|------|-------|
-| `connecting` | `session` | Начато TCP-подключение |
-| `hostkey_prompt` | `session, prompt_id, kind: "unknown"\|"mismatch", host, port, key_type, fingerprint, known_fingerprint?` | Нужно решение TOFU |
-| `auth_prompt` | `session, prompt_id, kind: "password"\|"passphrase"\|"keyboard_interactive", prompts: [{text, echo}], attempt` | Нужен секрет |
-| `connected` | `session, server_banner` | PTY открыт, шелл запущен |
-| `output` | `session, data_b64` | Данные из PTY (stdout+stderr) |
-| `closed` | `session, reason: "exit"\|"client"\|"remote"\|"error"\|"idle", exit_status?, signal?` | Сессия завершена; последнее событие сессии |
-| `error` | `session, error: {code, message, params}`, `fatal: bool` | Ошибка; при `fatal` следом придёт `closed` |
-| `daemon_shutdown` | `reason: "idle"\|"stop"` | Демон завершается |
+| `connecting` | `session, connection_id` | Начато подключение |
+| `hostkey_prompt` | `session?, connection_id, prompt_id, kind: unknown\|mismatch, host, port, key_type, fingerprint, known_fingerprint?` | Нужно решение TOFU |
+| `auth_prompt` | `session?, connection_id, prompt_id, kind: password\|passphrase, prompts: [{text, echo}], attempt` | Нужен секрет |
+| `connected` | `session, connection_id, server_banner` | PTY открыт, шелл запущен |
+| `output` | `session, data_b64, replay?` | Вывод PTY (stdout+stderr) |
+| `closed` | `session, reason: exit\|client\|remote\|error, exit_status?, signal?` | Последнее событие сессии |
+| `error` | `session?` или `subscription?`, `error`, `fatal` | Ошибка; при `fatal` для сессии следом `closed` |
+| `monitor` | `subscription, connection_id, data` | Очередной замер (§4.8) |
+| `daemon_shutdown` | `reason: idle\|stop` | Демон завершается |
 
-Пример потока:
+У вопросов от `desktop.open` нет поля `session` — они приходят клиенту,
+вызвавшему `desktop.open`; отвечать теми же `session.*_answer` без `session`.
 
 ```
 → {"id":2,"method":"session.open","params":{"connection_id":"c1","cols":120,"rows":34}}
 ← {"id":2,"ok":true,"data":{"session":"s1"}}
-← {"event":"connecting","session":"s1"}
-← {"event":"hostkey_prompt","session":"s1","prompt_id":"p1","kind":"unknown","host":"10.0.0.5","port":22,"key_type":"ssh-ed25519","fingerprint":"SHA256:abc..."}
-→ {"id":3,"method":"session.hostkey_answer","params":{"session":"s1","prompt_id":"p1","decision":"accept"}}
+← {"event":"connecting","session":"s1","connection_id":"c1"}
+← {"event":"hostkey_prompt","session":"s1","connection_id":"c1","prompt_id":"p3","kind":"unknown","host":"10.0.0.5","port":22,"key_type":"ssh-ed25519","fingerprint":"SHA256:abc..."}
+→ {"id":3,"method":"session.hostkey_answer","params":{"session":"s1","prompt_id":"p3","decision":"accept"}}
 ← {"id":3,"ok":true,"data":null}
-← {"event":"connected","session":"s1","server_banner":"SSH-2.0-OpenSSH_9.6p1"}
+← {"event":"connected","session":"s1","connection_id":"c1","server_banner":"SSH-2.0-OpenSSH_9.6p1"}
 ← {"event":"output","session":"s1","data_b64":"V2VsY29tZS4uLg0K"}
 → {"id":4,"method":"session.input","params":{"session":"s1","data_b64":"ZXhpdA0="}}
 ← {"event":"closed","session":"s1","reason":"exit","exit_status":0}
 ```
 
-Поток вывода: демон склеивает вывод PTY в события раз в ≤ 10 мс или по
-32 КиБ. Если клиент не читает и буфер сессии превышает 1 МиБ, демон
-перестаёт читать из канала SSH (backpressure), данные не теряются.
+### 4.6 Рабочий стол: соединения и возможности — `desktop.*`
+
+Одно SSH-соединение на подключение («пул»); внутри — каналы терминалов и
+утилит. Утилиты ограничены 8 одновременными каналами `exec` на соединение
+(остальные ждут). Соединение без терминалов и каналов закрывается после
+10 мин простоя.
+
+| Метод | Параметры | Ответ |
+|-------|-----------|-------|
+| `desktop.open` | `connection_id`, `secrets?` | `{connection, capabilities}`; вопросы host key/пароля — событиями этому клиенту |
+| `desktop.capabilities` | `connection_id`, `refresh` | Capabilities (кэш соединения) |
+| `desktop.list` | — | `{items: [{connection_id, opened_at, alive, terminals, channels_in_use, readonly, server_banner}]}` |
+| `desktop.close` | `connection_id` | `{closed: bool}` |
+
+Утилиты (`monitor.*`, `priv.*`…) используют соединение пула; если его нет,
+подключаются **без вопросов** (сохранённые ключи и секреты) — при
+неизвестном host key или нужном пароле вернут ошибку (`hostkey.unknown`,
+`auth.secret_required`). Поэтому рабочий стол сначала вызывает `desktop.open`.
+
+Capabilities:
+
+```json
+{ "os": { "id": "debian", "version": "12", "name": "Debian GNU/Linux 12 (bookworm)",
+          "kernel": "Linux", "kernel_release": "6.1.0-18-amd64", "arch": "x86_64" },
+  "user": { "name": "deploy", "uid": 1000, "is_root": false },
+  "privileges": { "sudo": true, "sudo_nopasswd": false },
+  "systemd": true, "procfs": true, "package_manager": "apt",
+  "tools": { "sudo": true, "systemctl": true, "journalctl": true, "ss": true, "docker": false, "…": false },
+  "utilities": { "terminal": true, "monitor": true, "services": true, "logs": true, "network": true,
+                 "firewall": false, "disks": true, "packages": true, "cron": true, "docker": false } }
+```
+
+`utilities` — что фронт может показать; окна, для которых `false`, скрываются
+или отключаются.
+
+### 4.7 Привилегии — `priv.*`
+
+| Метод | Параметры | Ответ |
+|-------|-----------|-------|
+| `priv.sudo.check` | `connection_id` | PrivStatus |
+| `priv.sudo.auth` | `connection_id`, `password` | PrivStatus; неверный пароль — `priv.auth_failed` |
+| `priv.sudo.forget` | `connection_id` | PrivStatus |
+| `priv.readonly.set` | `connection_id`, `readonly` | PrivStatus |
+
+PrivStatus: `{connection_id, is_root, sudo_available, sudo_nopasswd,
+sudo_authenticated, readonly}`.
+
+- Пароль sudo проверяется (`sudo -S -k -v`) и хранится только в памяти
+  демона до закрытия соединения; не пишется ни в БД, ни в логи.
+- Команды с правами root утилиты выполняют так: root — напрямую;
+  NOPASSWD — `sudo -n`; есть пароль — `sudo -S` (пароль в stdin); иначе
+  `priv.required` (фронт показывает баннер и вызывает `priv.sudo.auth`).
+- `readonly: true` — любые изменения на сервере через утилиты отклоняются
+  (`priv.readonly`); чтение работает. Терминал не ограничивается.
+
+### 4.8 Утилита «Монитор» — `monitor.*`
+
+| Метод | Параметры | Ответ |
+|-------|-----------|-------|
+| `monitor.snapshot` | `connection_id`, `processes` (50, ≤ 500), `sort`: `cpu`\|`mem` | MonitorData (≈ 0,5 с: два замера CPU) |
+| `monitor.subscribe` | `connection_id`, `interval_ms` (2000, ≥ 1000), `processes`, `sort` | `{subscription, interval_ms}`; затем события `monitor` |
+| `monitor.unsubscribe` | `subscription` | `{unsubscribed}`; чужая/неизвестная — `subscription.not_found` |
+
+Подписки клиента отменяются при его отключении. Ошибка замера — событие
+`error` с `subscription`, `fatal: true`, подписка завершается.
+
+MonitorData:
+
+```json
+{ "timestamp": "2026-10-24T09:15:02Z",
+  "cpu": { "usage_pct": 23.5, "cores": 4, "per_core": [30.1, 12.0, 40.2, 11.7] },
+  "memory": { "total_bytes": 8192000000, "used_bytes": 2048000000, "available_bytes": 6144000000,
+              "free_bytes": 1024000000, "buffers_bytes": 102400000, "cached_bytes": 2252800000, "usage_pct": 25.0 },
+  "swap": { "total_bytes": 2048000000, "used_bytes": 512000000, "usage_pct": 25.0 },
+  "load": { "1m": 0.52, "5m": 0.40, "15m": 0.31, "running": 2, "total": 345 },
+  "uptime_sec": 86461,
+  "processes": [ { "pid": 812, "ppid": 1, "user": "mysql", "cpu_pct": 12.5, "mem_pct": 4.1,
+                   "rss_bytes": 343040000, "elapsed_sec": 86400, "state": "Ssl", "command": "mysqld" } ] }
+```
+
+`usage_pct` — `null`, если нет второго замера. Источник — `/proc` и `ps`
+(procps); на сервере без `/proc` — `cap.missing` с `capability: procfs`.
 
 ---
 
@@ -907,6 +967,19 @@ JSON Lines: один JSON-объект на строку, `\n`-разделит�
 | `session.not_connected` | `session`, `state` | Операция недоступна в текущем состоянии сессии |
 | `session.prompt_expired` | `prompt_id` | Запрос уже неактуален |
 | `session.limit_reached` | `max` | Превышено число сессий демона (по умолчанию 256) |
+| `subscription.not_found` | `subscription` | Подписки нет (закрыта или чужая) |
+| `auth.cancelled` | — | Пользователь отменил ввод секрета (также в §5 auth) |
+
+### desktop / priv / remote
+
+| Код | Params | Описание |
+|-----|--------|----------|
+| `priv.required` | `connection_id`, `sudo_available` | Нужны права root: введите пароль sudo |
+| `priv.auth_failed` | `connection_id` | sudo отверг пароль |
+| `priv.readonly` | `connection_id` | Соединение в режиме «только чтение» |
+| `cap.missing` | `capability` | На сервере нет нужной возможности (`procfs`, `sudo`, …) |
+| `remote.command_failed` | `command`, `exit_status`, `stderr` | Команда на сервере завершилась с ошибкой |
+| `remote.bad_output` | `command` | Вывод команды на сервере не удалось разобрать |
 
 ---
 
@@ -988,11 +1061,13 @@ JSON Lines: один JSON-объект на строку, `\n`-разделит�
 
 ### 6.6 Session (только в демоне, не в БД)
 
+Другие объекты демона (Capabilities, PrivStatus, MonitorData) — §4.6–4.8.
+
 | Поле | Тип |
 |------|-----|
 | `session` | string (`s1`, …), уникален в пределах демона |
 | `connection_id` | uuid |
-| `state` | `connecting` \| `awaiting_hostkey` \| `awaiting_auth` \| `connected` \| `closed` |
+| `state` | `connecting` \| `connected` \| `closed` (вопросы — события, отдельного состояния нет) |
 | `cols`, `rows` | int |
 | `opened_at` | datetime |
 | `attached` | bool |
