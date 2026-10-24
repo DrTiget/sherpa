@@ -19,11 +19,43 @@ impl MethodGroup for DesktopMethods {
     }
 
     fn methods(&self) -> &'static [&'static str] {
-        &["desktop.open", "desktop.capabilities", "desktop.list", "desktop.close"]
+        &[
+            "desktop.open",
+            "desktop.capabilities",
+            "desktop.list",
+            "desktop.close",
+            "desktop.state.get",
+            "desktop.state.set",
+        ]
     }
 
     async fn call(&self, cx: &Cx, method: &str, p: Value) -> CoreResult<Value> {
         match method {
+            "desktop.state.get" | "desktop.state.set" => {
+                let id = req_str(&p, "connection_id")?;
+                cx.state.with_store(|s| {
+                    crate::repo::conn::get(s, &id)?;
+                    let key = format!("desktop.state.{id}");
+                    if method == "desktop.state.set" {
+                        let state = p
+                            .get("state")
+                            .filter(|v| v.is_object())
+                            .ok_or_else(|| CoreError::invalid("state", "expected object"))?;
+                        let text = state.to_string();
+                        if text.len() > 65536 {
+                            return Err(CoreError::invalid("state", "maximum 64 KiB"));
+                        }
+                        s.meta_set(&key, &text)?;
+                    }
+                    let state: Value = s
+                        .meta_get(&key)?
+                        .map(|v| serde_json::from_str(&v))
+                        .transpose()
+                        .map_err(|_| CoreError::internal("Invalid desktop state"))?
+                        .unwrap_or(json!({}));
+                    Ok(json!({"connection_id": id, "state": state}))
+                })
+            }
             "desktop.open" => {
                 let id = req_str(&p, "connection_id")?;
                 cx.state.with_store(|s| crate::repo::conn::get(s, &id).map(|_| ()))?;

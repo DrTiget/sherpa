@@ -61,6 +61,10 @@ impl PooledConn {
         }
     }
 
+    pub fn forwards(&self) -> &crate::ssh::client::ForwardRoutes {
+        &self.session.forwards
+    }
+
     pub fn handle(&self) -> &Handle<Verifier> {
         &self.session.handle
     }
@@ -94,6 +98,35 @@ impl PooledConn {
 
     pub fn channels_in_use(&self) -> usize {
         self.max_channels.saturating_sub(self.channels.available_permits())
+    }
+
+    pub async fn channel_permit(&self) -> CoreResult<tokio::sync::OwnedSemaphorePermit> {
+        self.touch();
+        self.channels
+            .clone()
+            .acquire_owned()
+            .await
+            .map_err(|_| CoreError::internal("channel semaphore closed"))
+    }
+
+    pub async fn sftp(&self) -> CoreResult<SftpChannel> {
+        let permit = self.channel_permit().await?;
+        let channel = self
+            .handle()
+            .channel_open_session()
+            .await
+            .map_err(|_| CoreError::new("fs.channel", "Cannot open SFTP channel"))?;
+        channel
+            .request_subsystem(true, "sftp")
+            .await
+            .map_err(|_| CoreError::new("fs.channel", "Cannot request SFTP subsystem"))?;
+        let session = russh_sftp::client::SftpSession::new(channel.into_stream())
+            .await
+            .map_err(crate::daemon::methods::files::sftp_error)?;
+        Ok(SftpChannel {
+            session: Arc::new(session),
+            permit: Some(permit),
+        })
     }
 
     // ---------- привилегии ----------
@@ -326,5 +359,27 @@ impl Pool {
         for id in ids {
             self.close(&id).await;
         }
+    }
+}
+
+/// Permit lives until the subsystem has been closed, including cancellation.
+pub struct SftpChannel {
+    session: Arc<russh_sftp::client::SftpSession>,
+    permit: Option<tokio::sync::OwnedSemaphorePermit>,
+}
+impl std::ops::Deref for SftpChannel {
+    type Target = russh_sftp::client::SftpSession;
+    fn deref(&self) -> &Self::Target {
+        &self.session
+    }
+}
+impl Drop for SftpChannel {
+    fn drop(&mut self) {
+        let session = self.session.clone();
+        let permit = self.permit.take();
+        tokio::spawn(async move {
+            let _permit = permit;
+            let _ = session.close().await;
+        });
     }
 }

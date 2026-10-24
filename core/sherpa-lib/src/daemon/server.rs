@@ -76,7 +76,7 @@ async fn reaper(state: Arc<DaemonState>) {
         let idle = state.settings.daemon_idle_timeout_sec;
         let empty =
             state.sessions.lock().expect("sessions").is_empty() && state.clients.lock().expect("clients").is_empty();
-        if idle > 0 && empty && state.idle_for() > Duration::from_secs(idle) {
+        if idle > 0 && empty && !state.jobs.active() && state.idle_for() > Duration::from_secs(idle) {
             tracing::info!("idle for {idle}s, shutting down");
             state.request_shutdown("idle");
             return;

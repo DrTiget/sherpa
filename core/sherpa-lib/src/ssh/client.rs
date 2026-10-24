@@ -46,8 +46,11 @@ impl ConnectOptions {
 }
 
 /// Открытое и авторизованное соединение.
+pub type Forwarded = russh::Channel<client::Msg>;
+pub type ForwardRoutes = Arc<Mutex<std::collections::HashMap<(String, u32), tokio::sync::mpsc::Sender<Forwarded>>>>;
 pub struct Session {
     pub handle: Handle<Verifier>,
+    pub forwards: ForwardRoutes,
 }
 
 impl Session {
@@ -83,10 +86,36 @@ pub struct Verifier {
     accept_once: Option<String>,
     probe_only: bool,
     state: Arc<Mutex<VerifyState>>,
+    forwards: ForwardRoutes,
 }
 
 impl client::Handler for Verifier {
     type Error = russh::Error;
+
+    async fn server_channel_open_forwarded_tcpip(
+        &mut self,
+        channel: Forwarded,
+        address: &str,
+        port: u32,
+        _originator_address: &str,
+        _originator_port: u32,
+        reply: client::ChannelOpenHandle,
+        _session: &mut client::Session,
+    ) -> Result<(), Self::Error> {
+        let route = self
+            .forwards
+            .lock()
+            .expect("forward routes")
+            .get(&(address.to_owned(), port))
+            .cloned();
+        if let Some(tx) = route {
+            if let Ok(permit) = tx.try_reserve() {
+                reply.accept().await;
+                permit.send(channel);
+            }
+        }
+        Ok(())
+    }
 
     async fn check_server_key(&mut self, key: &PublicKeyOrCertificate) -> Result<bool, Self::Error> {
         let PublicKeyOrCertificate::PublicKey { key, .. } = key else {
@@ -267,12 +296,14 @@ async fn connect_inner(
         ..Default::default()
     };
     config.preferred.key = host_key_algorithms(opts).into();
+    let forwards = ForwardRoutes::default();
     let handler = Verifier {
         known: opts.known.clone(),
         accept_new: opts.accept_new,
         accept_once: opts.accept_once_fingerprint.clone(),
         probe_only: opts.probe_only,
         state: state.clone(),
+        forwards: forwards.clone(),
     };
     let tap = BannerTap {
         inner: tcp,
@@ -282,7 +313,7 @@ async fn connect_inner(
         Ok(h) => h,
         Err(e) => return Err(handshake_error(host, port, e, &state, &banner, opts.timeout)),
     };
-    let mut session = Session { handle };
+    let mut session = Session { handle, forwards };
     authenticate(&mut session, target).await?;
     Ok(session)
 }

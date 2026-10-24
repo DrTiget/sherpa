@@ -60,6 +60,8 @@ pub struct DaemonState {
     pub clients: Mutex<HashMap<u64, ClientHandle>>,
     pub subscriptions: Mutex<HashMap<String, Subscription>>,
     pub pool: Pool,
+    pub jobs: super::methods::jobs::Jobs,
+    pub confirmations: super::methods::danger::Confirmations,
     pub registry: Vec<Arc<dyn MethodGroup>>,
     next_id: AtomicU64,
     last_activity: Mutex<Instant>,
@@ -78,6 +80,8 @@ impl DaemonState {
             clients: Mutex::new(HashMap::new()),
             subscriptions: Mutex::new(HashMap::new()),
             pool: Pool::default(),
+            jobs: Default::default(),
+            confirmations: Default::default(),
             registry: registry(),
             next_id: AtomicU64::new(1),
             last_activity: Mutex::new(Instant::now()),
@@ -154,11 +158,13 @@ impl DaemonState {
     }
 
     pub fn request_shutdown(&self, reason: &str) {
+        self.jobs.cancel_all();
         let _ = self.shutdown.send(Some(reason.to_string()));
     }
 
     /// Клиент отключился: его сессии ждут переподключения, подписки отменяются.
     pub fn client_gone(&self, client: u64) {
+        self.confirmations.client_gone(client);
         self.clients.lock().expect("clients").remove(&client);
         let sessions: Vec<Arc<TermSession>> = self.sessions.lock().expect("sessions").values().cloned().collect();
         for s in sessions {
