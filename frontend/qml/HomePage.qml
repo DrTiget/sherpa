@@ -13,6 +13,7 @@ Item {
     signal settingsRequested()
     signal newGroupRequested()
     signal groupMenu(string id, string name)
+    signal desktopRequested(string id, bool terminal)
     property alias searchField: search
     property bool hideBackup: false
 
@@ -104,7 +105,7 @@ Item {
                 Layout.fillHeight: true
                 onAddRequested: root.addRequested()
                 onImportRequested: root.importRequested()
-                onOpenRequested: (id) => Backend.checkOne(id)   // терминал появится позже; пока двойной клик проверяет
+                onOpenRequested: (id) => root.desktopRequested(id, false)
             }
             Rectangle { Layout.fillHeight: true; width: 1; color: Theme.line }
             ServerCard {
@@ -112,6 +113,8 @@ Item {
                 Layout.fillHeight: true
                 onEditRequested: (id) => root.editRequested(id)
                 onDeleteRequested: (id) => root.deleteRequested(id)
+                onTerminalRequested: (id) => root.desktopRequested(id, true)
+                onDesktopRequested: (id) => root.desktopRequested(id, false)
             }
         }
 

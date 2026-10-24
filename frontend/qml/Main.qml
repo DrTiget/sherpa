@@ -15,6 +15,38 @@ ApplicationWindow {
     font.family: Theme.fontUi
     font.pixelSize: Theme.sizeUi
 
+    property var terminalFirst: ({})
+    function openDesktop(id, terminal) {
+        const s = Backend.serverById(id)
+        if (!s.id) return
+        const existed = Backend.desk.desktop(id) !== null
+        if (!existed) { const t = terminalFirst; t[id] = terminal; terminalFirst = t }
+        Backend.desk.openDesktop(id, s.name)
+        const ids = Backend.desk.ids
+        for (let i = 0; i < ids.length; ++i)
+            if (ids[i] === id) tabs.current = i + 1
+        if (existed && terminal) {
+            const page = desktopPages.itemAt(tabs.current - 1)
+            if (page) page.newTerminal()
+        }
+    }
+    function requestCloseDesktop(id) {
+        const ids = Backend.desk.ids
+        const idx = ids.indexOf(id)
+        const page = idx >= 0 ? desktopPages.itemAt(idx) : null
+        if (page && page.wins.length > 0) {
+            closeDeskDlg.targetId = id
+            closeDeskDlg.message = qsTr("Close the desktop of “%1”? Open terminal sessions will end.").arg(Backend.serverById(id).name)
+            closeDeskDlg.open()
+        } else doCloseDesktop(id)
+    }
+    function doCloseDesktop(id) {
+        tabs.current = 0
+        Backend.desk.closeDesktop(id)
+    }
+    property alias tabHost: tabs
+    property alias desktopRepeater: desktopPages
+
     // свойства для тестов
     property alias home: homePage
     property alias formDialog: serverForm
@@ -78,6 +110,8 @@ ApplicationWindow {
             id: tabs
             anchors.fill: parent
             visible: Backend.appState === "ready"
+            extraTabs: Backend.desk.desktops
+            onCloseTab: (id) => win.requestCloseDesktop(id)
             HomePage {
                 id: homePage
                 onAddRequested: serverForm.openCreate()
@@ -87,11 +121,27 @@ ApplicationWindow {
                 onSettingsRequested: settingsDlg.open()
                 onNewGroupRequested: { groupDlg.mode = "new"; groupDlg.groupId = ""; groupDlg.value = ""; groupDlg.title = qsTr("New group"); groupDlg.open() }
                 onGroupMenu: (id, name) => { groupMenu.gid = id; groupMenu.gname = name; groupMenu.popup() }
+                onDesktopRequested: (id, terminal) => win.openDesktop(id, terminal)
+            }
+            Repeater {
+                id: desktopPages
+                model: Backend.desk.ids
+                delegate: DesktopPage {
+                    required property string modelData
+                    required property int index
+                    desk: Backend.desk.desktop(modelData)
+                    current: tabs.current === index + 1
+                    startWithTerminal: win.terminalFirst[modelData] === true
+                    onHomeRequested: tabs.current = 0
+                    onSwitchServer: (id, name) => win.openDesktop(id, false)
+                    onCloseDesktopRequested: win.requestCloseDesktop(modelData)
+                    onEditConnectionRequested: (id) => { tabs.current = 0; serverForm.openEdit(id) }
+                }
             }
         }
     }
 
-    Menu {
+    SMenu {
         id: groupMenu
         property string gid
         property string gname
@@ -99,6 +149,14 @@ ApplicationWindow {
         MenuItem { text: qsTr("Delete group"); onTriggered: { delGroup.targetId = groupMenu.gid; delGroup.message = qsTr("Delete group “%1”? Its servers move to the parent group.").arg(groupMenu.gname); delGroup.open() } }
     }
 
+    ConfirmDialog {
+        id: closeDeskDlg
+        property string targetId
+        title: qsTr("Close desktop")
+        confirmText: qsTr("Close")
+        danger: true
+        onConfirmed: win.doCloseDesktop(targetId)
+    }
     ServerFormDialog { id: serverForm }
     ImportDialog { id: importDlg }
     SettingsDialog { id: settingsDlg }
@@ -138,6 +196,12 @@ ApplicationWindow {
 
     SToast { id: toast; anchors.right: parent.right; anchors.bottom: parent.bottom; anchors.margins: 20; z: 100 }
 
+    Shortcut { sequences: ["Ctrl+Tab", "Ctrl+PgDown"]; onActivated: tabs.current = (tabs.current + 1) % (1 + Backend.desk.desktops.length) }
+    Shortcut { sequences: ["Ctrl+Shift+Tab", "Ctrl+PgUp"]; onActivated: tabs.current = (tabs.current + Backend.desk.desktops.length) % (1 + Backend.desk.desktops.length) }
+    Repeater {
+        model: 9
+        delegate: Item { Shortcut { sequence: "Alt+" + (index + 1); onActivated: if (index <= Backend.desk.desktops.length) tabs.current = index } }
+    }
     Shortcut { sequence: "Ctrl+N"; onActivated: serverForm.openCreate() }
     Shortcut { sequence: "Ctrl+F"; onActivated: homePage.searchField.forceFocus() }
     Shortcut { sequences: ["Ctrl+R", "F5"]; onActivated: Backend.checkOne(Backend.selectedId) }
@@ -145,5 +209,5 @@ ApplicationWindow {
     Shortcut { sequence: "Ctrl+E"; onActivated: if (Backend.selectedId !== "") serverForm.openEdit(Backend.selectedId) }
     Shortcut { sequence: "Ctrl+,"; onActivated: settingsDlg.open() }
 
-    Component.onCompleted: Backend.start()
+    Component.onCompleted: { Backend.start() }
 }

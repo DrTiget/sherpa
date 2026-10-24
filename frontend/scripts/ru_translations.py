@@ -1,7 +1,31 @@
 #!/usr/bin/env python3
 """Заполняет translations/sherpa_ru.ts русскими текстами (после lupdate). Запуск: python3 scripts/ru_translations.py"""
-import re, sys, html
+import sys
 RU = {
+"Terminal": "Терминал", "Resource monitor": "Монитор ресурсов", "Monitor": "Монитор", "New terminal": "Новый терминал",
+"Show desktop": "Показать рабочий стол", "Connecting to %1…": "Подключение к %1…", "Cannot connect to %1": "Не удаётся подключиться к %1",
+"Edit connection": "Изменить подключение", "Home": "Дом", "Connection lost": "Соединение потеряно", "reconnecting in %1 s": "переподключение через %1 с",
+"Retry now": "Повторить сейчас", "Close terminal?": "Закрыть терминал?", "The session is still active. Closing the window ends it.": "Сессия ещё активна. Закрытие окна завершит её.",
+"The terminal service is not available": "Служба терминала недоступна", "The server desktop is not connected": "Рабочий стол сервера не подключён",
+"Root rights are required for this action": "Для этого действия нужны права root", "Read-only mode is on: changes are blocked": "Включён режим «только чтение»: изменения заблокированы",
+"Wrong sudo password": "Неверный пароль sudo", "Not available on this server: {capability} is missing": "Недоступно на этом сервере: нет {capability}",
+"The command failed on the server": "Команда на сервере завершилась ошибкой", "The server returned unexpected output": "Сервер вернул неожиданный вывод",
+"The subscription was not found": "Подписка не найдена",
+"Files": "Файлы", "Services": "Службы", "Logs": "Журналы", "Network": "Сеть", "Firewall": "Брандмауэр", "Disks": "Диски", "Packages": "Пакеты",
+"Scheduler": "Планировщик", "Databases": "Базы данных", "Web servers": "Веб-серверы", "Favorites": "Избранное", "System": "Система",
+"Monitoring": "Мониторинг", "Development": "Разработка", "All applications": "Все приложения", "Search utilities, services, files…": "Поиск утилит, служб, файлов…",
+"n/a": "н/д", "soon": "скоро", "Reconnect": "Переподключить", "Close desktop": "Закрыть рабочий стол",
+"Close the desktop of “%1”? Open terminal sessions will end.": "Закрыть рабочий стол «%1»? Открытые сессии терминала завершатся.",
+"d ": "д ", "h ": "ч ", "m": "м", "d": "д", "h": "ч", "Memory": "Память", "Cores: %1": "Ядра: %1", "load": "нагрузка", "up": "аптайм",
+"Processes": "Процессы", "Filter": "Фильтр", "Filter processes": "Фильтр процессов", "Command": "Команда", "Waiting for the server…": "Ожидание сервера…",
+"Not available on this server": "Недоступно на этом сервере", "Collecting data…": "Сбор данных…",
+"Key passphrase required": "Нужна парольная фраза ключа", "Password required": "Нужен пароль", "Enter the secret": "Введите секрет",
+"Attempt %1": "Попытка %1", "Secret": "Секрет", "Remember for this server": "Запомнить для этого сервера", "Trust once": "Доверять один раз", "Sign in": "Войти",
+"Minimize": "Свернуть", "Maximize": "Развернуть", "Desktop": "Рабочий стол", "Close tab": "Закрыть вкладку", "Launcher": "Лаунчер",
+"Reconnecting…": "Переподключение…", "Session ended": "Сессия завершена", "Connection to the core lost. Reconnecting…": "Связь с ядром потеряна. Переподключение…",
+"Connecting…": "Подключение…", "Connection error": "Ошибка соединения", "Session disconnected": "Сессия отключена", "Waiting for the core…": "Ожидание ядра…",
+"Paste multiple lines?": "Вставить несколько строк?", "The text contains line breaks and will run as several commands.": "В тексте есть переводы строк — он выполнится как несколько команд.",
+"Paste": "Вставить",
 "%1 (copy)": "%1 (копия)",
 "A group cannot be moved into its own subgroup": "Группу нельзя переместить в её же подгруппу",
 "A group named “{name}” already exists": "Группа «{name}» уже существует",
@@ -222,15 +246,23 @@ RU = {
 "shown %1 of %2": "показано %1 из %2",
 "{key}: several IdentityFile entries, the first one is used": "{key}: несколько IdentityFile, взят первый",
 }
+import xml.etree.ElementTree as ET
 p = sys.argv[1] if len(sys.argv) > 1 else "translations/sherpa_ru.ts"
-s = open(p, encoding="utf-8").read()
+tree = ET.parse(p)
 missing = set()
-def fix(m):
-    src = html.unescape(m.group(1))
+for m in tree.getroot().iter("message"):
+    tr = m.find("translation")
+    if tr.get("type") != "unfinished" and (tr.text or "").strip():
+        continue
+    src = m.find("source").text or ""
     if src in RU:
-        return m.group(0)[:m.start(2)-m.start(0)] + html.escape(RU[src], quote=False) + m.group(0)[m.end(2)-m.start(0):]
-    missing.add(src); return m.group(0)
-s = re.sub(r'<source>(.*?)</source>\s*(?:<comment>.*?</comment>\s*)?<translation(?: type="unfinished")?>()</translation>', fix, s, flags=re.S)
-s = s.replace('<translation type="unfinished">', '<translation>')
-open(p, "w", encoding="utf-8").write(s)
-if missing: print("НЕ ПЕРЕВЕДЕНО:", *sorted(missing), sep="\n  ")
+        tr.text = RU[src]
+        tr.attrib.pop("type", None)
+    else:
+        missing.add(src)
+with open(p, "w", encoding="utf-8") as f:
+    f.write('<?xml version="1.0" encoding="utf-8"?>\n<!DOCTYPE TS>\n')
+    f.write(ET.tostring(tree.getroot(), encoding="unicode"))
+    f.write("\n")
+if missing:
+    print("НЕ ПЕРЕВЕДЕНО:", *sorted(missing), sep="\n  ")

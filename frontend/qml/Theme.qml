@@ -34,12 +34,12 @@ QtObject {
     readonly property color selectedBorder: Qt.rgba(54 / 255, 123 / 255, 240 / 255, 0.6)
 
     // фон окна и панелей: при выключенной прозрачности — сплошные цвета
-    readonly property color windowFill: light ? Qt.rgba(244 / 255, 246 / 255, 250 / 255, translucent ? 0.78 : 1)
-                                              : Qt.rgba(18 / 255, 21 / 255, 30 / 255, translucent ? 0.74 : 1)
-    readonly property color panelFill: light ? Qt.rgba(1, 1, 1, translucent ? 0.55 : 1)
-                                             : Qt.rgba(5 / 255, 7 / 255, 12 / 255, translucent ? 0.5 : 1)
-    readonly property color dialogFill: light ? Qt.rgba(248 / 255, 250 / 255, 253 / 255, translucent ? 0.86 : 1)
-                                              : Qt.rgba(18 / 255, 21 / 255, 30 / 255, translucent ? 0.84 : 1)
+    readonly property color windowFill: light ? Qt.rgba(244 / 255, 246 / 255, 250 / 255, blurOn ? 0.78 : 1)
+                                              : Qt.rgba(18 / 255, 21 / 255, 30 / 255, blurOn ? 0.74 : 1)
+    readonly property color panelFill: light ? Qt.rgba(1, 1, 1, blurOn ? 0.55 : 1)
+                                             : Qt.rgba(5 / 255, 7 / 255, 12 / 255, blurOn ? 0.5 : 1)
+    readonly property color dialogFill: light ? Qt.rgba(248 / 255, 250 / 255, 253 / 255, blurOn ? 0.86 : 1)
+                                              : Qt.rgba(18 / 255, 21 / 255, 30 / 255, blurOn ? 0.84 : 1)
     readonly property color inputFill: light ? Qt.rgba(1, 1, 1, 0.8) : Qt.rgba(5 / 255, 7 / 255, 12 / 255, 0.55)
     readonly property color scrim: Qt.rgba(0, 0, 0, light ? 0.3 : 0.5)
 

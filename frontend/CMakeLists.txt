@@ -44,6 +44,15 @@ set(SHERPA_QML
     qml/SLabel.qml
     qml/GlassPanel.qml
     qml/TabHost.qml
+    qml/SWindow.qml
+    qml/SMenu.qml
+    qml/PromptDialog.qml
+    qml/TerminalWindow.qml
+    qml/MonitorWindow.qml
+    qml/Taskbar.qml
+    qml/Launcher.qml
+    qml/ServersDock.qml
+    qml/DesktopPage.qml
 )
 
 # Интерфейс — статическая QML-библиотека: её используют и приложение, и тесты.
@@ -57,6 +66,11 @@ qt_add_qml_module(sherpa_ui
         src/ErrorText.cpp src/ErrorText.h
         src/ServerModel.cpp src/ServerModel.h
         src/Backend.cpp src/Backend.h
+        src/DaemonClient.cpp src/DaemonClient.h
+        src/TermEmulator.cpp src/TermEmulator.h
+        src/TerminalSession.cpp src/TerminalSession.h
+        src/DesktopManager.cpp src/DesktopManager.h
+        src/TerminalItem.cpp src/TerminalItem.h
 )
 target_link_libraries(sherpa_ui PUBLIC Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
 target_include_directories(sherpa_ui PUBLIC src)

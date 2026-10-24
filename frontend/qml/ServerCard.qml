@@ -8,6 +8,7 @@ Item {
     signal editRequested(string id)
     signal deleteRequested(string id)
     signal terminalRequested(string id)
+    signal desktopRequested(string id)
     readonly property var s: Backend.selected
     readonly property bool has: !!s.id
     property var hk: ({})
@@ -64,7 +65,8 @@ Item {
             Flow {
                 Layout.fillWidth: true
                 spacing: 8
-                SButton { text: qsTr("Terminal (soon)"); kind: "primary"; enabled: false; onClicked: root.terminalRequested(root.s.id) }
+                SButton { text: qsTr("Desktop"); kind: "primary"; onClicked: root.desktopRequested(root.s.id) }
+                SButton { text: qsTr("Terminal"); onClicked: root.terminalRequested(root.s.id) }
                 SButton { text: qsTr("Check"); busy: !!root.s.checking; enabled: !root.s.checking; onClicked: Backend.checkOne(root.s.id) }
                 SButton { text: qsTr("Edit"); onClicked: root.editRequested(root.s.id) }
                 SButton { text: qsTr("Duplicate"); onClicked: Backend.duplicateConnection(root.s.id) }

@@ -123,6 +123,11 @@ quint64 CoreClient::start(const QStringList &args, const QJsonObject &input, boo
     connect(p, &QProcess::finished, this, [this, id](int code, QProcess::ExitStatus st) {
         complete(id, code, st == QProcess::CrashExit);
     });
+    connect(p, &QProcess::started, this, [this, id]() {
+        auto it = m_jobs.find(id);
+        if (it != m_jobs.end() && it->cancelled)   // отмена пришла раньше старта процесса
+            it->proc->kill();
+    });
     connect(p, &QProcess::errorOccurred, this, [this, id](QProcess::ProcessError err) {
         if (err == QProcess::FailedToStart) {
             auto it = m_jobs.find(id);

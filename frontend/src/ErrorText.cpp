@@ -100,6 +100,15 @@ const Entry kEntries[] = {
     {"client.core_not_found", QT_TRANSLATE_NOOP("Errors", "The sherpa-core program was not found. Reinstall Sherpa or set the SHERPA_CORE variable.")},
     {"client.bad_output", QT_TRANSLATE_NOOP("Errors", "The core returned an unreadable response")},
     {"client.process_failed", QT_TRANSLATE_NOOP("Errors", "The core process crashed")},
+    {"client.daemon_unavailable", QT_TRANSLATE_NOOP("Errors", "The terminal service is not available")},
+    {"desktop.not_open", QT_TRANSLATE_NOOP("Errors", "The server desktop is not connected")},
+    {"priv.required", QT_TRANSLATE_NOOP("Errors", "Root rights are required for this action")},
+    {"priv.readonly", QT_TRANSLATE_NOOP("Errors", "Read-only mode is on: changes are blocked")},
+    {"priv.auth_failed", QT_TRANSLATE_NOOP("Errors", "Wrong sudo password")},
+    {"cap.missing", QT_TRANSLATE_NOOP("Errors", "Not available on this server: {capability} is missing")},
+    {"remote.command_failed", QT_TRANSLATE_NOOP("Errors", "The command failed on the server")},
+    {"remote.bad_output", QT_TRANSLATE_NOOP("Errors", "The server returned unexpected output")},
+    {"subscription.not_found", QT_TRANSLATE_NOOP("Errors", "The subscription was not found")},
     {"client.cancelled", QT_TRANSLATE_NOOP("Errors", "Cancelled")},
 };
 

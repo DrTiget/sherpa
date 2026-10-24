@@ -2,6 +2,8 @@
 #pragma once
 
 #include "CoreClient.h"
+#include "DaemonClient.h"
+#include "DesktopManager.h"
 #include "ServerModel.h"
 
 #include <QHash>
@@ -48,12 +50,15 @@ class Backend : public QObject {
     Q_PROPERTY(bool translucent READ translucent WRITE setTranslucent NOTIFY translucentChanged)
     Q_PROPERTY(int timeoutSec READ timeoutSec WRITE setTimeoutSec NOTIFY timeoutChanged)
     Q_PROPERTY(QString defaultSshConfig READ defaultSshConfig CONSTANT)
+    Q_PROPERTY(DesktopManager *desk READ desk CONSTANT)
 
 public:
     explicit Backend(QObject *parent = nullptr);
     ~Backend() override;
 
     CoreClient *client() { return &m_client; }
+    DaemonClient *daemon() { return &m_daemon; }
+    DesktopManager *desk() { return &m_desk; }
 
     QString appState() const { return m_appState; }
     ServerModel *servers() { return &m_servers; }
@@ -197,6 +202,8 @@ private:
                                     const QString &groupId) const;
 
     CoreClient m_client;
+    DaemonClient m_daemon{&m_client};
+    DesktopManager m_desk{&m_daemon};
     ServerModel m_servers;
     QSettings m_settings;
     QTranslator m_translator;
