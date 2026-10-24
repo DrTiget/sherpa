@@ -46,8 +46,13 @@ impl ConnectOptions {
 }
 
 /// Открытое и авторизованное соединение.
-pub type Forwarded = russh::Channel<client::Msg>;
-pub type ForwardRoutes = Arc<Mutex<std::collections::HashMap<(String, u32), tokio::sync::mpsc::Sender<Forwarded>>>>;
+pub type Forwarded = (russh::Channel<client::Msg>, tokio::sync::OwnedSemaphorePermit);
+#[derive(Clone)]
+pub struct ForwardRoute {
+    pub tx: tokio::sync::mpsc::Sender<Forwarded>,
+    pub slots: Arc<tokio::sync::Semaphore>,
+}
+pub type ForwardRoutes = Arc<Mutex<std::collections::HashMap<(String, u32), ForwardRoute>>>;
 pub struct Session {
     pub handle: Handle<Verifier>,
     pub forwards: ForwardRoutes,
@@ -94,7 +99,7 @@ impl client::Handler for Verifier {
 
     async fn server_channel_open_forwarded_tcpip(
         &mut self,
-        channel: Forwarded,
+        channel: russh::Channel<client::Msg>,
         address: &str,
         port: u32,
         _originator_address: &str,
@@ -108,10 +113,10 @@ impl client::Handler for Verifier {
             .expect("forward routes")
             .get(&(address.to_owned(), port))
             .cloned();
-        if let Some(tx) = route {
-            if let Ok(permit) = tx.try_reserve() {
+        if let Some(route) = route {
+            if let (Ok(slot), Ok(permit)) = (route.slots.try_acquire_owned(), route.tx.try_reserve()) {
                 reply.accept().await;
-                permit.send(channel);
+                permit.send((channel, slot));
             }
         }
         Ok(())

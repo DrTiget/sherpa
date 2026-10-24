@@ -81,6 +81,7 @@ impl MethodGroup for DesktopMethods {
             "desktop.list" => Ok(json!({ "items": cx.state.pool.list().await })),
             "desktop.close" => {
                 let id = req_str(&p, "connection_id")?;
+                cx.state.jobs.cancel_connection(&id);
                 Ok(json!({ "closed": cx.state.pool.close(&id).await }))
             }
             _ => Err(unknown(method)),

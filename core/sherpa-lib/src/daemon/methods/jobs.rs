@@ -82,6 +82,17 @@ impl Jobs {
             .values()
             .any(|j| !terminal(&j.state.lock().expect("job")))
     }
+    pub fn cancel_connection(&self, connection: &str) {
+        for j in self
+            .entries
+            .lock()
+            .expect("jobs")
+            .values()
+            .filter(|j| j.connection == connection)
+        {
+            j.cancel.send_replace(true);
+        }
+    }
     pub fn cancel_all(&self) {
         for j in self.entries.lock().expect("jobs").values() {
             j.cancel.send_replace(true);

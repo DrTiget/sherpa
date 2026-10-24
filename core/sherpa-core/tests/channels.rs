@@ -245,6 +245,20 @@ async fn exercise(e: &Env, id: &str) {
     let job = call(&cx,"transfer.start",json!({"connection_id":id,"direction":"download","local":partial,"remote":remote.join("sub/data"),"resume":true})).await;
     wait_job(&cx, "transfer", job["id"].as_str().unwrap(), "completed").await;
     assert_eq!(std::fs::read(&partial).unwrap(), bytes);
+    let partial_upload = base.join("partial-upload");
+    std::fs::write(&partial_upload, &bytes[..54321]).unwrap();
+    let job = call(&cx,"transfer.start",json!({"connection_id":id,"direction":"upload","local":tree.join("sub/data"),"remote":partial_upload,"resume":true})).await;
+    wait_job(&cx, "transfer", job["id"].as_str().unwrap(), "completed").await;
+    assert_eq!(std::fs::read(&partial_upload).unwrap(), bytes);
+    std::fs::write(&partial, b"bad prefix").unwrap();
+    let job = call(&cx,"transfer.start",json!({"connection_id":id,"direction":"download","local":partial,"remote":remote.join("sub/data"),"resume":true})).await;
+    let failed = wait_job(&cx, "transfer", job["id"].as_str().unwrap(), "failed").await;
+    assert_eq!(failed["error"]["code"], "transfer.conflict");
+    // Симлинк не позволяет рекурсивной операции уйти за выбранный каталог.
+    let outside = e.path("outside");
+    std::fs::create_dir(&outside).unwrap();
+    std::fs::write(outside.join("keep"), b"keep").unwrap();
+    std::os::unix::fs::symlink(&outside, remote.join("link")).unwrap();
     // Очередь и отмена до открытия канала.
     let permits = state.jobs.transfers.clone().acquire_many_owned(2).await.unwrap();
     let job = call(
@@ -268,6 +282,7 @@ async fn exercise(e: &Env, id: &str) {
     confirmed["confirm_token"] = ticket["confirm_token"].clone();
     call(&cx, "files.delete", confirmed.clone()).await;
     assert!(!remote.exists());
+    assert!(outside.join("keep").exists());
     assert_eq!(
         dispatch(&cx, "files.delete", confirmed).await.unwrap_err().code,
         "danger.confirmation_required"

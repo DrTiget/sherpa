@@ -150,6 +150,9 @@ impl MethodGroup for FilesMethods {
             return Ok(Value::Null);
         }
         let s = conn.sftp().await?;
+        if modifying {
+            conn.ensure_writable()?;
+        }
         match method {
             "files.stat" => Ok(entry(
                 &target,

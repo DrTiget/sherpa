@@ -96,11 +96,11 @@ impl MethodGroup for TunnelMethods {
                 cx.state.jobs.entries.lock().expect("jobs").remove(&id);
                 return Err(CoreError::new("tunnel.exists", "Remote forwarding already exists"));
             }
-            routes.insert((bind.clone(), port as u32), tx);
+            routes.insert((bind.clone(), port as u32), conn.forward_route(tx));
         }
         tokio::spawn(async move {
             // Удерживает соединение даже когда через слушатель нет трафика.
-            conn.terminal_opened();
+            conn.tunnel_opened();
             let result = {
                 let work = async {
                     if kind == "remote" {
@@ -129,7 +129,7 @@ impl MethodGroup for TunnelMethods {
                 )
                 .await;
             }
-            conn.terminal_closed();
+            conn.tunnel_closed();
             match result {
                 Ok(()) => j.update(&state, json!({"status":"stopped"})).await,
                 Err(e) => j.update(&state, json!({"status":"failed","error":e})).await,
@@ -160,12 +160,12 @@ async fn serve(
                 tasks.spawn(async move { let r = local(socket,&conn,dest).await; notify(r,&state,&job).await; });
             }
             channel = incoming.recv(), if listener.is_none() && tasks.len() < 32 => {
-                let channel = channel.ok_or_else(error)?;
+                let (channel, slot) = channel.ok_or_else(error)?;
                 let (conn,state,job,dest) = (conn.clone(),state.clone(),job.clone(),dest.clone());
                 tasks.spawn(async move {
                     let work = async {
                         conn.ensure_writable()?;
-                        let _permit = conn.channel_permit().await?;
+                        let _permit = slot;
                         let (host,port) = dest.ok_or_else(error)?;
                         let mut tcp = tokio::time::timeout(Duration::from_secs(15),TcpStream::connect((host.as_str(),port as u16))).await.map_err(|_| error())?.map_err(|_| error())?;
                         tokio::io::copy_bidirectional(&mut tcp,&mut channel.into_stream()).await.map_err(|_| error())?; Ok(())

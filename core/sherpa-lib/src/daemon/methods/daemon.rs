@@ -37,8 +37,12 @@ impl MethodGroup for DaemonMethods {
             })),
             "daemon.stop" => {
                 let n = st.sessions.lock().expect("sessions").len();
-                if n > 0 && !opt_bool(&p, "force")? {
-                    return Err(CoreError::new("daemon.sessions_active", "There are active sessions").with("count", n));
+                if (n > 0 || st.jobs.active()) && !opt_bool(&p, "force")? {
+                    return Err(CoreError::new(
+                        "daemon.sessions_active",
+                        "There are active sessions or background jobs",
+                    )
+                    .with("count", n));
                 }
                 let state = st.clone();
                 tokio::spawn(async move {

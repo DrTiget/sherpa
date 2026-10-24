@@ -86,7 +86,7 @@ impl MethodGroup for DangerMethods {
             return Err(CoreError::invalid("action", "unknown action"));
         }
         let token = cx.state.confirmations.prepare(cx.client.id, &action, &p["params"])?;
-        Ok(json!({"confirm_token": token, "expires_in_sec": 60, "action": action, "params": bound(&p["params"])}))
+        Ok(json!({"confirm_token": token, "expires_in_sec": 60, "action": action}))
     }
 }
 #[cfg(test)]

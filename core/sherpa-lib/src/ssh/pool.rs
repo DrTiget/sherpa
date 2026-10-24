@@ -41,6 +41,7 @@ pub struct PooledConn {
     privs: Mutex<PrivState>,
     readonly: AtomicBool,
     terminals: AtomicUsize,
+    tunnels: AtomicUsize,
 }
 
 impl PooledConn {
@@ -58,7 +59,26 @@ impl PooledConn {
             privs: Mutex::new(PrivState::default()),
             readonly: AtomicBool::new(false),
             terminals: AtomicUsize::new(0),
+            tunnels: AtomicUsize::new(0),
         }
+    }
+
+    pub fn forward_route(
+        &self,
+        tx: tokio::sync::mpsc::Sender<crate::ssh::client::Forwarded>,
+    ) -> crate::ssh::client::ForwardRoute {
+        crate::ssh::client::ForwardRoute {
+            tx,
+            slots: self.channels.clone(),
+        }
+    }
+    pub fn tunnel_opened(&self) {
+        self.tunnels.fetch_add(1, Ordering::SeqCst);
+        self.touch();
+    }
+    pub fn tunnel_closed(&self) {
+        self.tunnels.fetch_sub(1, Ordering::SeqCst);
+        self.touch();
     }
 
     pub fn forwards(&self) -> &crate::ssh::client::ForwardRoutes {
@@ -257,6 +277,7 @@ impl PooledConn {
             "opened_at": self.opened_at,
             "alive": self.is_alive(),
             "terminals": self.terminals(),
+            "tunnels": self.tunnels.load(Ordering::SeqCst),
             "channels_in_use": self.channels_in_use(),
             "readonly": self.readonly(),
             "server_banner": self.server_banner,
@@ -363,7 +384,11 @@ impl Pool {
         let ids: Vec<String> = self.slots.lock().expect("pool").keys().cloned().collect();
         for id in ids {
             if let Some(c) = self.get(&id).await {
-                if c.terminals() == 0 && c.channels_in_use() == 0 && c.idle_for() > max_idle {
+                if c.terminals() == 0
+                    && c.tunnels.load(Ordering::SeqCst) == 0
+                    && c.channels_in_use() == 0
+                    && c.idle_for() > max_idle
+                {
                     self.close(&id).await;
                 }
             } else {
