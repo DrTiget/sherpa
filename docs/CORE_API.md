@@ -904,10 +904,105 @@ DatabaseQuery SQL: `{id, user, database, elapsed_sec, state, query}`.
 Не входят в этот набор: Docker Compose/pull/prune/PTY exec, редактирование и
 включение/отключение сайтов, `redis.flush`, пользовательский SQL, прогресс дампа.
 
+### 4.20 Сеть — `net.*`
+
+Все методы, кроме диагностики подписок, принимают `connection_id`.
+Команды исполняются на сервере через пул SSH; firewall требует `priv.*`.
+
+| Метод | Дополнительные параметры | Ответ |
+|-------|-------------------------|-------|
+| `net.iface.list` | — | `{items: [...]}` — объекты `ip -j address show`: `ifindex`, `ifname`, `flags`, `mtu`, `address`, `operstate`, `addr_info` (family/local/prefixlen/scope) |
+| `net.route.list` | — | `{ipv4: [...], ipv6: [...]}` — все таблицы; объекты iproute2 (`dst`, `gateway?`, `dev?`, `metric?`, `table?`, `type?`) |
+| `net.dns.get` | — | `{servers: [IP], search: [domain], options: [string], resolved: [{link, servers: [IP]}]}`; `/etc/resolv.conf`, дополнительно `resolvectl dns`, если установлен |
+| `net.sockets` | — | `{items: [{protocol, state, recv_queue, send_queue, local: {address, port}, peer: {address, port}, uid, processes: [{name,pid,fd}]}]}` — слушающие TCP/UDP, `ss -tulpnH -e` |
+| `net.firewall.list` | `backend`: `ufw` / `nft` / `iptables` | `{backend, items, active?}` (см. ниже) |
+| `net.apply` | параметры правила ниже; `confirm: true`, `confirm_token`, `confirm_timeout?` (60, 10–120 с) | `{transaction: UUID, confirm_timeout, state: "pending"}` |
+| `net.confirm` | `transaction` | `{transaction, state: "confirmed"}` |
+| `net.rollback` | `transaction` | `{transaction, state: "rolled_back"}` |
+
+`port: null` означает wildcard. `uid: null` и пустой `processes` означают,
+что ss не предоставил сведения (обычно нет прав на чужие процессы).
+Неизвестные поля объектов iproute2/nftables сохраняются.
+Правила UFW: `{id,destination,action,direction,source,comment}`;
+`active` — bool. nftables: нативные JSON-объекты `nftables[]`, включая
+таблицы, цепочки, правила с `handle` и выражения `expr`. iptables:
+`{tokens: [string]}` для строк `-P`, `-N`, `-A`; это IPv4-таблица filter.
+Бэкенд выбирается явно из `Capabilities.tools`, чтобы не менять случайно
+другой одновременно установленный firewall.
+
+Параметры правила: `backend`, `operation: "add"|"delete"`,
+`table?` (filter), `chain?` (INPUT для iptables, input для nft).
+Добавление: `action: "allow"|"deny"|"reject"`, `protocol: "tcp"|"udp"`,
+`port` (1–65535), `source?` (IPv4/CIDR, по умолчанию 0.0.0.0/0).
+Удаление: `rule_id` — номер UFW/iptables либо handle nftables (> 0).
+UFW добавляет входящее правило; nft работает с семейством `inet` и
+существующими таблицей/цепочкой. Raw shell и произвольные nft-выражения
+не принимаются. Перед `net.apply` фронт получает одноразовый
+`confirm_token` через `danger.prepare {method: "net.apply", params: {...}}`
+с теми же параметрами и показывает затрагиваемое правило пользователю.
+
+`net.apply` проверяет readonly, подтверждение и наличие rollback-инструментов,
+сохраняет снимок, запускает **серверный** watchdog, затем меняет правило.
+Нужны `flock`, `nohup`, стандартные sh/coreutils; для iptables также
+`iptables-save`/`iptables-restore`, для UFW — tar. На одном сервере возможна
+только одна незавершённая сетевая транзакция. Lock сериализует применение,
+подтверждение и откат; после истечения срока подтвердить откат нельзя.
+Откат работает при потере SSH/клиента/демона и повторяется каждые 5 с при
+ошибке восстановления. Ошибка применения также вызывает немедленный откат.
+Снимок nft восстанавливается атомарной загрузкой ruleset с flush; iptables
+сохраняет все IPv4-таблицы; UFW — конфигурацию и исходное active/inactive.
+Снимки/состояние/лог watchdog остаются в root-only `/run/sherpa-net/<UUID>`
+до перезагрузки. Сбой ОС/перезагрузка и внешние параллельные изменения
+firewall не покрываются; фронт не должен предлагать внешние изменения во
+время ожидания подтверждения. Сетевые адреса/маршруты/DNS пока только читаются.
+
+### 4.21 Сетевые инструменты — `nettools.*`
+
+| Метод | Параметры (помимо `connection_id`) | Ответ |
+|-------|-----------------------------------|-------|
+| `nettools.ping` | `target` (hostname/IP), `count?` (4, 1–30) | `{subscription}` |
+| `nettools.trace` | `target` | `{subscription}` |
+| `nettools.dig` | `target`, `record_type?`: A/AAAA/MX/TXT/NS (A) | `{subscription}` |
+| `nettools.curl` | `target`: HTTP(S) URL без credentials | `{subscription}`; только HEAD, без redirect |
+| `nettools.port` | `target`, `port` (1–65535) | `{subscription}`; TCP connect через nc |
+| `nettools.cancel` | `subscription` | `{unsubscribed}`; только подписка текущего клиента |
+
+Диагностика запускается **на сервере**, с `LC_ALL=C` и `timeout 60`.
+Нужны соответствующая программа, timeout и nohup (Capabilities.tools).
+Вывод stdout/stderr объединён и передаётся порциями не чаще раза в секунду:
+`{"event":"nettools.output","subscription":"nt1","connection_id":"c1",
+"method":"nettools.ping","records":[{"text":"64 bytes from ..."}]}`.
+Строка `text` — диагностический вывод для консоли, фронт его не парсит.
+Завершение: `{"event":"nettools.done","subscription":"nt1",
+"exit_status":0,"truncated":false}`. Ненулевой exit_status — результат
+диагностики (например, закрытый порт), 124 — удалённый timeout.
+Ошибка транспорта/протокола — событие `error` с `fatal:true`.
+Общий вывод ограничен 65536 байт; при достижении лимита поток завершается
+с `truncated:true`, `exit_status` может быть null. Подписка удаляется после
+завершения; отключение клиента/отмена прекращает доставку событий. Удалённая
+команда при этом ограничена 60 с, временные файлы удаляются через 120 с
+после завершения. Readonly не запрещает диагностику; создаются только
+временные служебные файлы. speedtest не реализован.
+
+---
+
 ## 5. Каталог кодов ошибок
 
 Формат: `<область>.<причина>`. Фронты держат таблицу переводов ru/en по
 этим кодам; `params` — для подстановки.
+
+### net — сетевые транзакции и диагностика
+
+| Код | Params | Описание |
+|-----|--------|----------|
+| `net.pending` | `capability`, `exit_status` | На сервере уже есть незавершённая сетевая транзакция |
+| `net.transaction_state` | `capability`, `exit_status` | Транзакция отсутствует, завершена или уже откатывается |
+| `net.rollback` | `capability`, `exit_status` | Ошибка применения/восстановления; watchdog повторяет неуспешный откат, журнал на сервере |
+| `nettools.timeout` | — | Диагностика не завершилась за 90 опросов |
+
+Сетевые методы также используют общие `cap.missing`, `remote.bad_output`,
+`remote.command_failed`, `priv.*`, `subscription.not_found`,
+`danger.confirmation_required`, `validation.*`.
 
 ### request / protocol / internal
 

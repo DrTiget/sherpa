@@ -51,6 +51,15 @@ pub const TOOLS: &[&str] = &[
     "pacman",
     "apk",
     "zypper",
+    "resolvectl",
+    "ping",
+    "traceroute",
+    "dig",
+    "curl",
+    "nc",
+    "nohup",
+    "iptables-save",
+    "iptables-restore",
 ];
 
 pub fn script() -> String {
@@ -110,6 +119,7 @@ pub fn parse(text: &str) -> Value {
             "services": systemd && tool("systemctl"),
             "logs": tool("journalctl") || tool("tail"),
             "network": tool("ss") || tool("ip"),
+            "nettools": tool("timeout") && tool("nohup") && ["ping", "traceroute", "dig", "curl", "nc"].iter().any(|t| tool(t)),
             "firewall": tool("ufw") || tool("nft") || tool("iptables"),
             "disks": tool("df"),
             "packages": pm.is_some(),

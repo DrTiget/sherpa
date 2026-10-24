@@ -49,6 +49,8 @@ pub fn registry() -> Vec<Arc<dyn MethodGroup>> {
         Arc::new(super::methods::desktop::DesktopMethods),
         Arc::new(super::methods::privs::PrivMethods),
         Arc::new(crate::utilities::monitor::MonitorMethods),
+        Arc::new(crate::utilities::net::NetMethods),
+        Arc::new(crate::utilities::nettools::NettoolsMethods),
         Arc::new(crate::utilities::disk::DiskMethods),
         Arc::new(crate::utilities::log::LogMethods),
         Arc::new(crate::utilities::cron::CronMethods),

@@ -3,6 +3,8 @@
 
 pub mod capabilities;
 pub mod monitor;
+pub mod net;
+pub mod nettools;
 pub mod disk;
 pub mod log;
 pub mod cron;
