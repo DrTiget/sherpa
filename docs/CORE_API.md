@@ -838,6 +838,72 @@ MonitorData:
 
 ---
 
+### 4.9 Docker, веб-серверы и базы данных — `docker.*`, `web.*`, `db.*`
+
+Все вызовы требуют `connection_id`, кроме `docker.unsubscribe`.
+Изменяющие вызовы проверяют `readonly` и требуют **`confirm: true`**;
+фронт передаёт его после диалога с перечнем объектов и именем сервера
+(для остановки на Prod — после ввода имени сервера).
+Docker и веб-команды выполняются через `priv.*` (root/sudo).
+БД используют пользователя SSH и штатную клиентскую авторизацию на сервере:
+`~/.my.cnf`, PostgreSQL peer/`.pgpass`, Redis default local socket/port.
+Пароли в параметрах и аргументах процессов не принимаются.
+
+| Метод | Дополнительные параметры | Ответ |
+|-------|---------------------------|-------|
+| `docker.ping` | — | `{items: [DockerVersion]}` |
+| `docker.ps` | — | `{items: [DockerContainer]}` (включая остановленные) |
+| `docker.images`, `docker.volumes`, `docker.networks` | — | `{items: [DockerObject]}` |
+| `docker.inspect` | `id` | `{items: [DockerInspect]}` |
+| `docker.start`, `docker.stop`, `docker.restart`, `docker.pause`, `docker.rm` | `id`, `confirm: true` | `{completed: true}` |
+| `docker.logs` | `id`, `tail` (200, ≤5000), `follow` (false) | `{lines: [строка]}` или `{subscription, interval_ms}` |
+| `docker.stats` | `subscribe` (false), `interval_ms` (2000, ≥1000) | `{items: [DockerStats]}` или `{subscription, interval_ms}` |
+| `docker.unsubscribe` | `subscription` | `{unsubscribed}` |
+| `web.detect` | — | `{tools: [nginx\|apachectl\|certbot\|openssl]}` |
+| `web.sites.list` | `engine`: `nginx` (default)\|`apache` | `{items: [WebSite]}` |
+| `web.sites.get` | `engine`, `path` внутри `/etc/nginx/` или `/etc/apache2/` | `{path, content}` |
+| `web.test` | `engine` | `{valid: bool, lines: [строка]}`; неуспешная проверка — `valid: false` |
+| `web.reload` | `engine`, `confirm: true` | `{completed: true}`; `nginx -t`/`apachectl configtest` выполняется **заново в том же скрипте**, reload только при коде 0 |
+| `web.certs.list` | — | `{items: [WebCertificate]}`: certbot + пути сертификатов из конфигов, даты openssl |
+| `web.certs.renew` | `dry_run` (false), `confirm: true` | `{completed: true}`; certbot non-interactive |
+| `db.detect` | — | `{tools: [mysql\|mariadb\|psql\|redis-cli\|mysqldump\|mariadb-dump\|pg_dump]}` |
+| `db.list` | `engine`: `mysql`\|`mariadb`\|`postgres`\|`redis` | `{items: [Database]}` |
+| `db.queries` | `engine` | `{items: [DatabaseQuery]}`; Redis: поля `CLIENT LIST` |
+| `db.kill` | `engine`, `id` (положительное целое), `confirm: true` | `{completed: true}`; MySQL KILL QUERY, PostgreSQL pg_cancel_backend, Redis CLIENT KILL |
+| `db.dump` | `engine`, `database`, `path` (файл в `/var/backups/`), `confirm: true` | `{completed: true, path}` после записи; MySQL SQL, PostgreSQL custom, Redis полный RDB экземпляра |
+
+DockerObject/Container/Version — объекты штатного Docker CLI JSON (`--format json`),
+имена полей CLI сохранены. Inspect ограничен `Id, Name, Image, State, Mounts,
+NetworkSettings`: переменные окружения, labels и аргументы команд не выдаются.
+DockerStats: `{id, name, cpu_pct, memory_used_bytes, memory_limit_bytes}`.
+
+Поток логов: события `docker.logs {subscription, stderr, data_b64}` (base64
+фрагментов stdout/stderr), затем `docker.logs.done {subscription}` при EOF.
+Это SSH-поток с ограниченной очередью, без опроса и повторения хвоста.
+Статистика: `docker.stats {subscription, data: {items: [DockerStats]}}`.
+Ошибка подписки: `error {subscription, error, fatal: true}`. Подписки отменяются
+при отключении клиента; чужая подписка недоступна для отмены.
+
+WebSite nginx: `{path, names: [строка], root: строка|null, listen: [строка], ssl: bool}`;
+Apache: `{names: [строка], source: строка}` из `apachectl -S`.
+WebCertificate: `{name?, domains?, path, expires_at, subject?, source?}`;
+`expires_at` — RFC3339, `source: "config"` для обнаруженных вне certbot.
+Источники конфигов SSL: `/etc/nginx`, `/etc/apache2`, `/etc/httpd`, `*.conf`.
+
+Database SQL: `{name, size_bytes, owner: строка|null}` (owner у PostgreSQL).
+Redis: `{name: "db0", size_bytes: null, keys, expires, avg_ttl}` — Redis
+не сообщает размер отдельных логических БД; `avg_ttl` в миллисекундах CLI.
+DatabaseQuery SQL: `{id, user, database, elapsed_sec, state, query}`.
+Дампы создаются с `umask 077`, временный файл удаляется и при ошибке;
+готовый файл публикуется атомарно без перезаписи. Произвольный SQL не принимается.
+Возврат дампа — только путь на сервере, содержимое не передаётся клиенту.
+
+Пример: `docker.stats` → `{"items":[{"id":"abc","name":"web",
+"cpu_pct":0.5,"memory_used_bytes":13107200,"memory_limit_bytes":1073741824}]}`.
+
+Не входят в этот набор: Docker Compose/pull/prune/PTY exec, редактирование и
+включение/отключение сайтов, `redis.flush`, пользовательский SQL, прогресс дампа.
+
 ## 5. Каталог кодов ошибок
 
 Формат: `<область>.<причина>`. Фронты держат таблицу переводов ru/en по
@@ -980,6 +1046,8 @@ MonitorData:
 | `cap.missing` | `capability` | На сервере нет нужной возможности (`procfs`, `sudo`, …) |
 | `remote.command_failed` | `command`, `exit_status`, `stderr` | Команда на сервере завершилась с ошибкой |
 | `remote.bad_output` | `command` | Вывод команды на сервере не удалось разобрать |
+| `action.confirm_required` | — | Отсутствует явное `confirm: true` для Docker/Web/DB |
+| `db.cancel_failed` | — | Сервер не отменил запрос или не отключил Redis-клиента |
 
 ---
 

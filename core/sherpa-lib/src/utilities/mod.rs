@@ -20,3 +20,7 @@ pub fn command_failed(command: &str, out: &ExecOutput) -> CoreError {
         )
         .with("stderr", stderr)
 }
+
+pub mod db;
+pub mod docker;
+pub mod web;
