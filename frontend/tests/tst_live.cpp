@@ -47,7 +47,7 @@ class TstLive : public QObject {
         for (const QVariant &w : page()->property("wins").toList()) {
             const QVariantMap m = w.toMap();
             if (m.value("kind") == "terminal")
-                return m.value("session").value<TerminalSession *>();
+                return m.value("content").value<QObject *>()->property("currentSession").value<TerminalSession *>();
         }
         return nullptr;
     }

@@ -362,6 +362,10 @@ private slots:
         QVariant ok;
         QMetaObject::invokeMethod(ed, "beforeClose", Q_RETURN_ARG(QVariant, ok), Q_ARG(QVariant, QVariant()));
         QVERIFY(!ok.toBool());   // есть несохранённое — закрыть сразу нельзя
+        QObject *dlg = ed->property("unsavedDialog").value<QObject *>();
+        QTRY_VERIFY_WITH_TIMEOUT(dlg->property("visible").toBool(), 3000);
+        f.shot("47b-editor-unsaved");
+        QMetaObject::invokeMethod(dlg, "close");
     }
 
     void tunnelLocalRemoteDynamicAndDanger()

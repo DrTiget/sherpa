@@ -20,6 +20,7 @@ Item {
     property alias textArea: area
     property alias highlighter: hl
     property alias conflictDialog: conflictDlg
+    property alias unsavedDialog: unsavedDlg
 
     function startWith(args) { if (args.path) load(args.path) }
 
