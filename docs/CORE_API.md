@@ -19,8 +19,8 @@ sherpa-core [глобальные флаги] <группа> <действие> 
 - Параметры передаются **флагами** (простые значения) или **JSON в stdin**
   (флаг `--input -`). Если указаны оба способа, значения из stdin перекрывают
   флаги. Секреты — только через stdin (см. §2).
-- Ядро всегда пишет в stdout **ровно один JSON-объект** и перевод строки
-  (кроме `daemon`, см. §4). stderr — только диагностический лог, без секретов;
+- Ядро пишет в stdout **ровно один JSON-объект** и перевод строки
+  (кроме `conn check --stream`, см. §3.6, и `daemon`, см. §4). stderr — только диагностический лог, без секретов;
   фронт его не разбирает.
 - Кодировка — UTF-8. Время — RFC 3339 в UTC (`2026-10-24T09:15:00Z`).
   Идентификаторы — UUID v7 строкой.
@@ -63,6 +63,16 @@ daemon_idle_timeout_sec = 300 # простой демона без сессий
 
 `data` — объект или `null`. Списки всегда в поле объекта (`{"items": [...]}`),
 чтобы можно было добавлять поля без поломки.
+
+Необязательное поле `warnings` (и в успешном ответе, и в ошибке) — список
+предупреждений в формате ошибки §1.4: выполнению они не мешают, фронт может
+их показать (например, `crypto.key_file_insecure`).
+
+```json
+{ "ok": true, "protocol": 1, "data": { ... },
+  "warnings": [ { "code": "crypto.key_file_insecure", "message": "...",
+                  "params": { "path": "...", "mode": "644" } } ] }
+```
 
 ### 1.4 Ошибка
 
@@ -440,10 +450,21 @@ sherpa-core conn check <id>... | --all | --group-id <id> [--recursive] | --tag <
 | `error` | `hostkey.*`, `ssh.*`, `fs.*` (нет файла ключа) и прочее |
 | `unknown` | Не проверялся (только в `status list`, не в `check`) |
 
-Прогресс пачки в CLI не стримится (≤ 100 серверов × 10 с при 32
-параллельно ≈ 40 с худшем случае). Нужен живой прогресс — фронт может
-запускать `check` по одному в своём пуле, либо (решение на подтверждение)
-добавить флаг `--stream`, выводящий JSON Lines `{"event":"result",...}`.
+Если `user` у подключения пуст, используется имя текущего пользователя ОС
+(как в OpenSSH). Разовые секреты в `secrets` — `password` и/или `passphrase`.
+
+**`--stream`** — живой прогресс. Вместо одного объекта ядро пишет JSON Lines:
+строку на каждый сервер сразу по готовности (порядок — по завершению, не по
+входу), последней строкой — обычный конверт §1.3 с итогом, без `items`:
+
+```
+{"event":"result","item":{"id":"c4","state":"offline","checked_at":"...","latency_ms":null,"server_banner":null,"error":{"code":"net.refused",...}}}
+{"event":"result","item":{"id":"c1","state":"online","checked_at":"...","latency_ms":41,"server_banner":"SSH-2.0-OpenSSH_9.6p1","error":null}}
+{"ok":true,"protocol":1,"data":{"summary":{"online":1,"offline":1,"auth_failed":0,"error":0,"total":2}}}
+```
+
+Ошибка всего вызова (нет хранилища, неверные аргументы) — одна строка-конверт
+с `ok: false`, как обычно; признак конца потока — строка с полем `ok`.
 
 ### 3.7 Статусы
 
@@ -538,7 +559,7 @@ sherpa-core import ssh-config preview [--path <file>] [--group-id <id>]
 
 ```json
 { "ok": true, "protocol": 1, "data": {
-  "preview_id": "0192f0d1-...",
+  "preview_id": "3f9a0c5e1b7d42a8c6e0f1d2b3a49c8e",
   "source": "/home/u/.ssh/config",
   "files": ["/home/u/.ssh/config", "/home/u/.ssh/config.d/work"],
   "items": [
@@ -570,8 +591,12 @@ sherpa-core import ssh-config apply --input -
 
 `apply` **заново** разбирает файл (предпросмотр не хранится в БД; `preview_id`
 — для сверки: если файл изменился, `import.source_changed`, фронт делает
-повторный preview). Импортируются только ключи из `select` с
-`action: create`; `overrides` позволяет переименовать пропущенный дубликат.
+повторный preview). `preview_id` — непрозрачная строка (отпечаток содержимого
+всех прочитанных файлов). Импортируются только ключи из `select` с
+`action: create`; без `select` — все новые. `overrides` позволяет
+переименовать пропущенный дубликат. Ключ из `select`, которого нет в файле,
+попадает в `failed` с кодом `import.unknown_key`. Флагами: `--path`,
+`--preview-id`, `--select` (повторяемый), `--group-id`, `--tag`.
 
 ```json
 { "ok": true, "protocol": 1, "data": {
@@ -794,7 +819,7 @@ JSON Lines: один JSON-объект на строку, `\n`-разделит�
 | `store.migration_failed` | `from`, `to` | Ошибка миграции схемы |
 | `crypto.key_mismatch` | `path` | Ключ-файл не подходит к БД |
 | `crypto.key_file_invalid` | `path` | Ключ-файл повреждён или неверного размера |
-| `crypto.key_file_insecure` | `path`, `mode` | Права ключ-файла шире 600 (предупреждение в `warnings` или ошибка — см. §7) |
+| `crypto.key_file_insecure` | `path`, `mode` | Права ключ-файла шире 600 (предупреждение в `warnings`; на Windows не проверяется) |
 | `crypto.decrypt_failed` | `field` | Не удалось расшифровать секрет |
 | `config.invalid` | `path`, `line`, `reason` | Ошибка в конфиге |
 | `fs.not_found` | `path` | Файл не найден (ключ, ssh config) |
@@ -863,7 +888,7 @@ JSON Lines: один JSON-объект на строку, `\n`-разделит�
 |-----|--------|----------|
 | `import.parse_error` | `file`, `line`, `reason` | Синтаксическая ошибка в ssh config |
 | `import.include_cycle` | `file` | Циклический `Include` (предупреждение) |
-| `import.include_too_deep` | `file`, `max` | Слишком глубокая вложенность `Include` |
+| `import.include_too_deep` | `file`, `max` | Слишком глубокая вложенность `Include` (предупреждение) |
 | `import.match_unsupported` | `file`, `line` | Блок `Match` пропущен (предупреждение) |
 | `import.multiple_identity_files` | `key`, `used` | Несколько `IdentityFile`, взят первый (предупреждение) |
 | `import.source_changed` | `path` | Файл изменился после предпросмотра |
@@ -982,11 +1007,15 @@ JSON Lines: один JSON-объект на строку, `\n`-разделит�
 
 ---
 
-## 7. Решения, требующие подтверждения
+## 7. Принятые решения
+
+Все пункты подтверждены пользователем (2026-10-24). К п. 2 добавлено:
+`conn check --stream` (§3.6).
 
 1. Параметры через флаги **и** JSON в stdin (stdin перекрывает) — или только
    JSON для всех команд ради единообразия.
-2. `conn check` без стриминга прогресса; опционально `--stream` (JSON Lines).
+2. `conn check` по умолчанию отвечает одним объектом; `--stream` — JSON Lines
+   (строка на сервер + итоговая строка).
 3. Пачечная проверка не принимает новые host keys молча; `--accept-new` —
    явное согласие. Изменённый ключ — никогда автоматически.
 4. Host key привязан к `(host, port)`, а не к подключению.
