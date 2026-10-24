@@ -3,7 +3,7 @@
 list(APPEND SHERPA_QML
     qml/tools/ToolRpc.qml
     qml/tools/ToolPane.qml
-    qml/tools/DangerDialog.qml
+    qml/tools/ToolDangerDialog.qml
     qml/tools/DataTable.qml
     qml/tools/STextArea.qml
     qml/tools/ServerPicker.qml

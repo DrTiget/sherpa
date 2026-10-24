@@ -44,7 +44,7 @@ ToolRpc {
     }
     function fmtTime(iso) { return iso ? Backend.formatTime(iso) : "—" }
 
-    DangerDialog { id: dlg; serverName: root.serverName; prod: root.prod }
+    ToolDangerDialog { id: dlg; serverName: root.serverName; prod: root.prod }
 
     // пароль sudo
     SDialog {
