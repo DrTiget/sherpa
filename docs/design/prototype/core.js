@@ -93,6 +93,7 @@ class Desk {
     this.timer = setInterval(() => this.tick(), 1000);
     for (let i = 0; i < 70; i++) this.tick(true);
     this.tick();
+    if (typeof initWidgets === 'function') initWidgets(this);
     this.connect(opts.fast);
   }
   seedNotes() {
@@ -104,9 +105,10 @@ class Desk {
   }
   build() {
     const s = this.srv, d = this;
-    this.el.append(this.root = h('div.desk' + (s.group === 'Prod' ? '.prodstripe' : ''), { style: `--hue:${s.hue}`, onmousedown: e => { if (e.target === d.root || e.target.classList.contains('blobs') || e.target.classList.contains('icons') || e.target.classList.contains('wins')) { d.closeLauncher(); d.closeNotify(); d.blurAll(); $$('.dicon.sel', d.root).forEach(x => x.classList.remove('sel')); } }, oncontextmenu: e => { if (e.target === d.root || e.target.closest('.wins') === d.winsEl && e.target === d.winsEl || e.target.classList.contains('blobs') || e.target.classList.contains('icons')) { e.preventDefault(); d.ctx(e, [['Новый терминал', () => d.open('terminal')], ['Файлы здесь', () => d.open('files')], ['Монитор ресурсов', () => d.open('monitor')], '-', ['Обои…', () => d.open('settings')], ['Упорядочить значки', () => toast('Значки упорядочены')], '-', ['Свернуть все окна (Ctrl+D)', () => d.showDesktop()]]); } } },
+    this.el.append(this.root = h('div.desk' + (s.group === 'Prod' ? '.prodstripe' : ''), { style: `--hue:${s.hue}`, onmousedown: e => { if (e.target === d.root || e.target.classList.contains('blobs') || e.target.classList.contains('icons') || e.target.classList.contains('wins')) { d.closeLauncher(); d.closeNotify(); d.blurAll(); $$('.dicon.sel', d.root).forEach(x => x.classList.remove('sel')); } }, oncontextmenu: e => { if (e.target === d.root || e.target.closest('.wins') === d.winsEl && e.target === d.winsEl || e.target.classList.contains('blobs') || e.target.classList.contains('icons')) { e.preventDefault(); d.ctx(e, [['Новый терминал', () => d.open('terminal')], ['Файлы здесь', () => d.open('files')], ['Монитор ресурсов', () => d.open('monitor')], '-', ['Виджеты…', () => widgetsDialog(d)], ['Обои…', () => d.open('settings')], ['Упорядочить значки', () => toast('Значки упорядочены')], '-', ['Свернуть все окна (Ctrl+D)', () => d.showDesktop()]]); } } },
       h('div.blobs'), h('div.wm', s.name),
       this.iconsEl = h('div.icons'),
+      this.widgetsEl = h('div.widgets'),
       this.winsEl = h('div.wins'),
       this.snapEl = h('div.snap'),
       this.bannerEl = h('div.deskbanner.banner'),
@@ -222,7 +224,7 @@ class Desk {
     confirmDanger({ title: k + ' сервера', server: s.name, prod: s.group === 'Prod', typeName: s.name, okText: k, lines: ['Все SSH-сессии и запущенные задачи будут прерваны.', kind === 'reboot' ? 'Сервер вернётся в сеть через 1–3 минуты.' : 'Включить сервер можно будет только вне Sherpa.'],
       onOk: () => { this.log(k + ' сервера'); toast(k + ' запущена…'); this.setState('lost'); } });
   }
-  cats() { return ['Избранное', 'Система', 'Сеть', 'Файлы', 'Мониторинг', 'Разработка', 'Все']; }
+  cats() { return ['Избранное', 'Система', 'Сеть', 'Файлы', 'Мониторинг', 'Данные', 'Безопасность', 'Разработка', 'Все']; }
   renderLauncher() {
     const q = this.search.value.trim().toLowerCase(), g = this.gridEl;
     this.catsEl.replaceChildren(...this.cats().map(c => h('div' + (c === this.cat && !q ? '.on' : ''), { onclick: () => { this.cat = c; this.search.value = ''; this.renderLauncher(); } }, c)));

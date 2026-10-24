@@ -116,7 +116,7 @@ async function selftest() {
   await sleep(1500);
   T('terminal cmds', () => { const w = d.wins.find(w => w.app.id === 'terminal'); ['help', 'ls -la /etc', 'cat /etc/hostname', 'df -h', 'systemctl status nginx', 'docker ps', 'uptime', 'free -h', 'cd /var/log', 'pwd', 'neofetch', 'foo'].forEach(c => w.api.run(c)); const t = w.body.textContent; if (!t.includes('/var/log') || !t.includes('команда не найдена')) throw new Error('вывод терминала'); });
   T('editor', () => { const w = d.open('editor', { file: '/etc/hostname', fresh: true }); if (!w.body.querySelector('textarea')) throw new Error('нет textarea'); });
-  for (const [id, tabs] of [['net', ['rt', 'dns', 'ports', 'fw', 'diag', 'if']], ['system', ['time', 'usr', 'pkg', 'svc', 'gen']], ['disks', ['map', 'big', 'clean', 'parts']], ['monitor', ['pr', 'nt', 'ov']], ['notify', ['r', 'a', 'n']]]) {
+  for (const [id, tabs] of [['net', ['rt', 'dns', 'ports', 'fw', 'diag', 'if']], ['system', ['time', 'usr', 'pkg', 'svc', 'gen']], ['disks', ['map', 'big', 'clean', 'parts']], ['monitor', ['pr', 'nt', 'ov']], ['notify', ['r', 'a', 'n']], ['sec', ['f2b', 'log', 'keys', 'ports', 'upd', 'ov']], ['nettools', ['trace', 'dig', 'curl', 'port', 'speed', 'ping']]]) {
     const w = d.wins.find(w => w.app.id === id); for (const t of tabs) { T(id + ':' + t, () => w.api.tab(t, {})); await sleep(150); } }
   T('launcher', () => { d.openLauncher(); d.search.value = 'nginx'; d.renderLauncher(); if (!d.gridEl.children.length) throw new Error('поиск пуст'); d.closeLauncher(); });
   T('wm', () => { const w = d.wins[0]; w.minimize(); w.restore(); w.toggleMax(); w.toggleMax(); w.close(); });
@@ -125,6 +125,7 @@ async function selftest() {
     const r = w.bar.getBoundingClientRect(); pe('pointerdown', w.bar, r.left + 100, r.top + 10); pe('pointermove', document, r.left + 160, r.top + 60); const moved = w.el.offsetLeft; pe('pointermove', document, 2, 300); pe('pointerup', document, 2, 300);
     if (!w.max || w.el.style.left !== '0px') throw new Error('snap left не сработал: ' + w.el.style.left + ' max=' + w.max); w.toggleMax(); w.toggleMax();
     const w2 = d.open('docker', { fresh: true }); w2.el.classList.remove('anim'); const w0 = w2.el.offsetWidth; const rs = w2.el.querySelector('.rs.se'), rr = rs.getBoundingClientRect(); pe('pointerdown', rs, rr.left + 3, rr.top + 3); pe('pointermove', document, rr.left + 103, rr.top + 53); pe('pointerup', document, 0, 0); if (w2.el.offsetWidth !== w0 + 100) throw new Error('resize: ' + w0 + '→' + w2.el.offsetWidth); });
+  T('widgets', () => { widgetsDialog(d); $$('.scrim').forEach(x => x.remove()); if (!$('.widget', d.el)) throw new Error('нет виджетов'); });
   T('overview', () => { d.toggleOverview(); d.toggleOverview(); d.setState('lost'); d.setState('ready'); });
   T('desk2', () => { openDesk(SERVERS[5]); });
   await sleep(1200);
