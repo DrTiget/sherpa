@@ -74,7 +74,25 @@ void TerminalSession::resize(int cols, int rows)
     m_emu.resize(cols, rows);
     if (m_id.isEmpty() || !active())
         return;
-    m_daemon->request("session.resize", {{"session", m_id}, {"cols", cols}, {"rows", rows}});
+    sendResize();
+}
+
+// Демон выполняет запросы параллельно, и два resize подряд могут поменяться местами. Поэтому в полёте
+// не больше одного resize; если за это время размер менялся, после ответа уходит актуальный.
+void TerminalSession::sendResize()
+{
+    if (m_resizeInFlight) {
+        m_resizePending = true;
+        return;
+    }
+    m_resizeInFlight = true;
+    m_resizePending = false;
+    const int c = m_cols, r = m_rows;
+    m_daemon->request("session.resize", {{"session", m_id}, {"cols", c}, {"rows", r}}, [this](const DaemonReply &) {
+        m_resizeInFlight = false;
+        if (m_resizePending && active())
+            sendResize();
+    });
 }
 
 void TerminalSession::close()
@@ -148,7 +166,8 @@ void TerminalSession::handleEvent(const QVariantMap &ev)
         emit promptChanged();
         setState("connected");
         // сообщить серверу актуальный размер (мог измениться пока подключались)
-        m_daemon->request("session.resize", {{"session", m_id}, {"cols", m_cols}, {"rows", m_rows}});
+        m_resizeInFlight = false;
+        sendResize();
     } else if (name == "output") {
         if (ev.value("replay").toBool() && m_replayFresh) {
             m_emu.reset();
@@ -207,6 +226,7 @@ void TerminalSession::onDaemonBack()
             return;
         }
         setState("connected");
-        m_daemon->request("session.resize", {{"session", m_id}, {"cols", m_cols}, {"rows", m_rows}});
+        m_resizeInFlight = false;
+        sendResize();
     });
 }

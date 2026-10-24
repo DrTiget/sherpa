@@ -29,7 +29,7 @@ Popup {
     ]
     function filtered() {
         const q = query.toLowerCase()
-        return AppRegistry.apps.filter(a => (category === "all" || (category === "fav" ? (a.id === "terminal" || a.id === "monitor") : a.cat === category))
+        return AppRegistry.apps.filter(a => !a.hidden && (category === "all" || (category === "fav" ? (a.id === "terminal" || a.id === "monitor" || a.id === "files") : a.cat === category))
                                 && (q === "" || a.name.toLowerCase().indexOf(q) >= 0 || a.id.indexOf(q) >= 0))
     }
     function capsOk(a) { return AppRegistry.enabledFor(a, desk.capabilities) }

@@ -66,10 +66,11 @@ Item {
         let content
         if (isTerm) {
             const s = session || desk.newTerminal()
-            content = termComp.createObject(win.contentItem, { session: s })
+            content = termComp.createObject(win.contentItem, { session: s, desktop: desk })
             content.anchors.fill = win.contentItem
-            win.title = Qt.binding(() => s.title !== "" ? s.title : qsTr("Terminal"))
+            win.title = Qt.binding(() => content.currentTitle)
             content.editConnection.connect(() => page.editConnectionRequested(desk.connectionId))
+            content.allClosed.connect(() => page.forceClose(id))
         } else {
             const comp = Qt.createComponent(app.source)
             if (comp.status !== Component.Ready) { console.warn("cannot load", app.source, comp.errorString()); win.destroy(); return null }
@@ -79,7 +80,7 @@ Item {
             // окна утилит могут просить открыть другое окно (например, «Терминал здесь»)
             if (content.openApp) content.openApp.connect((id2, args) => page.openApp(id2, args))
         }
-        const entry = { id: id, kind: kind, win: win, session: kind === "terminal" ? content.session : null }
+        const entry = { id: id, kind: kind, win: win, content: content, session: kind === "terminal" ? content : null }
         wins = wins.concat([entry])
         win.activated.connect(() => page.activate(win))
         win.layoutChanged.connect(() => { page.refreshList(); saveTimer.restart() })
@@ -89,13 +90,15 @@ Item {
         if (wstate === "max") win.maximize(); else if (wstate === "min") win.minimize()
         activate(win)
         saveTimer.restart()
-        if (kind === "terminal" && wstate !== "min") content.term.forceActiveFocus()
+        if (kind === "terminal" && wstate !== "min") content.focusCurrent()
         return win
     }
     function closeWindow(id) {
         const e = wins.find(w => w.id === id)
         if (!e) return
         if (e.kind === "terminal" && e.session && e.session.active) { closeConfirm.targetId = id; closeConfirm.open(); return }
+        // окно может задержать закрытие (несохранённые правки): beforeClose(proceed) → true, если закрывать можно сразу
+        if (e.content && e.content.beforeClose && !e.content.beforeClose(() => page.forceClose(id))) return
         forceClose(id)
     }
     function forceClose(id) {
@@ -117,7 +120,18 @@ Item {
     function showDesktop() { for (const w of wins) w.win.minimize(); activate(null) }
     function newTerminal() { return openWindow("terminal") }
     // Открыть утилиту по id с необязательными аргументами (окно сможет прочитать `startArgs`)
-    function openApp(id, args) { const w = openWindow(id); if (w && args) { const c = w.contentItem.children[0]; if (c && c.startWith) c.startWith(args) } return w }
+    function openApp(id, args) {
+        const w = openWindow(id)
+        if (!w || !args) return w
+        const e = wins.find(x => x.win === w)
+        if (id === "terminal" && args.cwd && e && e.content) {
+            const q = "'" + String(args.cwd).replace(/'/g, "'\\''") + "'"
+            const s = e.content.currentSession
+            const send = () => { if (s.state === "connected") { s.stateChanged.disconnect(send); Qt.callLater(() => s.sendInput("cd " + q + " && clear\r")) } }
+            s.stateChanged.connect(send)
+        } else if (e && e.content && e.content.startWith) e.content.startWith(args)
+        return w
+    }
 
     function layoutData() {
         return { windows: wins.map(w => ({ kind: w.kind, x: w.win.normalRect.x, y: w.win.normalRect.y, w: w.win.normalRect.width, h: w.win.normalRect.height,
@@ -129,7 +143,7 @@ Item {
         restored = true
         const l = desk.layout.windows || []
         for (const w of l) {
-            if (AppRegistry.byId(w.kind))
+            if (AppRegistry.byId(w.kind) && !AppRegistry.byId(w.kind).noRestore)
                 openWindow(w.kind, { x: w.x, y: w.y, w: w.w, h: w.h }, w.state)
         }
         if (startWithTerminal && !findKind("terminal")) newTerminal()

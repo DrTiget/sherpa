@@ -3,6 +3,7 @@
 #include "ErrorText.h"
 
 #include <QDir>
+#include <QJSEngine>
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -204,8 +205,33 @@ int DesktopState::call(const QString &method, const QVariantMap &params)
     return token;
 }
 
+static void callJs(QJSEngine *eng, QJSValue cb, const DaemonReply &r)
+{
+    if (!cb.isCallable() || !eng)
+        return;
+    QJSValueList args;
+    args << r.ok << eng->toScriptValue(r.data) << r.error.code
+         << (r.ok ? QString() : ErrorText::text(r.error.code, r.error.params, r.error.message))
+         << eng->toScriptValue(r.error.params);
+    cb.call(args);
+}
+
+void DesktopState::rpc(const QString &method, const QVariantMap &params, const QJSValue &cb)
+{
+    QVariantMap p = params;
+    p.insert("connection_id", m_id);
+    rpcRaw(method, p, cb);
+}
+
+void DesktopState::rpcRaw(const QString &method, const QVariantMap &params, const QJSValue &cb)
+{
+    QJSEngine *eng = qjsEngine(this);
+    m_daemon->request(method, params, [eng, cb](const DaemonReply &r) { callJs(eng, cb, r); });
+}
+
 void DesktopState::handleEvent(const QVariantMap &ev)
 {
+    emit eventReceived(ev);
     const QString name = ev.value("event").toString();
     if (name == "hostkey_prompt" || name == "auth_prompt") {
         m_prompt = ev;

@@ -2,102 +2,120 @@ import QtQuick
 import QtQuick.Layouts
 import Sherpa
 
-// Содержимое окна терминала: вид эмулятора, состояния сессии, подтверждение вставки.
+// Окно терминала: вкладки сессий внутри окна («+» — новая сессия к тому же серверу), у каждой вкладки свой TerminalPane.
 Item {
     id: root
-    required property var session
-    property bool autoOpen: true
-    property alias term: term
-    readonly property string st: session ? session.state : "closed"
-
-    Timer {
-        id: openTimer
-        interval: 0
-        running: root.autoOpen
-        onTriggered: if (root.session && root.session.state === "closed") root.session.open(term.cols, term.rows)
-    }
-
-    TerminalItem {
-        id: term
-        anchors.fill: parent
-        anchors.bottomMargin: status.height
-        session: root.session
-        focus: true
-        onMultilinePaste: (t) => pasteDlg.askPaste(t)
-        Component.onCompleted: forceActiveFocus()
-    }
-
-    // подключение
-    Rectangle {
-        visible: root.st === "connecting"
-        anchors.centerIn: term
-        width: 260; height: 56; radius: Theme.radius
-        color: Theme.alpha("#000000", 0.55)
-        border.color: Theme.line
-        Row {
-            anchors.centerIn: parent
-            spacing: 10
-            SSpinner { width: 18; height: 18 }
-            SLabel { text: qsTr("Connecting…"); color: "#e6eaf2" }
-        }
-    }
-
-    // обрыв / завершение / ошибка
-    Rectangle {
-        id: overlay
-        visible: root.st === "lost" || root.st === "closed" || root.st === "error"
-        anchors.horizontalCenter: term.horizontalCenter
-        anchors.bottom: term.bottom
-        anchors.bottomMargin: 14
-        width: Math.min(term.width - 24, 460)
-        height: ovCol.implicitHeight + 24
-        radius: Theme.radiusLarge
-        color: Theme.alpha("#10131c", 0.92)
-        border.color: Theme.alpha(root.st === "closed" && root.session.reason === "exit" ? Theme.cyan : Theme.amber, 0.6)
-        ColumnLayout {
-            id: ovCol
-            anchors.fill: parent
-            anchors.margins: 12
-            spacing: 8
-            SLabel {
-                Layout.fillWidth: true
-                font.bold: true
-                color: "#e6eaf2"
-                wrapMode: Text.Wrap; elide: Text.ElideNone
-                text: root.st === "lost" ? qsTr("Connection lost")
-                      : root.st === "error" ? (root.session.errorText || qsTr("Connection error"))
-                      : (root.session.reason === "exit" ? qsTr("Session ended") : qsTr("Session disconnected"))
-            }
-            RowLayout {
-                spacing: 8
-                SButton { visible: root.st !== "lost"; text: qsTr("Reconnect"); kind: "primary"; compact: true; onClicked: { root.session.reconnect(); term.forceActiveFocus() } }
-                SButton { visible: root.st === "error" && root.session.errorCode.indexOf("auth.") === 0; text: qsTr("Edit connection"); compact: true; onClicked: root.editConnection() }
-                SButton { visible: root.st === "lost"; text: qsTr("Waiting for the core…"); compact: true; enabled: false }
-            }
-        }
-    }
+    required property var session           // первая сессия
+    property var desktop: null
+    property var sessions: []
+    property int current: 0
+    readonly property var currentSession: sessions.length > current ? sessions[current] : null
+    readonly property string currentTitle: currentSession && currentSession.title !== "" ? currentSession.title : qsTr("Terminal")
+    property bool active: false             // есть живая сессия (для подтверждения закрытия окна)
     signal editConnection()
+    signal allClosed()
+    property alias tabsRepeater: panes
 
-    // подвал: размер, баннер
+    function refreshActive() { active = sessions.some(s => s.active) }
+    function addTab(s) {
+        const ns = s || (desktop ? desktop.newTerminal() : null)
+        if (!ns) return null
+        ns.stateChanged.connect(refreshActive)
+        sessions = sessions.concat([ns])
+        current = sessions.length - 1
+        refreshActive()
+        return ns
+    }
+    function closeTab(i) {
+        if (i < 0 || i >= sessions.length) return
+        const s = sessions[i]
+        s.close()
+        sessions = sessions.filter((x, k) => k !== i)
+        if (sessions.length === 0) { allClosed(); return }
+        current = Math.min(current, sessions.length - 1)
+        refreshActive()
+    }
+    // для DesktopPage: закрыть все сессии окна
+    function close() { for (const s of sessions) s.close() }
+    function focusCurrent() { const p = panes.itemAt(current); if (p) p.terminal.forceActiveFocus() }
+    function paneAt(i) { return panes.itemAt(i) }
+    Component.onCompleted: addTab(session)
+    onCurrentChanged: Qt.callLater(focusCurrent)
+
+    Shortcut { sequence: "Ctrl+Shift+T"; enabled: root.visible; onActivated: root.addTab() }
+    Shortcut { sequence: "Ctrl+PgDown"; enabled: root.visible && root.sessions.length > 1; onActivated: root.current = (root.current + 1) % root.sessions.length }
+    Shortcut { sequence: "Ctrl+PgUp"; enabled: root.visible && root.sessions.length > 1; onActivated: root.current = (root.current + root.sessions.length - 1) % root.sessions.length }
+
+    // полоса вкладок
     Rectangle {
-        id: status
-        anchors.bottom: parent.bottom
+        id: bar
         width: parent.width
-        height: 22
-        color: Theme.alpha("#05070c", 0.7)
-        SLabel { x: 10; anchors.verticalCenter: parent.verticalCenter; mono: true; font.pixelSize: 11; color: "#8b93a7"; text: root.session ? root.session.banner : "" }
-        SLabel { anchors.right: parent.right; anchors.rightMargin: 10; anchors.verticalCenter: parent.verticalCenter; mono: true; font.pixelSize: 11; color: "#8b93a7"; text: term.cols + "×" + term.rows }
+        height: 30
+        color: Theme.alpha("#05070c", 0.75)
+        Row {
+            anchors.verticalCenter: parent.verticalCenter
+            x: 6
+            spacing: 4
+            Repeater {
+                model: root.sessions.length
+                delegate: Rectangle {
+                    id: tab
+                    required property int index
+                    readonly property var s: root.sessions[index]
+                    readonly property bool on: root.current === index
+                    height: 24
+                    width: Math.min(190, lbl.implicitWidth + 50)
+                    radius: 5
+                    color: on ? Theme.alpha(Theme.accent, 0.3) : (tma.containsMouse ? Theme.hover : "transparent")
+                    border.color: on ? Theme.selectedBorder : "transparent"
+                    Row {
+                        anchors.verticalCenter: parent.verticalCenter; x: 8; spacing: 6
+                        Rectangle {
+                            width: 7; height: 7; radius: 4; anchors.verticalCenter: parent.verticalCenter
+                            color: !tab.s ? Theme.gray : tab.s.state === "connected" ? Theme.green : (tab.s.state === "connecting" || tab.s.state === "awaiting" ? Theme.amber : (tab.s.state === "lost" ? Theme.amber : Theme.red))
+                        }
+                        SLabel {
+                            id: lbl
+                            width: Math.min(implicitWidth, 120)
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: 12
+                            color: "#e6eaf2"
+                            text: tab.s && tab.s.title !== "" ? tab.s.title : qsTr("Terminal %1").arg(tab.index + 1)
+                        }
+                        SLabel {
+                            text: "×"; font.pixelSize: 14; color: "#8b93a7"; anchors.verticalCenter: parent.verticalCenter
+                            MouseArea { anchors.fill: parent; anchors.margins: -4; cursorShape: Qt.PointingHandCursor; onClicked: root.closeTab(tab.index) }
+                            Accessible.role: Accessible.Button
+                            Accessible.name: qsTr("Close tab")
+                        }
+                    }
+                    MouseArea { id: tma; anchors.fill: parent; anchors.rightMargin: 24; hoverEnabled: true; onClicked: root.current = tab.index }
+                    Accessible.role: Accessible.PageTab
+                    Accessible.name: lbl.text
+                }
+            }
+            Rectangle {
+                width: 24; height: 24; radius: 5
+                color: pma.containsMouse ? Theme.hover : "transparent"
+                SLabel { anchors.centerIn: parent; text: "+"; color: Theme.cyan; font.pixelSize: 16 }
+                MouseArea { id: pma; anchors.fill: parent; hoverEnabled: true; onClicked: root.addTab() }
+                Accessible.role: Accessible.Button
+                Accessible.name: qsTr("New tab")
+            }
+        }
     }
 
-    PromptDialog { source: root.session }
-
-    ConfirmDialog {
-        id: pasteDlg
-        property string pending
-        function askPaste(t) { pending = t; open() }
-        title: qsTr("Paste multiple lines?")
-        message: qsTr("The text contains line breaks and will run as several commands.")
-        confirmText: qsTr("Paste")
-        onConfirmed: term.pasteText(pending)
+    Repeater {
+        id: panes
+        model: root.sessions.length
+        delegate: TerminalPane {
+            required property int index
+            session: root.sessions[index]
+            visible: root.current === index
+            x: 0; y: bar.height
+            width: root.width
+            height: root.height - bar.height
+            onEditConnection: root.editConnection()
+        }
     }
 }

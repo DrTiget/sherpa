@@ -66,6 +66,7 @@ signals:
     void bell();
 
 private:
+    void sendResize();
     void setState(const QString &s);
     void fail(const CoreError &e);
 
@@ -76,4 +77,5 @@ private:
     int m_cols = 80, m_rows = 24;
     bool m_opening = false;
     bool m_replayFresh = false;
+    bool m_resizeInFlight = false, m_resizePending = false;
 };

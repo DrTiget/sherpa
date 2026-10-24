@@ -184,6 +184,12 @@ void TerminalItem::paint(QPainter *p)
             if (draw)
                 p->fillRect(QRectF(x * m_cw, y, m_cw * (c.width == 2 ? 2 : 1) + 0.5, m_ch), cb);
         }
+        for (int mi = 0; mi < m_matches.size(); ++mi) {
+            const Match &m = m_matches[mi];
+            if (m.row != er)
+                continue;
+            p->fillRect(QRectF(m.col * m_cw, y, m.len * m_cw, m_ch), mi == m_matchIndex ? QColor(255, 138, 77, 200) : QColor(255, 197, 61, 110));
+        }
         // текст по сериям одинакового стиля
         int x = 0;
         while (x < n) {
@@ -445,6 +451,84 @@ QString TerminalItem::screenText() const
     if (!m_session)
         return {};
     return m_session->emulator()->text(0, 0, m_session->emulator()->rows() - 1, m_session->emulator()->cols() - 1);
+}
+
+int TerminalItem::search(const QString &text, bool cs)
+{
+    m_matches.clear();
+    m_matchIndex = -1;
+    if (m_session && !text.isEmpty()) {
+        const TermEmulator *e = m_session->emulator();
+        const Qt::CaseSensitivity sens = cs ? Qt::CaseSensitive : Qt::CaseInsensitive;
+        for (int row = -e->scrollbackSize(); row < e->rows(); ++row) {
+            const TermLine &l = e->line(row);
+            QString str;
+            QVector<int> cols;   // индекс QChar -> колонка
+            for (int c = 0; c < l.size(); ++c) {
+                if (l[c].width == 0)
+                    continue;
+                const QString part = QString::fromUcs4(&l[c].ch, 1);
+                for (int k = 0; k < part.size(); ++k)
+                    cols << c;
+                str += part;
+            }
+            int from = 0, idx;
+            while ((idx = str.indexOf(text, from, sens)) >= 0) {
+                const int startCol = cols[idx];
+                const int endCol = cols[qMin(idx + text.size() - 1, int(cols.size()) - 1)];
+                m_matches.append({row, startCol, endCol - startCol + 1});
+                from = idx + qMax(1, int(text.size()));
+            }
+        }
+        if (!m_matches.isEmpty()) {
+            m_matchIndex = int(m_matches.size()) - 1;
+            showMatch();
+        }
+    }
+    emit searchChanged();
+    update();
+    return int(m_matches.size());
+}
+
+void TerminalItem::showMatch()
+{
+    if (m_matchIndex < 0 || m_matchIndex >= m_matches.size() || !m_session)
+        return;
+    const int row = m_matches[m_matchIndex].row;
+    int vr = row + m_scroll;
+    if (vr < 0 || vr >= m_rows) {
+        const int sb = m_session->emulator()->scrollbackSize();
+        m_scroll = qBound(0, m_rows / 2 - row, sb);
+    }
+    update();
+}
+
+void TerminalItem::nextMatch()
+{
+    if (m_matches.isEmpty())
+        return;
+    m_matchIndex = (m_matchIndex + 1) % int(m_matches.size());
+    showMatch();
+    emit searchChanged();
+}
+
+void TerminalItem::prevMatch()
+{
+    if (m_matches.isEmpty())
+        return;
+    m_matchIndex = (m_matchIndex - 1 + int(m_matches.size())) % int(m_matches.size());
+    showMatch();
+    emit searchChanged();
+}
+
+void TerminalItem::clearSearch()
+{
+    if (m_matches.isEmpty() && m_matchIndex < 0)
+        return;
+    m_matches.clear();
+    m_matchIndex = -1;
+    emit searchChanged();
+    update();
 }
 
 void TerminalItem::scrollToBottom() { m_scroll = 0; update(); }

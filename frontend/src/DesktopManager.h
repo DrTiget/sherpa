@@ -5,6 +5,7 @@
 #include "TerminalSession.h"
 
 #include <QHash>
+#include <QJSValue>
 #include <QObject>
 #include <QTimer>
 #include <QVariantMap>
@@ -65,6 +66,11 @@ public:
     Q_INVOKABLE TerminalSession *newTerminal();
     // Мини-запрос к демону из QML (для утилит): method, params → сигнал requestDone
     Q_INVOKABLE int call(const QString &method, const QVariantMap &params);
+    // Запрос к демону с обратным вызовом: cb(ok, data, errorCode, errorText, errorParams). connection_id подставляется сам.
+    Q_INVOKABLE void rpc(const QString &method, const QVariantMap &params, const QJSValue &cb);
+    // То же без connection_id (transfer.cancel, tunnel.stop, danger.prepare…)
+    Q_INVOKABLE void rpcRaw(const QString &method, const QVariantMap &params, const QJSValue &cb);
+    bool hasMethod(const QString &m) const { return m_daemon->hasMethod(m); }
 
     void handleEvent(const QVariantMap &ev);
     void onDaemonLost();
@@ -81,6 +87,8 @@ signals:
     void promptChanged();
     void layoutLoaded();
     void terminalCreated(TerminalSession *session);
+    // Любое событие демона этого сервера (transfer, tunnel, log…) — для окон утилит
+    void eventReceived(const QVariantMap &ev);
     void requestDone(int token, bool ok, const QVariant &data, const QString &errorText);
 
 private:

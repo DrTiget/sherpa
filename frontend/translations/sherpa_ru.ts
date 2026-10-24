@@ -2,6 +2,119 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>AppRegistry</name>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="11" />
+        <source>Terminal</source>
+        <translation>Терминал</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="13" />
+        <source>Resource monitor</source>
+        <translation>Монитор ресурсов</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="15" />
+        <source>Files</source>
+        <translation>Файлы</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="17" />
+        <source>Editor</source>
+        <translation>Редактор</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="19" />
+        <source>Tunnels</source>
+        <translation>Туннели</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="21" />
+        <source>Services</source>
+        <translation>Службы</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="23" />
+        <source>Logs</source>
+        <translation>Журналы</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="25" />
+        <source>Network</source>
+        <translation>Сеть</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="27" />
+        <source>Network tools</source>
+        <translation>Сетевые инструменты</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="29" />
+        <source>Firewall</source>
+        <translation>Брандмауэр</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="31" />
+        <source>Disks</source>
+        <translation>Диски</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="33" />
+        <source>Packages</source>
+        <translation>Пакеты</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="35" />
+        <source>System</source>
+        <translation>Системная</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="37" />
+        <source>Scheduler</source>
+        <translation>Планировщик</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="41" />
+        <source>Databases</source>
+        <translation>Базы данных</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="43" />
+        <source>Web servers</source>
+        <translation>Веб-серверы</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="45" />
+        <source>Security</source>
+        <translation>Безопасность</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="47" />
+        <source>Backups</source>
+        <translation>Бэкапы</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="49" />
+        <source>Snippets</source>
+        <translation>Сниппеты</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="51" />
+        <source>Compare configs</source>
+        <translation>Сравнение конфигов</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="53" />
+        <source>Notes</source>
+        <translation>Заметки</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="55" />
+        <source>Sherpa journal</source>
+        <translation>Журнал Sherpa</translation>
+    </message>
+</context>
+<context>
     <name>Backend</name>
     <message>
         <location filename="../src/Backend.cpp" line="529" />
@@ -33,89 +146,246 @@
     </message>
 </context>
 <context>
+    <name>DangerDialog</name>
+    <message>
+        <location filename="../qml/DangerDialog.qml" line="13" />
+        <location filename="../qml/DangerDialog.qml" line="23" />
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/DangerDialog.qml" line="19" />
+        <source>Dangerous action</source>
+        <translation>Опасное действие</translation>
+    </message>
+    <message>
+        <location filename="../qml/DangerDialog.qml" line="58" />
+        <source>…and %1 more</source>
+        <translation>…и ещё %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/DangerDialog.qml" line="66" />
+        <source>Type the server name to confirm</source>
+        <translation>Введите имя сервера для подтверждения</translation>
+    </message>
+    <message>
+        <location filename="../qml/DangerDialog.qml" line="69" />
+        <source>Server name confirmation</source>
+        <translation>Подтверждение именем сервера</translation>
+    </message>
+    <message>
+        <location filename="../qml/DangerDialog.qml" line="74" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+</context>
+<context>
     <name>DesktopPage</name>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="57" />
-        <location filename="../qml/DesktopPage.qml" line="69" />
-        <location filename="../qml/DesktopPage.qml" line="155" />
+        <location filename="../qml/DesktopPage.qml" line="178" />
         <source>Terminal</source>
         <translation>Терминал</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="57" />
-        <location filename="../qml/DesktopPage.qml" line="181" />
+        <location filename="../qml/DesktopPage.qml" line="204" />
         <source>Resource monitor</source>
         <translation>Монитор ресурсов</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="155" />
+        <location filename="../qml/DesktopPage.qml" line="178" />
         <source>Monitor</source>
         <translation>Монитор</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="180" />
+        <location filename="../qml/DesktopPage.qml" line="203" />
         <source>New terminal</source>
         <translation>Новый терминал</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="182" />
+        <location filename="../qml/DesktopPage.qml" line="205" />
         <source>Show desktop</source>
         <translation>Показать рабочий стол</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="263" />
+        <location filename="../qml/DesktopPage.qml" line="286" />
         <source>Connecting to %1…</source>
         <translation>Подключение к %1…</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="263" />
+        <location filename="../qml/DesktopPage.qml" line="286" />
         <source>Cannot connect to %1</source>
         <translation>Не удаётся подключиться к %1</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="271" />
+        <location filename="../qml/DesktopPage.qml" line="294" />
         <source>Retry</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="272" />
+        <location filename="../qml/DesktopPage.qml" line="295" />
         <source>Edit connection</source>
         <translation>Изменить подключение</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="273" />
+        <location filename="../qml/DesktopPage.qml" line="296" />
         <source>Home</source>
         <translation>Дом</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="283" />
+        <location filename="../qml/DesktopPage.qml" line="306" />
         <source>Connection lost</source>
         <translation>Соединение потеряно</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="284" />
+        <location filename="../qml/DesktopPage.qml" line="307" />
         <source>reconnecting in %1 s</source>
         <translation>переподключение через %1 с</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="285" />
+        <location filename="../qml/DesktopPage.qml" line="308" />
         <source>Retry now</source>
         <translation>Повторить сейчас</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="296" />
+        <location filename="../qml/DesktopPage.qml" line="319" />
         <source>Close terminal?</source>
         <translation>Закрыть терминал?</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="297" />
+        <location filename="../qml/DesktopPage.qml" line="320" />
         <source>The session is still active. Closing the window ends it.</source>
         <translation>Сессия ещё активна. Закрытие окна завершит её.</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="298" />
+        <location filename="../qml/DesktopPage.qml" line="321" />
         <source>Close</source>
         <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>EditorWindow</name>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="54" />
+        <source>Saved</source>
+        <translation>Сохранено</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="91" />
+        <source>not found</source>
+        <translation>не найдено</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="107" />
+        <source>%1 replaced</source>
+        <translation>заменено: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="124" />
+        <location filename="../qml/EditorWindow.qml" line="255" />
+        <source>Reload</source>
+        <translation>Перечитать</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="125" />
+        <location filename="../qml/EditorWindow.qml" line="140" />
+        <source>Find</source>
+        <translation>Найти</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="126" />
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="130" />
+        <source>Read-only mode: saving is disabled.</source>
+        <translation>Режим «только чтение»: сохранение отключено.</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="141" />
+        <source>Replace with</source>
+        <translation>Заменить на</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="142" />
+        <source>Match case</source>
+        <translation>С учётом регистра</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="145" />
+        <source>Replace</source>
+        <translation>Заменить</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="146" />
+        <source>Replace all</source>
+        <translation>Заменить все</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="210" />
+        <source>File text</source>
+        <translation>Текст файла</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="226" />
+        <source>Ln %1, Col %2</source>
+        <translation>Строка %1, столбец %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="241" />
+        <source>Unsaved changes</source>
+        <translation>Несохранённые изменения</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="243" />
+        <source>Save changes to %1 before closing?</source>
+        <translation>Сохранить изменения в %1 перед закрытием?</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="245" />
+        <source>Discard</source>
+        <translation>Отбросить</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="247" />
+        <location filename="../qml/EditorWindow.qml" line="267" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="248" />
+        <source>Save and close</source>
+        <translation>Сохранить и закрыть</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="253" />
+        <source>Discard changes?</source>
+        <translation>Отбросить изменения?</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="254" />
+        <source>Reload the file from the server and lose your edits?</source>
+        <translation>Перечитать файл с сервера и потерять правки?</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="262" />
+        <source>File changed on the server</source>
+        <translation>Файл изменился на сервере</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="265" />
+        <source>Someone modified “%1” after you opened it. Overwrite their version with yours, or reload their version?</source>
+        <translation>«%1» изменили после того, как вы его открыли. Перезаписать их версию вашей или загрузить их версию?</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="269" />
+        <source>Reload from server</source>
+        <translation>Загрузить с сервера</translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="270" />
+        <source>Overwrite</source>
+        <translation>Перезаписать</translation>
     </message>
 </context>
 <context>
@@ -576,6 +846,382 @@
     </message>
 </context>
 <context>
+    <name>FilesTransfers</name>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="36" />
+        <location filename="../qml/FilesTransfers.qml" line="37" />
+        <source>s</source>
+        <translation>с</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="37" />
+        <location filename="../qml/FilesTransfers.qml" line="38" />
+        <source>m</source>
+        <translation>м</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="38" />
+        <source>h</source>
+        <translation>ч</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="42" />
+        <source>queued</source>
+        <translation>в очереди</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="43" />
+        <source>in progress</source>
+        <translation>идёт</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="44" />
+        <source>done</source>
+        <translation>готово</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="45" />
+        <source>cancelled</source>
+        <translation>отменено</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="46" />
+        <source>failed</source>
+        <translation>ошибка</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="56" />
+        <source>Transfers</source>
+        <translation>Передачи</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="59" />
+        <source>Clear finished</source>
+        <translation>Убрать завершённые</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="66" />
+        <source>Collapse transfers</source>
+        <translation>Свернуть передачи</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="66" />
+        <source>Expand transfers</source>
+        <translation>Развернуть передачи</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="125" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="126" />
+        <source>Resume</source>
+        <translation>Докачать</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="132" />
+        <source>Remove from list</source>
+        <translation>Убрать из списка</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesTransfers.qml" line="142" />
+        <source>No transfers. Drop files onto the window to upload.</source>
+        <translation>Передач нет. Перетащите файлы на окно, чтобы загрузить.</translation>
+    </message>
+</context>
+<context>
+    <name>FilesWindow</name>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="207" />
+        <source>Read-only mode is on: changes are blocked</source>
+        <translation>Включён режим «только чтение»: изменения заблокированы</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="212" />
+        <location filename="../qml/FilesWindow.qml" line="494" />
+        <location filename="../qml/FilesWindow.qml" line="596" />
+        <source>New folder</source>
+        <translation>Новая папка</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="212" />
+        <source>Folder name</source>
+        <translation>Имя папки</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="213" />
+        <source>Create</source>
+        <translation>Создать</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="217" />
+        <location filename="../qml/FilesWindow.qml" line="218" />
+        <source>Rename</source>
+        <translation>Переименовать</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="217" />
+        <source>New name</source>
+        <translation>Новое имя</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="222" />
+        <source>Move to</source>
+        <translation>Переместить в</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="222" />
+        <source>New full path</source>
+        <translation>Новый полный путь</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="223" />
+        <source>Move</source>
+        <translation>Переместить</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="227" />
+        <location filename="../qml/FilesWindow.qml" line="231" />
+        <source>The name must not contain “/”</source>
+        <translation>Имя не должно содержать «/»</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="241" />
+        <location filename="../qml/FilesWindow.qml" line="246" />
+        <location filename="../qml/FilesWindow.qml" line="495" />
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="242" />
+        <source>Delete %1 item(s), including folders with all their contents? This cannot be undone.</source>
+        <translation>Удалить элементов: %1, включая папки со всем содержимым? Это нельзя отменить.</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="243" />
+        <source>Delete %1 file(s)? This cannot be undone.</source>
+        <translation>Удалить файлов: %1? Это нельзя отменить.</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="465" />
+        <source>Upload files</source>
+        <translation>Загрузка файлов</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="471" />
+        <source>Upload folder</source>
+        <translation>Загрузка папки</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="476" />
+        <source>Download to…</source>
+        <translation>Скачать в…</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="484" />
+        <source>Open</source>
+        <translation>Открыть</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="485" />
+        <source>Edit</source>
+        <translation>Изменить</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="486" />
+        <source>Open terminal here</source>
+        <translation>Терминал здесь</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="488" />
+        <source>Download…</source>
+        <translation>Скачать…</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="489" />
+        <source>Rename…</source>
+        <translation>Переименовать…</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="490" />
+        <source>Move to…</source>
+        <translation>Переместить в…</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="491" />
+        <location filename="../qml/FilesWindow.qml" line="842" />
+        <source>Permissions…</source>
+        <translation>Права…</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="492" />
+        <source>Copy path</source>
+        <translation>Копировать путь</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="496" />
+        <location filename="../qml/FilesWindow.qml" line="526" />
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="523" />
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="524" />
+        <source>Forward</source>
+        <translation>Вперёд</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="525" />
+        <source>Up</source>
+        <translation>Вверх</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="563" />
+        <source>Search “%1” in %2</source>
+        <translation>Поиск «%1» в %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="583" />
+        <location filename="../qml/FilesWindow.qml" line="831" />
+        <source>Path</source>
+        <translation>Путь</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="589" />
+        <source>Search by name</source>
+        <translation>Поиск по имени</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="592" />
+        <source>Search files</source>
+        <translation>Поиск файлов</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="594" />
+        <source>Hide dotfiles</source>
+        <translation>Скрыть скрытые</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="594" />
+        <source>Show hidden</source>
+        <translation>Показать скрытые</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="595" />
+        <source>Upload</source>
+        <translation>Загрузить</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="597" />
+        <source>Properties panel</source>
+        <translation>Панель свойств</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="604" />
+        <source>Retry</source>
+        <translation>Повторить</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="612" />
+        <source>Read-only mode: browsing and downloads only.</source>
+        <translation>Режим «только чтение»: только просмотр и скачивание.</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="629" />
+        <source>Favorites</source>
+        <translation>Избранное</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="631" />
+        <source>Home</source>
+        <translation>Дом</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="642" />
+        <source>Folders</source>
+        <translation>Папки</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="702" />
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="702" />
+        <location filename="../qml/FilesWindow.qml" line="831" />
+        <source>Size</source>
+        <translation>Размер</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="702" />
+        <location filename="../qml/FilesWindow.qml" line="832" />
+        <source>Modified</source>
+        <translation>Изменён</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="703" />
+        <location filename="../qml/FilesWindow.qml" line="832" />
+        <source>Owner</source>
+        <translation>Владелец</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="703" />
+        <location filename="../qml/FilesWindow.qml" line="833" />
+        <source>Permissions</source>
+        <translation>Права</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="778" />
+        <source>Nothing found</source>
+        <translation>Ничего не найдено</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="778" />
+        <source>Folder is empty</source>
+        <translation>Папка пуста</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="779" />
+        <source>Drop files here to upload them.</source>
+        <translation>Перетащите сюда файлы, чтобы загрузить.</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="785" />
+        <source>List is truncated</source>
+        <translation>Список обрезан</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="800" />
+        <source>Drop to upload to %1</source>
+        <translation>Отпустите, чтобы загрузить в %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="815" />
+        <source>Properties</source>
+        <translation>Свойства</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="819" />
+        <source>items</source>
+        <translation>элементов</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="821" />
+        <source>%1 selected</source>
+        <translation>Выбрано: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/FilesWindow.qml" line="831" />
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+</context>
+<context>
     <name>FirstRunPage</name>
     <message>
         <location filename="../qml/FirstRunPage.qml" line="14" />
@@ -865,115 +1511,103 @@
 <context>
     <name>Launcher</name>
     <message>
-        <location filename="../qml/Launcher.qml" line="26" />
         <source>Terminal</source>
-        <translation>Терминал</translation>
+        <translation type="vanished">Терминал</translation>
+    </message>
+    <message>
+        <source>Resource monitor</source>
+        <translation type="vanished">Монитор ресурсов</translation>
     </message>
     <message>
         <location filename="../qml/Launcher.qml" line="27" />
-        <source>Resource monitor</source>
-        <translation>Монитор ресурсов</translation>
-    </message>
-    <message>
-        <location filename="../qml/Launcher.qml" line="28" />
-        <location filename="../qml/Launcher.qml" line="42" />
         <source>Files</source>
         <translation>Файлы</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="29" />
         <source>Services</source>
-        <translation>Службы</translation>
+        <translation type="vanished">Службы</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="30" />
         <source>Logs</source>
-        <translation>Журналы</translation>
+        <translation type="vanished">Журналы</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="31" />
-        <location filename="../qml/Launcher.qml" line="41" />
+        <location filename="../qml/Launcher.qml" line="26" />
         <source>Network</source>
         <translation>Сеть</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="32" />
         <source>Firewall</source>
-        <translation>Брандмауэр</translation>
+        <translation type="vanished">Брандмауэр</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="33" />
         <source>Disks</source>
-        <translation>Диски</translation>
+        <translation type="vanished">Диски</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="34" />
         <source>Packages</source>
-        <translation>Пакеты</translation>
+        <translation type="vanished">Пакеты</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="35" />
         <source>Scheduler</source>
-        <translation>Планировщик</translation>
+        <translation type="vanished">Планировщик</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="37" />
         <source>Databases</source>
-        <translation>Базы данных</translation>
+        <translation type="vanished">Базы данных</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="38" />
         <source>Web servers</source>
-        <translation>Веб-серверы</translation>
+        <translation type="vanished">Веб-серверы</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="41" />
+        <location filename="../qml/Launcher.qml" line="26" />
         <source>Favorites</source>
         <translation>Избранное</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="41" />
+        <location filename="../qml/Launcher.qml" line="26" />
         <source>System</source>
         <translation>Системная</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="42" />
+        <location filename="../qml/Launcher.qml" line="27" />
         <source>Monitoring</source>
         <translation>Мониторинг</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="42" />
+        <location filename="../qml/Launcher.qml" line="27" />
         <source>Development</source>
         <translation>Разработка</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="43" />
+        <location filename="../qml/Launcher.qml" line="28" />
         <source>All applications</source>
         <translation>Все приложения</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="69" />
+        <location filename="../qml/Launcher.qml" line="51" />
         <source>Search utilities, services, files…</source>
         <translation>Поиск утилит, служб, файлов…</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="114" />
+        <location filename="../qml/Launcher.qml" line="96" />
         <source>n/a</source>
         <translation>н/д</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="114" />
-        <location filename="../qml/Launcher.qml" line="117" />
+        <location filename="../qml/Launcher.qml" line="96" />
+        <location filename="../qml/Launcher.qml" line="99" />
         <source>soon</source>
         <translation>скоро</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="125" />
+        <location filename="../qml/Launcher.qml" line="107" />
         <source>Reconnect</source>
         <translation>Переподключить</translation>
     </message>
     <message>
-        <location filename="../qml/Launcher.qml" line="127" />
+        <location filename="../qml/Launcher.qml" line="109" />
         <source>Close desktop</source>
         <translation>Закрыть рабочий стол</translation>
     </message>
@@ -1148,6 +1782,69 @@
         <location filename="../qml/NameDialog.qml" line="36" />
         <source>Cancel</source>
         <translation>Отмена</translation>
+    </message>
+</context>
+<context>
+    <name>PermissionsDialog</name>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="14" />
+        <source>Permissions: %1</source>
+        <translation>Права: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="41" />
+        <source>Read</source>
+        <translation>Чтение</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="42" />
+        <source>Write</source>
+        <translation>Запись</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="43" />
+        <source>Execute</source>
+        <translation>Выполнение</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="45" />
+        <source>Owner</source>
+        <translation>Владелец</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="45" />
+        <source>Group</source>
+        <translation>Группа</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="45" />
+        <source>Others</source>
+        <translation>Остальные</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="80" />
+        <source>Octal</source>
+        <translation>Восьмеричное</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="88" />
+        <source>Apply as root (sudo)</source>
+        <translation>Применить от root (sudo)</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="91" />
+        <source>Owner changes usually need root. Names are not shown: SFTP returns numeric IDs.</source>
+        <translation>Смена владельца обычно требует root. Имена не показываются: SFTP отдаёт числовые ID.</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="95" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/PermissionsDialog.qml" line="97" />
+        <source>Apply</source>
+        <translation>Применить</translation>
     </message>
 </context>
 <context>
@@ -1843,78 +2540,166 @@
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../src/TerminalSession.cpp" line="93" />
+        <location filename="../src/TerminalSession.cpp" line="111" />
         <source>Reconnecting…</source>
         <translation>Переподключение…</translation>
     </message>
     <message>
-        <location filename="../src/TerminalSession.cpp" line="167" />
-        <location filename="../src/TerminalSession.cpp" line="198" />
+        <location filename="../src/TerminalSession.cpp" line="186" />
+        <location filename="../src/TerminalSession.cpp" line="217" />
         <source>Session ended</source>
         <translation>Сессия завершена</translation>
     </message>
     <message>
-        <location filename="../src/TerminalSession.cpp" line="188" />
+        <location filename="../src/TerminalSession.cpp" line="207" />
         <source>Connection to the core lost. Reconnecting…</source>
         <translation>Связь с ядром потеряна. Переподключение…</translation>
     </message>
 </context>
 <context>
-    <name>TerminalWindow</name>
+    <name>TerminalPane</name>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="41" />
+        <location filename="../qml/TerminalPane.qml" line="41" />
         <source>Connecting…</source>
         <translation>Подключение…</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="67" />
+        <location filename="../qml/TerminalPane.qml" line="67" />
         <source>Connection lost</source>
         <translation>Соединение потеряно</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="68" />
+        <location filename="../qml/TerminalPane.qml" line="68" />
         <source>Connection error</source>
         <translation>Ошибка соединения</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="69" />
+        <location filename="../qml/TerminalPane.qml" line="69" />
         <source>Session ended</source>
         <translation>Сессия завершена</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="69" />
+        <location filename="../qml/TerminalPane.qml" line="69" />
         <source>Session disconnected</source>
         <translation>Сессия отключена</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="73" />
+        <location filename="../qml/TerminalPane.qml" line="73" />
         <source>Reconnect</source>
         <translation>Переподключить</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="74" />
+        <location filename="../qml/TerminalPane.qml" line="74" />
         <source>Edit connection</source>
         <translation>Изменить подключение</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="75" />
+        <location filename="../qml/TerminalPane.qml" line="75" />
         <source>Waiting for the core…</source>
         <translation>Ожидание ядра…</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="98" />
+        <location filename="../qml/TerminalPane.qml" line="108" />
+        <location filename="../qml/TerminalPane.qml" line="111" />
+        <source>Search in output</source>
+        <translation>Поиск по выводу</translation>
+    </message>
+    <message>
+        <location filename="../qml/TerminalPane.qml" line="115" />
+        <source>Match case</source>
+        <translation>С учётом регистра</translation>
+    </message>
+    <message>
+        <location filename="../qml/TerminalPane.qml" line="116" />
+        <source>Previous match</source>
+        <translation>Предыдущее совпадение</translation>
+    </message>
+    <message>
+        <location filename="../qml/TerminalPane.qml" line="117" />
+        <source>Next match</source>
+        <translation>Следующее совпадение</translation>
+    </message>
+    <message>
+        <location filename="../qml/TerminalPane.qml" line="141" />
         <source>Paste multiple lines?</source>
         <translation>Вставить несколько строк?</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="99" />
+        <location filename="../qml/TerminalPane.qml" line="142" />
         <source>The text contains line breaks and will run as several commands.</source>
         <translation>В тексте есть переводы строк — он выполнится как несколько команд.</translation>
     </message>
     <message>
-        <location filename="../qml/TerminalWindow.qml" line="100" />
+        <location filename="../qml/TerminalPane.qml" line="143" />
         <source>Paste</source>
         <translation>Вставить</translation>
+    </message>
+</context>
+<context>
+    <name>TerminalWindow</name>
+    <message>
+        <source>Connecting…</source>
+        <translation type="vanished">Подключение…</translation>
+    </message>
+    <message>
+        <source>Connection lost</source>
+        <translation type="vanished">Соединение потеряно</translation>
+    </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="vanished">Ошибка соединения</translation>
+    </message>
+    <message>
+        <source>Session ended</source>
+        <translation type="vanished">Сессия завершена</translation>
+    </message>
+    <message>
+        <source>Session disconnected</source>
+        <translation type="vanished">Сессия отключена</translation>
+    </message>
+    <message>
+        <source>Reconnect</source>
+        <translation type="vanished">Переподключить</translation>
+    </message>
+    <message>
+        <source>Edit connection</source>
+        <translation type="vanished">Изменить подключение</translation>
+    </message>
+    <message>
+        <source>Waiting for the core…</source>
+        <translation type="vanished">Ожидание ядра…</translation>
+    </message>
+    <message>
+        <source>Paste multiple lines?</source>
+        <translation type="vanished">Вставить несколько строк?</translation>
+    </message>
+    <message>
+        <source>The text contains line breaks and will run as several commands.</source>
+        <translation type="vanished">В тексте есть переводы строк — он выполнится как несколько команд.</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="vanished">Вставить</translation>
+    </message>
+    <message>
+        <location filename="../qml/TerminalWindow.qml" line="13" />
+        <source>Terminal</source>
+        <translation>Терминал</translation>
+    </message>
+    <message>
+        <location filename="../qml/TerminalWindow.qml" line="83" />
+        <source>Terminal %1</source>
+        <translation>Терминал %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/TerminalWindow.qml" line="89" />
+        <source>Close tab</source>
+        <translation>Закрыть вкладку</translation>
+    </message>
+    <message>
+        <location filename="../qml/TerminalWindow.qml" line="103" />
+        <source>New tab</source>
+        <translation>Новая вкладка</translation>
     </message>
 </context>
 <context>
@@ -1943,6 +2728,212 @@
         <location filename="../qml/Theme.qml" line="81" />
         <source>not checked</source>
         <translation>не проверялся</translation>
+    </message>
+</context>
+<context>
+    <name>TransferConflictDialog</name>
+    <message>
+        <location filename="../qml/TransferConflictDialog.qml" line="13" />
+        <source>File already exists</source>
+        <translation>Файл уже существует</translation>
+    </message>
+    <message>
+        <location filename="../qml/TransferConflictDialog.qml" line="18" />
+        <source>“%1” already exists in the local folder.</source>
+        <translation>«%1» уже есть в локальной папке.</translation>
+    </message>
+    <message>
+        <location filename="../qml/TransferConflictDialog.qml" line="19" />
+        <source>“%1” already exists on the server.</source>
+        <translation>«%1» уже есть на сервере.</translation>
+    </message>
+    <message>
+        <location filename="../qml/TransferConflictDialog.qml" line="22" />
+        <source>Skip</source>
+        <translation>Пропустить</translation>
+    </message>
+    <message>
+        <location filename="../qml/TransferConflictDialog.qml" line="23" />
+        <source>Resume</source>
+        <translation>Докачать</translation>
+    </message>
+    <message>
+        <location filename="../qml/TransferConflictDialog.qml" line="25" />
+        <source>Keep both</source>
+        <translation>Оставить оба</translation>
+    </message>
+    <message>
+        <location filename="../qml/TransferConflictDialog.qml" line="26" />
+        <source>Replace</source>
+        <translation>Заменить</translation>
+    </message>
+</context>
+<context>
+    <name>TunnelsWindow</name>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="61" />
+        <source>Port must be between 1 and 65535</source>
+        <translation>Порт должен быть от 1 до 65535</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="62" />
+        <source>Remote tunnels need an explicit port</source>
+        <translation>Для remote-туннеля нужен явный порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="66" />
+        <source>Enter the target host and port</source>
+        <translation>Укажите целевой хост и порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="89" />
+        <source>Open a tunnel to the network</source>
+        <translation>Открыть туннель в сеть</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="90" />
+        <source>The tunnel listens on %1, so other machines can use it to reach the target through this server.</source>
+        <translation>Туннель слушает на %1, поэтому другие машины смогут через этот сервер добраться до цели.</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="92" />
+        <source>Open tunnel</source>
+        <translation>Открыть туннель</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="105" />
+        <source>SOCKS5 proxy on %1:%2</source>
+        <translation>SOCKS5-прокси на %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="106" />
+        <source>server</source>
+        <translation>сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="122" />
+        <source>Tunnels</source>
+        <translation>Туннели</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="123" />
+        <source>New tunnel…</source>
+        <translation>Новый туннель…</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="126" />
+        <source>Read-only mode: new tunnels are blocked.</source>
+        <translation>Режим «только чтение»: новые туннели заблокированы.</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="140" />
+        <source>Local (-L)</source>
+        <translation>Локальный (-L)</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="140" />
+        <source>Remote (-R)</source>
+        <translation>Удалённый (-R)</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="140" />
+        <source>SOCKS (-D)</source>
+        <translation>SOCKS (-D)</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="144" />
+        <source>Listens on this computer and forwards connections through the server to the target.</source>
+        <translation>Слушает на этом компьютере и пересылает соединения через сервер к цели.</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="145" />
+        <source>Listens on the server and forwards connections to a target reachable from this computer.</source>
+        <translation>Слушает на сервере и пересылает соединения к цели, доступной с этого компьютера.</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="146" />
+        <source>Starts a SOCKS5 proxy on this computer; connections go out from the server.</source>
+        <translation>Запускает SOCKS5-прокси на этом компьютере; соединения выходят с сервера.</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="150" />
+        <source>Listen address (on server)</source>
+        <translation>Адрес прослушивания (на сервере)</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="150" />
+        <source>Listen address</source>
+        <translation>Адрес прослушивания</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="151" />
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="151" />
+        <source>auto</source>
+        <translation>авто</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="152" />
+        <source>Target host</source>
+        <translation>Целевой хост</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="153" />
+        <source>Target port</source>
+        <translation>Целевой порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="158" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="159" />
+        <source>Start</source>
+        <translation>Запустить</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="205" />
+        <source>running</source>
+        <translation>работает</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="205" />
+        <source>starting</source>
+        <translation>запускается</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="205" />
+        <source>stopped</source>
+        <translation>остановлен</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="205" />
+        <source>failed</source>
+        <translation>ошибка</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="207" />
+        <source>Stop</source>
+        <translation>Остановить</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="213" />
+        <source>Remove from list</source>
+        <translation>Убрать из списка</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="222" />
+        <source>No tunnels</source>
+        <translation>Туннелей нет</translation>
+    </message>
+    <message>
+        <location filename="../qml/TunnelsWindow.qml" line="223" />
+        <source>Forward a port through this server: for example reach a database that listens only on the server.</source>
+        <translation>Пробросьте порт через этот сервер, например, чтобы достучаться до базы, слушающей только на сервере.</translation>
     </message>
 </context>
 </TS>

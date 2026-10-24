@@ -17,6 +17,8 @@ class TerminalItem : public QQuickPaintedItem {
     Q_PROPERTY(int cols READ cols NOTIFY gridChanged)
     Q_PROPERTY(int rows READ rows NOTIFY gridChanged)
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
+    Q_PROPERTY(int matchCount READ matchCount NOTIFY searchChanged)
+    Q_PROPERTY(int matchIndex READ matchIndex NOTIFY searchChanged)
 public:
     explicit TerminalItem(QQuickItem *parent = nullptr);
 
@@ -29,6 +31,8 @@ public:
     int cols() const { return m_cols; }
     int rows() const { return m_rows; }
     bool hasSelection() const { return m_selActive; }
+    int matchCount() const { return int(m_matches.size()); }
+    int matchIndex() const { return m_matchIndex; }
 
     void paint(QPainter *p) override;
 
@@ -38,6 +42,11 @@ public:
     Q_INVOKABLE void zoom(int delta);
     Q_INVOKABLE void scrollToBottom();
     Q_INVOKABLE QString screenText() const;
+    // Поиск по выводу (история + экран). Возвращает число совпадений; текущее — последнее (ближайшее к концу).
+    Q_INVOKABLE int search(const QString &text, bool caseSensitive = false);
+    Q_INVOKABLE void nextMatch();
+    Q_INVOKABLE void prevMatch();
+    Q_INVOKABLE void clearSearch();
 
     // Для тестов: кодирование клавиши в байты терминала
     static QByteArray encodeKey(const QKeyEvent *e, bool appCursor);
@@ -48,6 +57,7 @@ signals:
     void backgroundOpacityChanged();
     void gridChanged();
     void selectionChanged();
+    void searchChanged();
     void multilinePaste(const QString &text);   // вставка с переводами строк — нужно подтверждение
 
 protected:
@@ -85,4 +95,8 @@ private:
     bool m_selActive = false, m_selecting = false;
     QPoint m_selA, m_selB; // (col,row) в координатах эмулятора (row может быть < 0)
     int m_pressButtons = 0;
+    struct Match { int row, col, len; };
+    QVector<Match> m_matches;
+    int m_matchIndex = -1;
+    void showMatch();
 };

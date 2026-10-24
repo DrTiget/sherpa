@@ -24,3 +24,13 @@ add_test(NAME daemon COMMAND tst_daemon)
 foreach(t coreclient terminal daemon)
     set_tests_properties(${t} PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endforeach()
+
+add_executable(tst_files tst_files.cpp)
+target_link_libraries(tst_files PRIVATE sherpa_ui sherpa_uiplugin Qt6::Test Qt6::Quick Qt6::QuickControls2)
+add_test(NAME files COMMAND tst_files)
+set_tests_properties(files PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 400)
+
+add_executable(tst_termapps tst_termapps.cpp)
+target_link_libraries(tst_termapps PRIVATE sherpa_ui sherpa_uiplugin Qt6::Test Qt6::Quick Qt6::QuickControls2)
+add_test(NAME termapps COMMAND tst_termapps)
+set_tests_properties(termapps PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 300)

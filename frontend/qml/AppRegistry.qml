@@ -12,9 +12,11 @@ QtObject {
 
         { id: "monitor", name: qsTr("Resource monitor"), glyph: "▤", cat: "monitoring", cap: "monitor", ready: true, source: "MonitorWindow.qml", w: 820, h: 560, single: true },
 
-        { id: "files", name: qsTr("Files"), glyph: "▣", cat: "files", cap: "", ready: false, source: "FilesWindow.qml", w: 980, h: 600, single: false },
+        { id: "files", name: qsTr("Files"), glyph: "▣", cat: "files", cap: "", ready: true, source: "FilesWindow.qml", w: 980, h: 600, single: false },
 
-        { id: "tunnels", name: qsTr("Tunnels"), glyph: "⇌", cat: "network", cap: "", ready: false, source: "TunnelsWindow.qml", w: 760, h: 480, single: true },
+        { id: "editor", name: qsTr("Editor"), glyph: "✎", cat: "files", cap: "", ready: true, source: "EditorWindow.qml", w: 860, h: 580, single: false, hidden: true, noRestore: true },
+
+        { id: "tunnels", name: qsTr("Tunnels"), glyph: "⇌", cat: "network", cap: "", ready: true, source: "TunnelsWindow.qml", w: 760, h: 480, single: true },
 
         { id: "services", name: qsTr("Services"), glyph: "⚙", cat: "system", cap: "services", ready: false, source: "", w: 860, h: 560, single: true },
 
