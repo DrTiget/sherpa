@@ -1,0 +1,30 @@
+[package]
+name = "sherpa-lib"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+base64 = "0.23.1"
+chacha20poly1305 = "0.10.1"
+clap = { version = "4.6.7", features = ["derive", "env"] }
+dirs = "7.0.0"
+glob = "0.3.4"
+hex = "0.4.3"
+rand = "0.9.5"
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+russh = "0.64"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sha2 = "0.10.9"
+thiserror = "2.0.21"
+time = { version = "0.3.41", features = ["formatting", "parsing", "macros"] }
+tokio = { version = "1.53.3", features = ["rt-multi-thread", "net", "time", "sync", "macros", "io-util"] }
+toml = "1.0.7"
+tracing = "0.1.44"
+uuid = { version = "1.20.0", features = ["v7"] }
+zeroize = "1.8.2"
+
+[dev-dependencies]
+tempfile = "3.27.0"
