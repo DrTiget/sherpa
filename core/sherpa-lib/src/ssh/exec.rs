@@ -44,6 +44,19 @@ fn channel_error(e: russh::Error) -> CoreError {
 
 /// Выполнить команду в новом канале `exec` поверх готового соединения.
 pub async fn exec_on(handle: &Handle<Verifier>, command: &str, input: Option<&[u8]>) -> CoreResult<ExecOutput> {
+    exec_on_io(handle, command, input, None).await
+}
+
+/// Поток вывода команды: `(stderr, байты)`.
+pub type OutputTx = tokio::sync::mpsc::Sender<(bool, Vec<u8>)>;
+
+/// Как `exec_on`, но при `stream` вывод уходит кусками в канал, а не копится в `ExecOutput`.
+pub async fn exec_on_io(
+    handle: &Handle<Verifier>,
+    command: &str,
+    input: Option<&[u8]>,
+    stream: Option<OutputTx>,
+) -> CoreResult<ExecOutput> {
     let mut ch = handle.channel_open_session().await.map_err(channel_error)?;
     ch.exec(true, command).await.map_err(channel_error)?;
     if let Some(data) = input {
@@ -53,8 +66,22 @@ pub async fn exec_on(handle: &Handle<Verifier>, command: &str, input: Option<&[u
     let mut out = ExecOutput::default();
     while let Some(msg) = ch.wait().await {
         match msg {
-            ChannelMsg::Data { data } => out.stdout.extend_from_slice(&data),
-            ChannelMsg::ExtendedData { data, .. } => out.stderr.extend_from_slice(&data),
+            ChannelMsg::Data { data } => match &stream {
+                Some(tx) => {
+                    if tx.send((false, data.to_vec())).await.is_err() {
+                        break;
+                    }
+                }
+                None => out.stdout.extend_from_slice(&data),
+            },
+            ChannelMsg::ExtendedData { data, .. } => match &stream {
+                Some(tx) => {
+                    if tx.send((true, data.to_vec())).await.is_err() {
+                        break;
+                    }
+                }
+                None => out.stderr.extend_from_slice(&data),
+            },
             ChannelMsg::ExitStatus { exit_status } => out.exit_status = Some(exit_status),
             ChannelMsg::Close => break,
             _ => {}

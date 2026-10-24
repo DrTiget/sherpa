@@ -98,6 +98,19 @@ impl MethodGroup for WebMethods {
         decode(method, &p, &c.exec_privileged(&cmd).await?)
     }
 }
+fn certificate_script() -> String {
+    r#"LC_ALL=C; export LC_ALL
+command -v openssl >/dev/null 2>&1 || exit 127
+if command -v certbot >/dev/null 2>&1; then certbot certificates || exit $?; else echo 'No certificates found.'; fi
+echo '@@SHERPA_CERTS@@'
+find /etc/nginx /etc/apache2 /etc/httpd -type f -exec awk '$1 == "ssl_certificate" || tolower($1) == "sslcertificatefile" {gsub(/[;\"]/ , "", $2); if ($2 ~ /^\//) print $2}' {} + 2>/dev/null | sort -u | while IFS= read -r path; do
+  printf 'path=%s\n' "$path"
+  openssl x509 -in "$path" -noout -enddate -subject || exit $?
+  echo '@@SHERPA_CERT@@'
+done
+"#.into()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -124,17 +137,4 @@ mod tests {
             "cap.missing"
         );
     }
-}
-
-fn certificate_script() -> String {
-    r#"LC_ALL=C; export LC_ALL
-command -v openssl >/dev/null 2>&1 || exit 127
-if command -v certbot >/dev/null 2>&1; then certbot certificates || exit $?; else echo 'No certificates found.'; fi
-echo '@@SHERPA_CERTS@@'
-find /etc/nginx /etc/apache2 /etc/httpd -type f -exec awk '$1 == "ssl_certificate" || tolower($1) == "sslcertificatefile" {gsub(/[;\"]/ , "", $2); if ($2 ~ /^\//) print $2}' {} + 2>/dev/null | sort -u | while IFS= read -r path; do
-  printf 'path=%s\n' "$path"
-  openssl x509 -in "$path" -noout -enddate -subject || exit $?
-  echo '@@SHERPA_CERT@@'
-done
-"#.into()
 }

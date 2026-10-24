@@ -15,7 +15,7 @@ use tokio::sync::Semaphore;
 use crate::error::{CoreError, CoreResult};
 use crate::secret::Secret;
 use crate::ssh::client::{Session, Verifier};
-use crate::ssh::exec::{exec_on, shell_quote, ExecOutput, RemoteExec};
+use crate::ssh::exec::{exec_on_io, shell_quote, ExecOutput, OutputTx, RemoteExec};
 
 /// Лимит одновременных каналов `exec` утилит на одно соединение.
 pub const DEFAULT_MAX_CHANNELS: usize = 8;
@@ -203,25 +203,52 @@ impl PooledConn {
 
     /// Выполнить команду с правами root: напрямую, `sudo -n` или `sudo -S` с паролем.
     pub async fn exec_privileged(&self, command: &str) -> CoreResult<ExecOutput> {
+        self.exec_privileged_io(command, None, None).await
+    }
+
+    /// То же с `input` в stdin команды и потоковым выводом (`stream`, см. `exec_on_io`).
+    /// Пароль sudo, если нужен, передаётся первой строкой stdin перед `input`.
+    pub async fn exec_privileged_io(
+        &self,
+        command: &str,
+        input: Option<&[u8]>,
+        stream: Option<OutputTx>,
+    ) -> CoreResult<ExecOutput> {
         let st = self.probe_privs().await?;
         if st.uid == Some(0) {
-            return self.exec(command).await;
+            return self.exec_io(command, input, stream).await;
         }
         let wrapped = shell_quote(command);
         if st.nopasswd.unwrap_or(false) {
-            return self.exec(&format!("sudo -n -- sh -c {wrapped}")).await;
+            return self
+                .exec_io(&format!("sudo -n -- sh -c {wrapped}"), input, stream)
+                .await;
         }
         let pw = self.sudo_password.lock().expect("sudo").clone();
         match pw {
             Some(pw) => {
-                let input = format!("{}\n", pw.expose());
-                self.exec_input(&format!("sudo -S -p '' -- sh -c {wrapped}"), Some(input.as_bytes()))
+                let mut data = format!("{}\n", pw.expose()).into_bytes();
+                data.extend_from_slice(input.unwrap_or_default());
+                self.exec_io(&format!("sudo -S -p '' -- sh -c {wrapped}"), Some(&data), stream)
                     .await
             }
             None => Err(CoreError::new("priv.required", "Root privileges are required")
                 .with("connection_id", self.connection_id.clone())
                 .with("sudo_available", st.sudo_present.unwrap_or(false))),
         }
+    }
+
+    async fn exec_io(&self, command: &str, input: Option<&[u8]>, stream: Option<OutputTx>) -> CoreResult<ExecOutput> {
+        let _permit = self
+            .channels
+            .clone()
+            .acquire_owned()
+            .await
+            .map_err(|_| CoreError::internal("channel semaphore closed"))?;
+        self.touch();
+        let r = exec_on_io(self.handle(), command, input, stream).await;
+        self.touch();
+        r
     }
 
     pub fn info(&self) -> Value {
@@ -239,16 +266,7 @@ impl PooledConn {
 
 impl RemoteExec for PooledConn {
     async fn exec_input(&self, command: &str, input: Option<&[u8]>) -> CoreResult<ExecOutput> {
-        let _permit = self
-            .channels
-            .clone()
-            .acquire_owned()
-            .await
-            .map_err(|_| CoreError::internal("channel semaphore closed"))?;
-        self.touch();
-        let r = exec_on(self.handle(), command, input).await;
-        self.touch();
-        r
+        self.exec_io(command, input, None).await
     }
 }
 

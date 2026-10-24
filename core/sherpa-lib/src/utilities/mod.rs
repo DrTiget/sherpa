@@ -2,12 +2,12 @@
 //! Как добавить новую — `docs/UTILITY_GUIDE.md`.
 
 pub mod capabilities;
+pub mod cron;
+pub mod disk;
+pub mod log;
 pub mod monitor;
 pub mod net;
 pub mod nettools;
-pub mod disk;
-pub mod log;
-pub mod cron;
 
 use crate::error::CoreError;
 use crate::ssh::ExecOutput;
