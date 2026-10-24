@@ -54,7 +54,7 @@ ToolPane {
     function delKey(k) {
         dangerous({ title: qsTr("Delete SSH key"), message: qsTr("The key is removed from authorized_keys; the owner can no longer sign in with it."),
                     items: [(k.user || "?") + "  " + k.key_type + "  " + k.fingerprint + "  " + (k.comment || "")], confirmText: qsTr("Delete"),
-                    needName: prod || k.user === "root" }, "sec.keys.del", { connection_id: serverId, user: k.user, fingerprint: k.fingerprint }, () => refresh())
+                    needName: prod || k.user === "root", hostname: k.user === "root" }, "sec.keys.del", { connection_id: serverId, user: k.user, fingerprint: k.fingerprint }, () => refresh())
     }
     function addKey() {
         const u = keyUser.text.trim(), k = keyText.text.trim()
@@ -142,7 +142,7 @@ ToolPane {
                         SLabel { Layout.fillWidth: true; text: root.recoText[modelData] || modelData; wrapMode: Text.Wrap; elide: Text.ElideNone }
                     }
                 }
-                SLabel { visible: root.score.recommendations && Object.keys(root.score.recommendations).every(k => !root.score.recommendations[k]); color: Theme.green; text: qsTr("No recommendations") }
+                SLabel { visible: !!root.score.recommendations && Object.keys(root.score.recommendations).every(k => !root.score.recommendations[k]); color: Theme.green; text: qsTr("No recommendations") }
             }
         }
         // fail2ban

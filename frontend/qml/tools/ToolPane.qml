@@ -17,6 +17,14 @@ ToolRpc {
 
     // Опасное действие. opts: {title, message, items: [строки], confirmText, needName (по умолчанию — на Prod), word}.
     function dangerous(opts, method, params, ok, fail) {
+        if (opts.hostname) {
+            // ядро сверяет введённое имя с hostname сервера (confirm_hostname), узнаём его через sys.info
+            req("sys.info", {}, (info) => {
+                dangerous(Object.assign({}, opts, { hostname: false, needName: true, expectName: info.hostname, nameKind: "hostname" }), method,
+                          Object.assign({}, params, { confirm_hostname: info.hostname }), ok, fail)
+            }, fail)
+            return
+        }
         dlg.ask(opts, () => {
             call("danger.prepare", { method: method, params: params }, (r) => {
                 call(method, Object.assign({}, params, { confirm_token: r.confirm_token }), ok, fail)

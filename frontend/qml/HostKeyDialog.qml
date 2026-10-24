@@ -22,7 +22,7 @@ SDialog {
             if (Object.keys(Backend.pendingHostKey).length > 0) {
                 root.confirmedReplace = false
                 root.open()
-            } else if (root.opened) {
+            } else if (root.visible) {
                 root.close()
             }
         }

@@ -100,35 +100,414 @@
     </message>
     <message>
         <location filename="../qml/AppRegistry.qml" line="51"/>
-        <source>Compare configs</source>
+        <source>Multi-server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/AppRegistry.qml" line="53"/>
-        <source>Notes</source>
+        <source>Compare configs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/AppRegistry.qml" line="55"/>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="57"/>
         <source>Sherpa journal</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AuditWindow</name>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="30"/>
+        <source>Saved: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="30"/>
+        <source>Could not write %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="41"/>
+        <source>This server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="41"/>
+        <source>All servers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="42"/>
+        <source>Search by action or outcome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="44"/>
+        <source>Export CSV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="45"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="51"/>
+        <source>The log is empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="53"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="54"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="55"/>
+        <source>Action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="56"/>
+        <source>Outcome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="57"/>
+        <source>Client</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../src/Backend.cpp" line="529"/>
+        <location filename="../src/Backend.cpp" line="539"/>
         <source>%1 (copy)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Backend.cpp" line="722"/>
+        <location filename="../src/Backend.cpp" line="732"/>
         <source>Host key saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/Backend.cpp" line="807"/>
+        <location filename="../src/Backend.cpp" line="817"/>
         <source>Key file copy saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BackupWindow</name>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="52"/>
+        <source>Title, source and repository are required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="53"/>
+        <source>Source must be an absolute path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="54"/>
+        <source>restic needs a password file on the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="62"/>
+        <source>Backup is running…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="63"/>
+        <source>Backup finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="66"/>
+        <source>Checking the repository…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="67"/>
+        <source>Repository check passed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="70"/>
+        <source>Prune repository</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="70"/>
+        <source>Old snapshots are removed according to the retention policy and cannot be recovered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="71"/>
+        <source>Prune</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="71"/>
+        <source>Prune finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="74"/>
+        <source>Delete backup job</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="74"/>
+        <source>Only the job is deleted; the backups in the repository are kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="75"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="86"/>
+        <source>Snapshot and an absolute target path are required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="90"/>
+        <source>Dry run…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="91"/>
+        <source>Dry run finished: nothing was written</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="93"/>
+        <location filename="../qml/tools/BackupWindow.qml" line="189"/>
+        <source>Restore from backup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="93"/>
+        <source>Files in the target directory can be overwritten. Make sure the target is correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="94"/>
+        <source>Restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="95"/>
+        <source>Restore finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="104"/>
+        <source>This server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="104"/>
+        <source>All servers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="107"/>
+        <source>New job…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="108"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="119"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="120"/>
+        <source>Check</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="121"/>
+        <source>Prune…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="122"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="123"/>
+        <source>Delete…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="125"/>
+        <source>No backup jobs yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="127"/>
+        <source>Job</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="128"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="129"/>
+        <source>Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="130"/>
+        <source>Source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="131"/>
+        <source>Repository</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="132"/>
+        <source>Schedule</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="133"/>
+        <source>Last run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="148"/>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="149"/>
+        <location filename="../qml/tools/BackupWindow.qml" line="197"/>
+        <source>Restore…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="152"/>
+        <source>rsync jobs have no snapshots: only “Run” is supported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="159"/>
+        <source>No snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="162"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="163"/>
+        <source>Host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="164"/>
+        <source>Paths</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="174"/>
+        <source>New backup job</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="174"/>
+        <source>Edit backup job</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="177"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="179"/>
+        <source>Source (absolute path on the server)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="180"/>
+        <source>Repository / destination</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="181"/>
+        <source>Password file on the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="182"/>
+        <source>Schedule (description only)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="183"/>
+        <source>Run with root rights (sudo)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="185"/>
+        <location filename="../qml/tools/BackupWindow.qml" line="196"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="185"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="191"/>
+        <source>Snapshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="192"/>
+        <source>Target directory on the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="193"/>
+        <source>Dry run (do not write anything)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="194"/>
+        <source>A real restore can overwrite existing files and needs confirmation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="197"/>
+        <source>Run dry run</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -580,90 +959,504 @@
     </message>
     <message>
         <location filename="../qml/DangerDialog.qml" line="74"/>
+        <location filename="../qml/tools/DangerDialog.qml" line="78"/>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="13"/>
+        <location filename="../qml/tools/DangerDialog.qml" line="30"/>
+        <source>Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="27"/>
+        <source>Confirm action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="64"/>
+        <source>Type the server hostname “%1” to confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="64"/>
+        <source>Type the server name “%1” to confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="72"/>
+        <source>Type “%1” to confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataTable</name>
+    <message>
+        <location filename="../qml/tools/DataTable.qml" line="14"/>
+        <source>Nothing to show</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DatabasesWindow</name>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="29"/>
+        <source>No database clients (mysql, psql, redis-cli) were found on this server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="43"/>
+        <source>Disconnect client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="43"/>
+        <source>Cancel query</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="44"/>
+        <source>Kill</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="56"/>
+        <source>The file must be inside /var/backups/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="59"/>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="60"/>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="126"/>
+        <source>Create dump</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="59"/>
+        <source>The dump is written on the server with permissions 600; large databases can take a while and load the server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="61"/>
+        <source>Dump saved: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="71"/>
+        <source>Databases</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="71"/>
+        <source>Clients</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="71"/>
+        <source>Queries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="74"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="79"/>
+        <source>Databases are not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="88"/>
+        <source>Dump…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="90"/>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="95"/>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="115"/>
+        <source>Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="91"/>
+        <source>Keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="92"/>
+        <source>With TTL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="93"/>
+        <source>Avg TTL, ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="96"/>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="97"/>
+        <source>Owner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="105"/>
+        <source>Nothing is running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="108"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="109"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="111"/>
+        <source>Command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="114"/>
+        <source>User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="116"/>
+        <source>Seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="117"/>
+        <source>State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="118"/>
+        <source>Query</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="131"/>
+        <source>A full RDB snapshot of the Redis instance will be saved on the server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="131"/>
+        <source>Database “%1” will be saved on the server (the content is not transferred to this computer).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="132"/>
+        <source>File on the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="133"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="133"/>
+        <source>Next…</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DesktopPage</name>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="178"/>
+        <location filename="../qml/DesktopPage.qml" line="180"/>
         <source>Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="204"/>
+        <location filename="../qml/DesktopPage.qml" line="214"/>
         <source>Resource monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="178"/>
+        <location filename="../qml/DesktopPage.qml" line="180"/>
         <source>Monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="203"/>
+        <location filename="../qml/DesktopPage.qml" line="213"/>
         <source>New terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="205"/>
+        <location filename="../qml/DesktopPage.qml" line="215"/>
         <source>Show desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="286"/>
+        <location filename="../qml/DesktopPage.qml" line="217"/>
+        <source>Widget: CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DesktopPage.qml" line="218"/>
+        <source>Widget: Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DesktopPage.qml" line="219"/>
+        <source>Widget: Disks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DesktopPage.qml" line="220"/>
+        <source>Widget: Alerts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DesktopPage.qml" line="301"/>
         <source>Connecting to %1…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="286"/>
+        <location filename="../qml/DesktopPage.qml" line="301"/>
         <source>Cannot connect to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="294"/>
+        <location filename="../qml/DesktopPage.qml" line="309"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="295"/>
+        <location filename="../qml/DesktopPage.qml" line="310"/>
         <source>Edit connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="296"/>
+        <location filename="../qml/DesktopPage.qml" line="311"/>
         <source>Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="306"/>
+        <location filename="../qml/DesktopPage.qml" line="321"/>
         <source>Connection lost</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="307"/>
+        <location filename="../qml/DesktopPage.qml" line="322"/>
         <source>reconnecting in %1 s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="308"/>
+        <location filename="../qml/DesktopPage.qml" line="323"/>
         <source>Retry now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="319"/>
+        <location filename="../qml/DesktopPage.qml" line="334"/>
         <source>Close terminal?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="320"/>
+        <location filename="../qml/DesktopPage.qml" line="335"/>
         <source>The session is still active. Closing the window ends it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="321"/>
+        <location filename="../qml/DesktopPage.qml" line="336"/>
         <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DesktopWidgets</name>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="13"/>
+        <source>CPU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="14"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="15"/>
+        <source>Disks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="16"/>
+        <source>Alerts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="44"/>
+        <source>No connection to the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="46"/>
+        <source>Memory %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="48"/>
+        <source>CPU %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="49"/>
+        <source>High load %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="50"/>
+        <source>Disk %1 is %2% full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="56"/>
+        <source>d </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="56"/>
+        <source>h </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="56"/>
+        <source>m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="121"/>
+        <source>up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="122"/>
+        <source>load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="124"/>
+        <source>RAM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="143"/>
+        <source>Loading…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="156"/>
+        <source>All is well</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DiffWindow</name>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="86"/>
+        <location filename="../qml/tools/DiffWindow.qml" line="107"/>
+        <source>Enter an absolute path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="90"/>
+        <source>Choose a server to compare with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="96"/>
+        <source>Choose a saved version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="99"/>
+        <source>saved version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="108"/>
+        <source>Version saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="112"/>
+        <source>Delete saved version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="112"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="123"/>
+        <source>File on this server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="124"/>
+        <source>Save version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="128"/>
+        <source>Other server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="128"/>
+        <source>Saved version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="130"/>
+        <source>path on the other server (empty = same)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="132"/>
+        <source>Delete…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="133"/>
+        <source>Compare</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="137"/>
+        <source>identical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="137"/>
+        <source>%1 differences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="138"/>
+        <source>Only differences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="144"/>
+        <source>Choose a file and a source to compare with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="145"/>
+        <source>Files are identical</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -880,6 +1673,184 @@
     <message>
         <location filename="../qml/DisksWindow.qml" line="289"/>
         <source>%1 files · double-click copies the path</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DockerWindow</name>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61"/>
+        <source>Start container</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61"/>
+        <source>Stop container</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61"/>
+        <source>Restart container</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61"/>
+        <source>Pause container</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61"/>
+        <source>Remove container</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="62"/>
+        <source>The container will be removed. Data in anonymous volumes may be lost.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="91"/>
+        <source>Containers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="91"/>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="92"/>
+        <source>Volumes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="92"/>
+        <source>Networks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="97"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="102"/>
+        <source>Docker is not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="103"/>
+        <source>Retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="117"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="118"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="119"/>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="120"/>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="121"/>
+        <location filename="../qml/tools/DockerWindow.qml" line="148"/>
+        <source>Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="122"/>
+        <location filename="../qml/tools/DockerWindow.qml" line="148"/>
+        <source>Inspect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="123"/>
+        <source>Remove…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="126"/>
+        <location filename="../qml/tools/DockerWindow.qml" line="170"/>
+        <location filename="../qml/tools/DockerWindow.qml" line="178"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="127"/>
+        <source>Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="128"/>
+        <source>State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="129"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="130"/>
+        <source>Ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="150"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="151"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="160"/>
+        <source>Repository</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="161"/>
+        <source>Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="163"/>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="164"/>
+        <source>Created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="171"/>
+        <location filename="../qml/tools/DockerWindow.qml" line="179"/>
+        <source>Driver</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="172"/>
+        <source>Mountpoint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="180"/>
+        <source>Scope</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2619,6 +3590,82 @@
     </message>
 </context>
 <context>
+    <name>MultiRunner</name>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="33"/>
+        <source>Select at least one server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="39"/>
+        <source>Run command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="40"/>
+        <source>The command runs on the server as the SSH user. Output is shown here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="40"/>
+        <source>The command runs on %1 servers at once (up to 8 in parallel).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="41"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MultiWindow</name>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="9"/>
+        <source>Kernel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="9"/>
+        <source>Uptime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="9"/>
+        <source>Disk /</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="10"/>
+        <source>Memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="10"/>
+        <source>OS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="25"/>
+        <source>Command to run on the selected servers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="27"/>
+        <source>Confirmation: type “выполнить”.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="28"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="30"/>
+        <source>Run on %1 server(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NameDialog</name>
     <message>
         <location filename="../qml/NameDialog.qml" line="7"/>
@@ -2638,6 +3685,552 @@
     <message>
         <location filename="../qml/NameDialog.qml" line="36"/>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NetApplyFlow</name>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="24"/>
+        <source>Change firewall rules</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="25"/>
+        <source>The change will be applied with an automatic rollback: if you do not confirm it within %1 s (for example, the connection drops), the server restores the previous rules.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="26"/>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="61"/>
+        <source>Confirm the changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="68"/>
+        <source>Confirm the changes within %1 s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="70"/>
+        <source>If the connection is lost or you do nothing, the changes will be rolled back automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="79"/>
+        <source>Roll back now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="80"/>
+        <source>Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NettoolsWindow</name>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="22"/>
+        <source>Port check</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="29"/>
+        <source>This field is required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="36"/>
+        <source>Port must be 1–65535</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="41"/>
+        <source>Running…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="50"/>
+        <source>Cancelled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="63"/>
+        <source>Timed out on the server (60 s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="64"/>
+        <source>Done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="65"/>
+        <source>Finished with exit code %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="65"/>
+        <source>output truncated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="70"/>
+        <source>Diagnostics failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="84"/>
+        <source>URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="84"/>
+        <source>Host or IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="89"/>
+        <source>Count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="90"/>
+        <source>Record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="92"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="93"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="93"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="97"/>
+        <source>The command runs on the server %1; the output appears here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="102"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NetworkWindow</name>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="91"/>
+        <source>Delete rule #%1: %2 %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="91"/>
+        <source>Delete firewall rule</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="100"/>
+        <source>Port must be 1–65535</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="104"/>
+        <source>%1 incoming %2/%3 from %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="117"/>
+        <source>Changes were not confirmed in time and have been rolled back.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="124"/>
+        <source>Interfaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="124"/>
+        <source>Routes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="125"/>
+        <source>Ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="125"/>
+        <source>Firewall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="130"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="142"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="143"/>
+        <location filename="../qml/tools/NetworkWindow.qml" line="206"/>
+        <source>State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="155"/>
+        <source>Family</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="156"/>
+        <location filename="../qml/tools/NetworkWindow.qml" line="248"/>
+        <source>Destination</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="157"/>
+        <source>Via</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="158"/>
+        <source>Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="159"/>
+        <source>Metric</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="160"/>
+        <source>Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="169"/>
+        <source>Name servers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="169"/>
+        <source>Search domains</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="169"/>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="192"/>
+        <source>Filter by port, address or process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="193"/>
+        <source>Include processes of other users (root)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="203"/>
+        <source>Close port…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="205"/>
+        <source>Proto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="207"/>
+        <source>Local address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="209"/>
+        <source>Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="226"/>
+        <source>enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="226"/>
+        <source>disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="228"/>
+        <source>+ Rule</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="233"/>
+        <source>No firewall found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="233"/>
+        <source>Neither ufw, nftables nor iptables is available on this server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="241"/>
+        <source>Delete…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="242"/>
+        <source>No rules</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="245"/>
+        <source>Action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="246"/>
+        <source>Chain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="247"/>
+        <source>Source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="249"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="259"/>
+        <source>New firewall rule</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="264"/>
+        <source>Incoming rule for backend “%1”. It is applied with an automatic rollback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="265"/>
+        <source>allow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="265"/>
+        <source>deny</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="265"/>
+        <source>reject</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="267"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="268"/>
+        <source>Source (IPv4 or CIDR, empty = any)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="272"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="273"/>
+        <source>Apply…</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NotesWindow</name>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="36"/>
+        <location filename="../qml/tools/NotesWindow.qml" line="52"/>
+        <source>Title is required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="42"/>
+        <source>Delete note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="42"/>
+        <location filename="../qml/tools/NotesWindow.qml" line="59"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="53"/>
+        <source>Value is required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="59"/>
+        <source>Delete secret</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="62"/>
+        <source>Show secret</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="62"/>
+        <source>The value is shown for 10 seconds. The access is written to the action log.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="62"/>
+        <source>Show</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="82"/>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="82"/>
+        <source>Secrets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="84"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="93"/>
+        <source>+ New note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="112"/>
+        <location filename="../qml/tools/NotesWindow.qml" line="143"/>
+        <location filename="../qml/tools/NotesWindow.qml" line="158"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="114"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="114"/>
+        <source>Preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="116"/>
+        <location filename="../qml/tools/NotesWindow.qml" line="140"/>
+        <source>Delete…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="117"/>
+        <location filename="../qml/tools/NotesWindow.qml" line="161"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="119"/>
+        <source>Markdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="134"/>
+        <source>+ Secret</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="139"/>
+        <source>Show…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="139"/>
+        <source>Change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="141"/>
+        <source>No secrets saved for this server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="144"/>
+        <location filename="../qml/tools/NotesWindow.qml" line="159"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="145"/>
+        <source>Updated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="154"/>
+        <source>New secret</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="154"/>
+        <source>Change secret</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="159"/>
+        <source>New value (empty = keep)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="161"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="174"/>
+        <source>Hides in %1 s. The clipboard is cleared after hiding.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="175"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="175"/>
+        <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3003,6 +4596,80 @@
     </message>
 </context>
 <context>
+    <name>RunResults</name>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="16"/>
+        <source>Results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="17"/>
+        <source>%1 failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="19"/>
+        <source>By server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="19"/>
+        <source>Compare</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="27"/>
+        <source>No runs yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="29"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="30"/>
+        <source>Result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="31"/>
+        <source>running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="31"/>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="31"/>
+        <location filename="../qml/tools/RunResults.qml" line="51"/>
+        <source>exit %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="33"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="34"/>
+        <source>Output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="51"/>
+        <source>%1 of %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="55"/>
+        <source>(empty output)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SBanner</name>
     <message>
         <location filename="../qml/SBanner.qml" line="43"/>
@@ -3070,6 +4737,380 @@
     <message>
         <location filename="../qml/SWindow.qml" line="186"/>
         <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SecurityWindow</name>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="45"/>
+        <source>Unban IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="45"/>
+        <source>Unban</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="50"/>
+        <source>No fail2ban jail is available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="51"/>
+        <location filename="../qml/tools/SecurityWindow.qml" line="236"/>
+        <source>Ban IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="51"/>
+        <source>Ban</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="55"/>
+        <source>Delete SSH key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="55"/>
+        <source>The key is removed from authorized_keys; the owner can no longer sign in with it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="56"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="61"/>
+        <source>User and key are required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="64"/>
+        <location filename="../qml/tools/SecurityWindow.qml" line="245"/>
+        <source>Add SSH key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="64"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="68"/>
+        <source>No firewall (ufw, nftables, iptables) is available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="70"/>
+        <source>deny incoming %1/%2 (%3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="70"/>
+        <source>Close port %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="75"/>
+        <source>Install and enable fail2ban with an sshd jail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="76"/>
+        <source>Install pending security updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="77"/>
+        <source>Replace weak SSH keys (DSA or RSA shorter than 2048 bits)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="78"/>
+        <source>Review database/Redis ports reachable from outside and close them in the firewall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="81"/>
+        <source>fail2ban jails</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="81"/>
+        <source>Security updates pending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="82"/>
+        <source>Weak SSH keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="82"/>
+        <source>High-risk open ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="88"/>
+        <source>Changes were not confirmed in time and have been rolled back.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="93"/>
+        <source>Overview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="93"/>
+        <source>Logins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="94"/>
+        <source>Keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="94"/>
+        <source>Ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="94"/>
+        <source>Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="99"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="121"/>
+        <source>Security score</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="122"/>
+        <source>A heuristic estimate, not a compliance check.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="125"/>
+        <source>Checks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="135"/>
+        <source>Recommendations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="145"/>
+        <source>No recommendations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="155"/>
+        <source>Ban IP…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="161"/>
+        <source>Unban…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="162"/>
+        <source>No banned addresses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="162"/>
+        <source>fail2ban is not available or has no jails</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="163"/>
+        <source>Banned IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="170"/>
+        <source>Failed sign-ins in the last 24 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="175"/>
+        <source>Ban…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="176"/>
+        <source>No failed sign-ins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="177"/>
+        <source>Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="180"/>
+        <source>Active sessions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="184"/>
+        <source>No active sessions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="185"/>
+        <location filename="../qml/tools/SecurityWindow.qml" line="201"/>
+        <location filename="../qml/tools/SecurityWindow.qml" line="247"/>
+        <source>User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="185"/>
+        <source>Terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="186"/>
+        <source>Since</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="186"/>
+        <source>From</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="193"/>
+        <source>Add key…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="198"/>
+        <source>Delete…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="199"/>
+        <source>No keys found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="202"/>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="203"/>
+        <source>Bits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="204"/>
+        <source>Strength</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="204"/>
+        <source>weak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="204"/>
+        <source>ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="205"/>
+        <source>Fingerprint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="206"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="215"/>
+        <source>Close…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="217"/>
+        <source>Proto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="218"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="219"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="220"/>
+        <source>Process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="221"/>
+        <source>Risk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="221"/>
+        <source>high</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="221"/>
+        <source>review</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="229"/>
+        <source>No pending security updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="230"/>
+        <source>Package</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="230"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="240"/>
+        <source>IP address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="241"/>
+        <location filename="../qml/tools/SecurityWindow.qml" line="250"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="241"/>
+        <location filename="../qml/tools/SecurityWindow.qml" line="250"/>
+        <source>Next…</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3414,6 +5455,29 @@
     </message>
 </context>
 <context>
+    <name>ServerPicker</name>
+    <message>
+        <location filename="../qml/tools/ServerPicker.qml" line="33"/>
+        <source>Servers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ServerPicker.qml" line="36"/>
+        <source>this</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ServerPicker.qml" line="37"/>
+        <source>all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ServerPicker.qml" line="38"/>
+        <source>none</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ServersDock</name>
     <message>
         <location filename="../qml/ServersDock.qml" line="19"/>
@@ -3681,6 +5745,109 @@
     <message>
         <location filename="../qml/Sidebar.qml" line="109"/>
         <source>Import from ~/.ssh/config</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SnippetsWindow</name>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="33"/>
+        <source>Title and command are required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="39"/>
+        <source>Delete snippet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="39"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="50"/>
+        <source>Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="50"/>
+        <source>History</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="61"/>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="62"/>
+        <source>New snippet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="84"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="85"/>
+        <source>Tags (comma separated)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="87"/>
+        <source>Shell command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="90"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="91"/>
+        <source>Delete…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="93"/>
+        <source>Run on selected servers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="96"/>
+        <source>Run snippet “%1”</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="97"/>
+        <source>Run command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="109"/>
+        <source>No runs yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="111"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="112"/>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="113"/>
+        <source>Outcome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="114"/>
+        <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4308,6 +6475,39 @@
     </message>
 </context>
 <context>
+    <name>ToolPane</name>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="53"/>
+        <source>Administrator password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="66"/>
+        <source>This action needs root rights. Enter the sudo password of the SSH user; it is kept in memory only.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="67"/>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="71"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="72"/>
+        <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="89"/>
+        <source>Read-only mode: changes are blocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TransferConflictDialog</name>
     <message>
         <location filename="../qml/TransferConflictDialog.qml" line="13"/>
@@ -4559,6 +6759,167 @@
     <message>
         <location filename="../qml/UtilPane.qml" line="167"/>
         <source>Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WebWindow</name>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="28"/>
+        <source>No web server (nginx, Apache) was found on this server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="46"/>
+        <source>Reload %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="46"/>
+        <source>The configuration is re-checked on the server; the web server is reloaded only if the check passes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="47"/>
+        <location filename="../qml/tools/WebWindow.qml" line="72"/>
+        <source>Reload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="58"/>
+        <source>Test certificate renewal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="58"/>
+        <source>Renew certificates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="59"/>
+        <source>Run test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="59"/>
+        <location filename="../qml/tools/WebWindow.qml" line="75"/>
+        <source>Renew</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="68"/>
+        <source>Sites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="68"/>
+        <source>Certificates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="71"/>
+        <source>Check config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="74"/>
+        <source>Test renewal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="76"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="81"/>
+        <source>Web servers are not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="97"/>
+        <source>Configuration is valid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="97"/>
+        <source>Configuration has errors — reload is blocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="108"/>
+        <source>Config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="109"/>
+        <source>No sites found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="111"/>
+        <location filename="../qml/tools/WebWindow.qml" line="125"/>
+        <source>Domains</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="112"/>
+        <source>Root</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="113"/>
+        <source>Listen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="115"/>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="122"/>
+        <source>No certificates found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="124"/>
+        <source>Certificate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="126"/>
+        <source>Expires</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="127"/>
+        <source>Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="127"/>
+        <source>%1 d</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="129"/>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="138"/>
+        <source>Site configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="141"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="141"/>
+        <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

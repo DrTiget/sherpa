@@ -100,36 +100,415 @@
     </message>
     <message>
         <location filename="../qml/AppRegistry.qml" line="51" />
+        <source>Multi-server</source>
+        <translation>Мультисервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/AppRegistry.qml" line="53" />
         <source>Compare configs</source>
         <translation>Сравнение конфигов</translation>
     </message>
     <message>
-        <location filename="../qml/AppRegistry.qml" line="53" />
+        <location filename="../qml/AppRegistry.qml" line="55" />
         <source>Notes</source>
         <translation>Заметки</translation>
     </message>
     <message>
-        <location filename="../qml/AppRegistry.qml" line="55" />
+        <location filename="../qml/AppRegistry.qml" line="57" />
         <source>Sherpa journal</source>
         <translation>Журнал Sherpa</translation>
     </message>
 </context>
 <context>
+    <name>AuditWindow</name>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="30" />
+        <source>Saved: %1</source>
+        <translation>Сохранено: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="30" />
+        <source>Could not write %1</source>
+        <translation>Не удалось записать %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="41" />
+        <source>This server</source>
+        <translation>Этот сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="41" />
+        <source>All servers</source>
+        <translation>Все серверы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="42" />
+        <source>Search by action or outcome</source>
+        <translation>Поиск по действию или итогу</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="44" />
+        <source>Export CSV</source>
+        <translation>Экспорт CSV</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="45" />
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="51" />
+        <source>The log is empty</source>
+        <translation>Журнал пуст</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="53" />
+        <source>Time</source>
+        <translation>Время</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="54" />
+        <source>Server</source>
+        <translation>Сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="55" />
+        <source>Action</source>
+        <translation>Действие</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="56" />
+        <source>Outcome</source>
+        <translation>Итог</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/AuditWindow.qml" line="57" />
+        <source>Client</source>
+        <translation>Клиент</translation>
+    </message>
+</context>
+<context>
     <name>Backend</name>
     <message>
-        <location filename="../src/Backend.cpp" line="529" />
+        <location filename="../src/Backend.cpp" line="539" />
         <source>%1 (copy)</source>
         <translation>%1 (копия)</translation>
     </message>
     <message>
-        <location filename="../src/Backend.cpp" line="722" />
+        <location filename="../src/Backend.cpp" line="732" />
         <source>Host key saved</source>
         <translation>Ключ хоста сохранён</translation>
     </message>
     <message>
-        <location filename="../src/Backend.cpp" line="807" />
+        <location filename="../src/Backend.cpp" line="817" />
         <source>Key file copy saved</source>
         <translation>Копия ключ-файла сохранена</translation>
+    </message>
+</context>
+<context>
+    <name>BackupWindow</name>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="52" />
+        <source>Title, source and repository are required</source>
+        <translation>Нужны название, источник и репозиторий</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="53" />
+        <source>Source must be an absolute path</source>
+        <translation>Источник должен быть абсолютным путём</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="54" />
+        <source>restic needs a password file on the server</source>
+        <translation>restic требует файл пароля на сервере</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="62" />
+        <source>Backup is running…</source>
+        <translation>Бэкап выполняется…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="63" />
+        <source>Backup finished</source>
+        <translation>Бэкап завершён</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="66" />
+        <source>Checking the repository…</source>
+        <translation>Проверка репозитория…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="67" />
+        <source>Repository check passed</source>
+        <translation>Проверка репозитория пройдена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="70" />
+        <source>Prune repository</source>
+        <translation>Очистить репозиторий</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="70" />
+        <source>Old snapshots are removed according to the retention policy and cannot be recovered.</source>
+        <translation>Старые снимки удаляются по политике хранения, восстановить их нельзя.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="71" />
+        <source>Prune</source>
+        <translation>Очистить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="71" />
+        <source>Prune finished</source>
+        <translation>Очистка завершена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="74" />
+        <source>Delete backup job</source>
+        <translation>Удалить задание бэкапа</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="74" />
+        <source>Only the job is deleted; the backups in the repository are kept.</source>
+        <translation>Удаляется только задание; бэкапы в репозитории сохраняются.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="75" />
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="86" />
+        <source>Snapshot and an absolute target path are required</source>
+        <translation>Нужны снимок и абсолютный путь назначения</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="90" />
+        <source>Dry run…</source>
+        <translation>Пробный прогон…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="91" />
+        <source>Dry run finished: nothing was written</source>
+        <translation>Пробный прогон завершён: ничего не записано</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="93" />
+        <location filename="../qml/tools/BackupWindow.qml" line="189" />
+        <source>Restore from backup</source>
+        <translation>Восстановление из бэкапа</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="93" />
+        <source>Files in the target directory can be overwritten. Make sure the target is correct.</source>
+        <translation>Файлы в целевом каталоге могут быть перезаписаны. Проверьте путь.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="94" />
+        <source>Restore</source>
+        <translation>Восстановить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="95" />
+        <source>Restore finished</source>
+        <translation>Восстановление завершено</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="104" />
+        <source>This server</source>
+        <translation>Этот сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="104" />
+        <source>All servers</source>
+        <translation>Все серверы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="107" />
+        <source>New job…</source>
+        <translation>Новое задание…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="108" />
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="119" />
+        <source>Run</source>
+        <translation>Запустить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="120" />
+        <source>Check</source>
+        <translation>Проверить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="121" />
+        <source>Prune…</source>
+        <translation>Очистить…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="122" />
+        <source>Edit</source>
+        <translation>Изменить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="123" />
+        <source>Delete…</source>
+        <translation>Удалить…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="125" />
+        <source>No backup jobs yet</source>
+        <translation>Заданий бэкапа пока нет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="127" />
+        <source>Job</source>
+        <translation>Задание</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="128" />
+        <source>Server</source>
+        <translation>Сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="129" />
+        <source>Engine</source>
+        <translation>Движок</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="130" />
+        <source>Source</source>
+        <translation>Источник</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="131" />
+        <source>Repository</source>
+        <translation>Репозиторий</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="132" />
+        <source>Schedule</source>
+        <translation>Расписание</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="133" />
+        <source>Last run</source>
+        <translation>Последний запуск</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="148" />
+        <source>Snapshots</source>
+        <translation>Снимки</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="149" />
+        <location filename="../qml/tools/BackupWindow.qml" line="197" />
+        <source>Restore…</source>
+        <translation>Восстановить…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="152" />
+        <source>rsync jobs have no snapshots: only “Run” is supported.</source>
+        <translation>У заданий rsync нет снимков: поддерживается только «Запустить».</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="159" />
+        <source>No snapshots</source>
+        <translation>Нет снимков</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="162" />
+        <source>Time</source>
+        <translation>Время</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="163" />
+        <source>Host</source>
+        <translation>Хост</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="164" />
+        <source>Paths</source>
+        <translation>Пути</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="174" />
+        <source>New backup job</source>
+        <translation>Новое задание бэкапа</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="174" />
+        <source>Edit backup job</source>
+        <translation>Изменить задание бэкапа</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="177" />
+        <source>Title</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="179" />
+        <source>Source (absolute path on the server)</source>
+        <translation>Источник (абсолютный путь на сервере)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="180" />
+        <source>Repository / destination</source>
+        <translation>Репозиторий / назначение</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="181" />
+        <source>Password file on the server</source>
+        <translation>Файл пароля на сервере</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="182" />
+        <source>Schedule (description only)</source>
+        <translation>Расписание (только описание)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="183" />
+        <source>Run with root rights (sudo)</source>
+        <translation>Выполнять с правами root (sudo)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="185" />
+        <location filename="../qml/tools/BackupWindow.qml" line="196" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="185" />
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="191" />
+        <source>Snapshot</source>
+        <translation>Снимок</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="192" />
+        <source>Target directory on the server</source>
+        <translation>Каталог назначения на сервере</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="193" />
+        <source>Dry run (do not write anything)</source>
+        <translation>Пробный прогон (ничего не записывать)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="194" />
+        <source>A real restore can overwrite existing files and needs confirmation.</source>
+        <translation>Настоящее восстановление может перезаписать существующие файлы и требует подтверждения.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/BackupWindow.qml" line="197" />
+        <source>Run dry run</source>
+        <translation>Пробный прогон</translation>
     </message>
 </context>
 <context>
@@ -581,91 +960,505 @@
     </message>
     <message>
         <location filename="../qml/DangerDialog.qml" line="74" />
+        <location filename="../qml/tools/DangerDialog.qml" line="78" />
         <source>Cancel</source>
         <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="13" />
+        <location filename="../qml/tools/DangerDialog.qml" line="30" />
+        <source>Confirm</source>
+        <translation>Подтвердить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="27" />
+        <source>Confirm action</source>
+        <translation>Подтвердите действие</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="64" />
+        <source>Type the server hostname “%1” to confirm</source>
+        <translation>Для подтверждения введите hostname сервера «%1»</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="64" />
+        <source>Type the server name “%1” to confirm</source>
+        <translation>Для подтверждения введите имя сервера «%1»</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DangerDialog.qml" line="72" />
+        <source>Type “%1” to confirm</source>
+        <translation>Для подтверждения введите «%1»</translation>
+    </message>
+</context>
+<context>
+    <name>DataTable</name>
+    <message>
+        <location filename="../qml/tools/DataTable.qml" line="14" />
+        <source>Nothing to show</source>
+        <translation>Показать нечего</translation>
+    </message>
+</context>
+<context>
+    <name>DatabasesWindow</name>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="29" />
+        <source>No database clients (mysql, psql, redis-cli) were found on this server.</source>
+        <translation>На сервере не найдены клиенты БД (mysql, psql, redis-cli).</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="43" />
+        <source>Disconnect client</source>
+        <translation>Отключить клиента</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="43" />
+        <source>Cancel query</source>
+        <translation>Отменить запрос</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="44" />
+        <source>Kill</source>
+        <translation>Завершить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="56" />
+        <source>The file must be inside /var/backups/</source>
+        <translation>Файл должен лежать в /var/backups/</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="59" />
+        <location filename="../qml/tools/DatabasesWindow.qml" line="60" />
+        <location filename="../qml/tools/DatabasesWindow.qml" line="126" />
+        <source>Create dump</source>
+        <translation>Создать дамп</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="59" />
+        <source>The dump is written on the server with permissions 600; large databases can take a while and load the server.</source>
+        <translation>Дамп записывается на сервере с правами 600; большие базы создаются долго и нагружают сервер.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="61" />
+        <source>Dump saved: %1</source>
+        <translation>Дамп сохранён: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="71" />
+        <source>Databases</source>
+        <translation>Базы данных</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="71" />
+        <source>Clients</source>
+        <translation>Клиенты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="71" />
+        <source>Queries</source>
+        <translation>Запросы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="74" />
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="79" />
+        <source>Databases are not available</source>
+        <translation>Базы данных недоступны</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="88" />
+        <source>Dump…</source>
+        <translation>Дамп…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="90" />
+        <location filename="../qml/tools/DatabasesWindow.qml" line="95" />
+        <location filename="../qml/tools/DatabasesWindow.qml" line="115" />
+        <source>Database</source>
+        <translation>База данных</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="91" />
+        <source>Keys</source>
+        <translation>Ключи</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="92" />
+        <source>With TTL</source>
+        <translation>С TTL</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="93" />
+        <source>Avg TTL, ms</source>
+        <translation>Средний TTL, мс</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="96" />
+        <source>Size</source>
+        <translation>Размер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="97" />
+        <source>Owner</source>
+        <translation>Владелец</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="105" />
+        <source>Nothing is running</source>
+        <translation>Ничего не выполняется</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="108" />
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="109" />
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="111" />
+        <source>Command</source>
+        <translation>Команда</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="114" />
+        <source>User</source>
+        <translation>Пользователь</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="116" />
+        <source>Seconds</source>
+        <translation>Секунд</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="117" />
+        <source>State</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="118" />
+        <source>Query</source>
+        <translation>Запрос</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="131" />
+        <source>A full RDB snapshot of the Redis instance will be saved on the server.</source>
+        <translation>На сервере будет сохранён полный снимок RDB экземпляра Redis.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="131" />
+        <source>Database “%1” will be saved on the server (the content is not transferred to this computer).</source>
+        <translation>База «%1» будет сохранена на сервере (содержимое на этот компьютер не передаётся).</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="132" />
+        <source>File on the server</source>
+        <translation>Файл на сервере</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="133" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DatabasesWindow.qml" line="133" />
+        <source>Next…</source>
+        <translation>Далее…</translation>
     </message>
 </context>
 <context>
     <name>DesktopPage</name>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="178" />
+        <location filename="../qml/DesktopPage.qml" line="180" />
         <source>Terminal</source>
         <translation>Терминал</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="204" />
+        <location filename="../qml/DesktopPage.qml" line="214" />
         <source>Resource monitor</source>
         <translation>Монитор ресурсов</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="178" />
+        <location filename="../qml/DesktopPage.qml" line="180" />
         <source>Monitor</source>
         <translation>Монитор</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="203" />
+        <location filename="../qml/DesktopPage.qml" line="213" />
         <source>New terminal</source>
         <translation>Новый терминал</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="205" />
+        <location filename="../qml/DesktopPage.qml" line="215" />
         <source>Show desktop</source>
         <translation>Показать рабочий стол</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="286" />
+        <location filename="../qml/DesktopPage.qml" line="217" />
+        <source>Widget: CPU</source>
+        <translation>Виджет: CPU</translation>
+    </message>
+    <message>
+        <location filename="../qml/DesktopPage.qml" line="218" />
+        <source>Widget: Server</source>
+        <translation>Виджет: Сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/DesktopPage.qml" line="219" />
+        <source>Widget: Disks</source>
+        <translation>Виджет: Диски</translation>
+    </message>
+    <message>
+        <location filename="../qml/DesktopPage.qml" line="220" />
+        <source>Widget: Alerts</source>
+        <translation>Виджет: Алерты</translation>
+    </message>
+    <message>
+        <location filename="../qml/DesktopPage.qml" line="301" />
         <source>Connecting to %1…</source>
         <translation>Подключение к %1…</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="286" />
+        <location filename="../qml/DesktopPage.qml" line="301" />
         <source>Cannot connect to %1</source>
         <translation>Не удаётся подключиться к %1</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="294" />
+        <location filename="../qml/DesktopPage.qml" line="309" />
         <source>Retry</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="295" />
+        <location filename="../qml/DesktopPage.qml" line="310" />
         <source>Edit connection</source>
         <translation>Изменить подключение</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="296" />
+        <location filename="../qml/DesktopPage.qml" line="311" />
         <source>Home</source>
         <translation>Дом</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="306" />
+        <location filename="../qml/DesktopPage.qml" line="321" />
         <source>Connection lost</source>
         <translation>Соединение потеряно</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="307" />
+        <location filename="../qml/DesktopPage.qml" line="322" />
         <source>reconnecting in %1 s</source>
         <translation>переподключение через %1 с</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="308" />
+        <location filename="../qml/DesktopPage.qml" line="323" />
         <source>Retry now</source>
         <translation>Повторить сейчас</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="319" />
+        <location filename="../qml/DesktopPage.qml" line="334" />
         <source>Close terminal?</source>
         <translation>Закрыть терминал?</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="320" />
+        <location filename="../qml/DesktopPage.qml" line="335" />
         <source>The session is still active. Closing the window ends it.</source>
         <translation>Сессия ещё активна. Закрытие окна завершит её.</translation>
     </message>
     <message>
-        <location filename="../qml/DesktopPage.qml" line="321" />
+        <location filename="../qml/DesktopPage.qml" line="336" />
         <source>Close</source>
         <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>DesktopWidgets</name>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="13" />
+        <source>CPU</source>
+        <translation>CPU</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="14" />
+        <source>Server</source>
+        <translation>Сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="15" />
+        <source>Disks</source>
+        <translation>Диски</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="16" />
+        <source>Alerts</source>
+        <translation>Алерты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="44" />
+        <source>No connection to the server</source>
+        <translation>Нет связи с сервером</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="46" />
+        <source>Memory %1%</source>
+        <translation>Память %1%</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="48" />
+        <source>CPU %1%</source>
+        <translation>CPU %1%</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="49" />
+        <source>High load %1</source>
+        <translation>Высокая нагрузка %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="50" />
+        <source>Disk %1 is %2% full</source>
+        <translation>Диск %1 заполнен на %2%</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="56" />
+        <source>d </source>
+        <translation>д </translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="56" />
+        <source>h </source>
+        <translation>ч </translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="56" />
+        <source>m</source>
+        <translation>м</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="121" />
+        <source>up</source>
+        <translation>аптайм</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="122" />
+        <source>load</source>
+        <translation>нагрузка</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="124" />
+        <source>RAM</source>
+        <translation>ОЗУ</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="143" />
+        <source>Loading…</source>
+        <translation>Загрузка…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DesktopWidgets.qml" line="156" />
+        <source>All is well</source>
+        <translation>Всё в порядке</translation>
+    </message>
+</context>
+<context>
+    <name>DiffWindow</name>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="86" />
+        <location filename="../qml/tools/DiffWindow.qml" line="107" />
+        <source>Enter an absolute path</source>
+        <translation>Введите абсолютный путь</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="90" />
+        <source>Choose a server to compare with</source>
+        <translation>Выберите сервер для сравнения</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="96" />
+        <source>Choose a saved version</source>
+        <translation>Выберите сохранённую версию</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="99" />
+        <source>saved version</source>
+        <translation>сохранённая версия</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="108" />
+        <source>Version saved</source>
+        <translation>Версия сохранена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="112" />
+        <source>Delete saved version</source>
+        <translation>Удалить сохранённую версию</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="112" />
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="123" />
+        <source>File on this server</source>
+        <translation>Файл на этом сервере</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="124" />
+        <source>Save version</source>
+        <translation>Сохранить версию</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="128" />
+        <source>Other server</source>
+        <translation>Другой сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="128" />
+        <source>Saved version</source>
+        <translation>Сохранённая версия</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="130" />
+        <source>path on the other server (empty = same)</source>
+        <translation>путь на другом сервере (пусто — тот же)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="132" />
+        <source>Delete…</source>
+        <translation>Удалить…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="133" />
+        <source>Compare</source>
+        <translation>Сравнить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="137" />
+        <source>identical</source>
+        <translation>одинаковы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="137" />
+        <source>%1 differences</source>
+        <translation>Различий: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="138" />
+        <source>Only differences</source>
+        <translation>Только различия</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="144" />
+        <source>Choose a file and a source to compare with</source>
+        <translation>Выберите файл и источник для сравнения</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DiffWindow.qml" line="145" />
+        <source>Files are identical</source>
+        <translation>Файлы одинаковы</translation>
     </message>
 </context>
 <context>
@@ -882,6 +1675,184 @@
         <location filename="../qml/DisksWindow.qml" line="289" />
         <source>%1 files · double-click copies the path</source>
         <translation>Файлов: %1 · двойной щелчок копирует путь</translation>
+    </message>
+</context>
+<context>
+    <name>DockerWindow</name>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61" />
+        <source>Start container</source>
+        <translation>Запустить контейнер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61" />
+        <source>Stop container</source>
+        <translation>Остановить контейнер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61" />
+        <source>Restart container</source>
+        <translation>Перезапустить контейнер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61" />
+        <source>Pause container</source>
+        <translation>Приостановить контейнер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="61" />
+        <source>Remove container</source>
+        <translation>Удалить контейнер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="62" />
+        <source>The container will be removed. Data in anonymous volumes may be lost.</source>
+        <translation>Контейнер будет удалён. Данные в анонимных томах могут быть потеряны.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="91" />
+        <source>Containers</source>
+        <translation>Контейнеры</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="91" />
+        <source>Images</source>
+        <translation>Образы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="92" />
+        <source>Volumes</source>
+        <translation>Тома</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="92" />
+        <source>Networks</source>
+        <translation>Сети</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="97" />
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="102" />
+        <source>Docker is not available</source>
+        <translation>Docker недоступен</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="103" />
+        <source>Retry</source>
+        <translation>Повторить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="117" />
+        <source>Start</source>
+        <translation>Запустить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="118" />
+        <source>Stop</source>
+        <translation>Остановить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="119" />
+        <source>Restart</source>
+        <translation>Перезапуск</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="120" />
+        <source>Pause</source>
+        <translation>Пауза</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="121" />
+        <location filename="../qml/tools/DockerWindow.qml" line="148" />
+        <source>Logs</source>
+        <translation>Журналы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="122" />
+        <location filename="../qml/tools/DockerWindow.qml" line="148" />
+        <source>Inspect</source>
+        <translation>Инспекция</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="123" />
+        <source>Remove…</source>
+        <translation>Удалить…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="126" />
+        <location filename="../qml/tools/DockerWindow.qml" line="170" />
+        <location filename="../qml/tools/DockerWindow.qml" line="178" />
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="127" />
+        <source>Image</source>
+        <translation>Образ</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="128" />
+        <source>State</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="129" />
+        <source>Status</source>
+        <translation>Статус</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="130" />
+        <source>Ports</source>
+        <translation>Порты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="150" />
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="151" />
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="160" />
+        <source>Repository</source>
+        <translation>Репозиторий</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="161" />
+        <source>Tag</source>
+        <translation>Тег</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="163" />
+        <source>Size</source>
+        <translation>Размер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="164" />
+        <source>Created</source>
+        <translation>Создан</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="171" />
+        <location filename="../qml/tools/DockerWindow.qml" line="179" />
+        <source>Driver</source>
+        <translation>Драйвер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="172" />
+        <source>Mountpoint</source>
+        <translation>Точка монтирования</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/DockerWindow.qml" line="180" />
+        <source>Scope</source>
+        <translation>Область</translation>
     </message>
 </context>
 <context>
@@ -2660,6 +3631,82 @@
     </message>
 </context>
 <context>
+    <name>MultiRunner</name>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="33" />
+        <source>Select at least one server</source>
+        <translation>Выберите хотя бы один сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="39" />
+        <source>Run command</source>
+        <translation>Выполнить команду</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="40" />
+        <source>The command runs on the server as the SSH user. Output is shown here.</source>
+        <translation>Команда выполняется на сервере от имени SSH-пользователя. Вывод показан здесь.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="40" />
+        <source>The command runs on %1 servers at once (up to 8 in parallel).</source>
+        <translation>Команда выполнится сразу на %1 серверах (до 8 параллельно).</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiRunner.qml" line="41" />
+        <source>Run</source>
+        <translation>Запустить</translation>
+    </message>
+</context>
+<context>
+    <name>MultiWindow</name>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="9" />
+        <source>Kernel</source>
+        <translation>Ядро</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="9" />
+        <source>Uptime</source>
+        <translation>Аптайм</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="9" />
+        <source>Disk /</source>
+        <translation>Диск /</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="10" />
+        <source>Memory</source>
+        <translation>Память</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="10" />
+        <source>OS</source>
+        <translation>ОС</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="25" />
+        <source>Command to run on the selected servers</source>
+        <translation>Команда для выбранных серверов</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="27" />
+        <source>Confirmation: type “выполнить”.</source>
+        <translation>Подтверждение: введите «выполнить».</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="28" />
+        <source>Run</source>
+        <translation>Запустить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/MultiWindow.qml" line="30" />
+        <source>Run on %1 server(s)</source>
+        <translation>Запуск на серверах: %1</translation>
+    </message>
+</context>
+<context>
     <name>NameDialog</name>
     <message>
         <location filename="../qml/NameDialog.qml" line="7" />
@@ -2680,6 +3727,552 @@
         <location filename="../qml/NameDialog.qml" line="36" />
         <source>Cancel</source>
         <translation>Отмена</translation>
+    </message>
+</context>
+<context>
+    <name>NetApplyFlow</name>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="24" />
+        <source>Change firewall rules</source>
+        <translation>Изменить правила брандмауэра</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="25" />
+        <source>The change will be applied with an automatic rollback: if you do not confirm it within %1 s (for example, the connection drops), the server restores the previous rules.</source>
+        <translation>Изменение применяется с автоматическим откатом: если вы не подтвердите его за %1 с (например, пропадёт связь), сервер вернёт прежние правила.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="26" />
+        <source>Apply</source>
+        <translation>Применить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="61" />
+        <source>Confirm the changes</source>
+        <translation>Подтвердите изменения</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="68" />
+        <source>Confirm the changes within %1 s</source>
+        <translation>Подтвердите изменения в течение %1 с</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="70" />
+        <source>If the connection is lost or you do nothing, the changes will be rolled back automatically.</source>
+        <translation>Если связь пропадёт или вы ничего не сделаете, изменения откатятся автоматически.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="79" />
+        <source>Roll back now</source>
+        <translation>Откатить сейчас</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetApplyFlow.qml" line="80" />
+        <source>Confirm</source>
+        <translation>Подтвердить</translation>
+    </message>
+</context>
+<context>
+    <name>NettoolsWindow</name>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="22" />
+        <source>Port check</source>
+        <translation>Проверка порта</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="29" />
+        <source>This field is required</source>
+        <translation>Обязательное поле</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="36" />
+        <source>Port must be 1–65535</source>
+        <translation>Порт должен быть от 1 до 65535</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="41" />
+        <source>Running…</source>
+        <translation>Выполняется…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="50" />
+        <source>Cancelled</source>
+        <translation>Отменено</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="63" />
+        <source>Timed out on the server (60 s)</source>
+        <translation>Превышено время на сервере (60 с)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="64" />
+        <source>Done</source>
+        <translation>Готово</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="65" />
+        <source>Finished with exit code %1</source>
+        <translation>Завершено с кодом %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="65" />
+        <source>output truncated</source>
+        <translation>вывод обрезан</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="70" />
+        <source>Diagnostics failed</source>
+        <translation>Диагностика не удалась</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="84" />
+        <source>URL</source>
+        <translation>URL</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="84" />
+        <source>Host or IP</source>
+        <translation>Хост или IP</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="89" />
+        <source>Count</source>
+        <translation>Число</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="90" />
+        <source>Record</source>
+        <translation>Запись</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="92" />
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="93" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="93" />
+        <source>Run</source>
+        <translation>Запустить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="97" />
+        <source>The command runs on the server %1; the output appears here.</source>
+        <translation>Команда выполняется на сервере %1; вывод появится здесь.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NettoolsWindow.qml" line="102" />
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkWindow</name>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="91" />
+        <source>Delete rule #%1: %2 %3</source>
+        <translation>Удалить правило №%1: %2 %3</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="91" />
+        <source>Delete firewall rule</source>
+        <translation>Удалить правило брандмауэра</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="100" />
+        <source>Port must be 1–65535</source>
+        <translation>Порт должен быть от 1 до 65535</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="104" />
+        <source>%1 incoming %2/%3 from %4</source>
+        <translation>%1: входящие %2/%3 от %4</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="117" />
+        <source>Changes were not confirmed in time and have been rolled back.</source>
+        <translation>Изменения не подтверждены вовремя и откатаны.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="124" />
+        <source>Interfaces</source>
+        <translation>Интерфейсы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="124" />
+        <source>Routes</source>
+        <translation>Маршруты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="125" />
+        <source>Ports</source>
+        <translation>Порты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="125" />
+        <source>Firewall</source>
+        <translation>Брандмауэр</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="130" />
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="142" />
+        <source>Name</source>
+        <translation>Имя</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="143" />
+        <location filename="../qml/tools/NetworkWindow.qml" line="206" />
+        <source>State</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="155" />
+        <source>Family</source>
+        <translation>Семейство</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="156" />
+        <location filename="../qml/tools/NetworkWindow.qml" line="248" />
+        <source>Destination</source>
+        <translation>Назначение</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="157" />
+        <source>Via</source>
+        <translation>Через</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="158" />
+        <source>Device</source>
+        <translation>Устройство</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="159" />
+        <source>Metric</source>
+        <translation>Метрика</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="160" />
+        <source>Table</source>
+        <translation>Таблица</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="169" />
+        <source>Name servers</source>
+        <translation>DNS-серверы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="169" />
+        <source>Search domains</source>
+        <translation>Домены поиска</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="169" />
+        <source>Options</source>
+        <translation>Параметры</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="192" />
+        <source>Filter by port, address or process</source>
+        <translation>Фильтр по порту, адресу или процессу</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="193" />
+        <source>Include processes of other users (root)</source>
+        <translation>Показывать процессы других пользователей (root)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="203" />
+        <source>Close port…</source>
+        <translation>Закрыть порт…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="205" />
+        <source>Proto</source>
+        <translation>Прот.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="207" />
+        <source>Local address</source>
+        <translation>Локальный адрес</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="209" />
+        <source>Process</source>
+        <translation>Процесс</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="226" />
+        <source>enabled</source>
+        <translation>включён</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="226" />
+        <source>disabled</source>
+        <translation>выключен</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="228" />
+        <source>+ Rule</source>
+        <translation>+ Правило</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="233" />
+        <source>No firewall found</source>
+        <translation>Брандмауэр не найден</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="233" />
+        <source>Neither ufw, nftables nor iptables is available on this server.</source>
+        <translation>На этом сервере нет ни ufw, ни nftables, ни iptables.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="241" />
+        <source>Delete…</source>
+        <translation>Удалить…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="242" />
+        <source>No rules</source>
+        <translation>Нет правил</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="245" />
+        <source>Action</source>
+        <translation>Действие</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="246" />
+        <source>Chain</source>
+        <translation>Цепочка</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="247" />
+        <source>Source</source>
+        <translation>Источник</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="249" />
+        <source>Details</source>
+        <translation>Подробности</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="259" />
+        <source>New firewall rule</source>
+        <translation>Новое правило брандмауэра</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="264" />
+        <source>Incoming rule for backend “%1”. It is applied with an automatic rollback.</source>
+        <translation>Входящее правило для «%1». Применяется с автоматическим откатом.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="265" />
+        <source>allow</source>
+        <translation>разрешить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="265" />
+        <source>deny</source>
+        <translation>запретить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="265" />
+        <source>reject</source>
+        <translation>отклонить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="267" />
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="268" />
+        <source>Source (IPv4 or CIDR, empty = any)</source>
+        <translation>Источник (IPv4 или CIDR, пусто — любой)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="272" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NetworkWindow.qml" line="273" />
+        <source>Apply…</source>
+        <translation>Применить…</translation>
+    </message>
+</context>
+<context>
+    <name>NotesWindow</name>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="36" />
+        <location filename="../qml/tools/NotesWindow.qml" line="52" />
+        <source>Title is required</source>
+        <translation>Нужно название</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="42" />
+        <source>Delete note</source>
+        <translation>Удалить заметку</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="42" />
+        <location filename="../qml/tools/NotesWindow.qml" line="59" />
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="53" />
+        <source>Value is required</source>
+        <translation>Нужно значение</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="59" />
+        <source>Delete secret</source>
+        <translation>Удалить секрет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="62" />
+        <source>Show secret</source>
+        <translation>Показать секрет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="62" />
+        <source>The value is shown for 10 seconds. The access is written to the action log.</source>
+        <translation>Значение показывается 10 секунд. Обращение записывается в журнал действий.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="62" />
+        <source>Show</source>
+        <translation>Показать</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="82" />
+        <source>Notes</source>
+        <translation>Заметки</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="82" />
+        <source>Secrets</source>
+        <translation>Секреты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="84" />
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="93" />
+        <source>+ New note</source>
+        <translation>+ Новая заметка</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="112" />
+        <location filename="../qml/tools/NotesWindow.qml" line="143" />
+        <location filename="../qml/tools/NotesWindow.qml" line="158" />
+        <source>Title</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="114" />
+        <source>Edit</source>
+        <translation>Изменить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="114" />
+        <source>Preview</source>
+        <translation>Предпросмотр</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="116" />
+        <location filename="../qml/tools/NotesWindow.qml" line="140" />
+        <source>Delete…</source>
+        <translation>Удалить…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="117" />
+        <location filename="../qml/tools/NotesWindow.qml" line="161" />
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="119" />
+        <source>Markdown</source>
+        <translation>Markdown</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="134" />
+        <source>+ Secret</source>
+        <translation>+ Секрет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="139" />
+        <source>Show…</source>
+        <translation>Показать…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="139" />
+        <source>Change</source>
+        <translation>Изменить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="141" />
+        <source>No secrets saved for this server</source>
+        <translation>Для этого сервера нет сохранённых секретов</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="144" />
+        <location filename="../qml/tools/NotesWindow.qml" line="159" />
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="145" />
+        <source>Updated</source>
+        <translation>Обновлено</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="154" />
+        <source>New secret</source>
+        <translation>Новый секрет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="154" />
+        <source>Change secret</source>
+        <translation>Изменить секрет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="159" />
+        <source>New value (empty = keep)</source>
+        <translation>Новое значение (пусто — оставить)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="161" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="174" />
+        <source>Hides in %1 s. The clipboard is cleared after hiding.</source>
+        <translation>Скроется через %1 с. После скрытия буфер обмена очищается.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="175" />
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/NotesWindow.qml" line="175" />
+        <source>Hide</source>
+        <translation>Скрыть</translation>
     </message>
 </context>
 <context>
@@ -3044,6 +4637,80 @@
     </message>
 </context>
 <context>
+    <name>RunResults</name>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="16" />
+        <source>Results</source>
+        <translation>Результаты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="17" />
+        <source>%1 failed</source>
+        <translation>с ошибкой: %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="19" />
+        <source>By server</source>
+        <translation>По серверам</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="19" />
+        <source>Compare</source>
+        <translation>Сравнить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="27" />
+        <source>No runs yet</source>
+        <translation>Запусков пока не было</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="29" />
+        <source>Server</source>
+        <translation>Сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="30" />
+        <source>Result</source>
+        <translation>Результат</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="31" />
+        <source>running</source>
+        <translation>работает</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="31" />
+        <source>error</source>
+        <translation>ошибка</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="31" />
+        <location filename="../qml/tools/RunResults.qml" line="51" />
+        <source>exit %1</source>
+        <translation>код %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="33" />
+        <source>Time</source>
+        <translation>Время</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="34" />
+        <source>Output</source>
+        <translation>Вывод</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="51" />
+        <source>%1 of %2</source>
+        <translation>%1 из %2</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/RunResults.qml" line="55" />
+        <source>(empty output)</source>
+        <translation>(пустой вывод)</translation>
+    </message>
+</context>
+<context>
     <name>SBanner</name>
     <message>
         <location filename="../qml/SBanner.qml" line="43" />
@@ -3112,6 +4779,380 @@
         <location filename="../qml/SWindow.qml" line="186" />
         <source>Close</source>
         <translation>Закрыть</translation>
+    </message>
+</context>
+<context>
+    <name>SecurityWindow</name>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="45" />
+        <source>Unban IP</source>
+        <translation>Разбанить IP</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="45" />
+        <source>Unban</source>
+        <translation>Разбанить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="50" />
+        <source>No fail2ban jail is available</source>
+        <translation>Нет доступных jail fail2ban</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="51" />
+        <location filename="../qml/tools/SecurityWindow.qml" line="236" />
+        <source>Ban IP</source>
+        <translation>Забанить IP</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="51" />
+        <source>Ban</source>
+        <translation>Забанить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="55" />
+        <source>Delete SSH key</source>
+        <translation>Удалить SSH-ключ</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="55" />
+        <source>The key is removed from authorized_keys; the owner can no longer sign in with it.</source>
+        <translation>Ключ удаляется из authorized_keys; владелец больше не сможет войти по нему.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="56" />
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="61" />
+        <source>User and key are required</source>
+        <translation>Нужны пользователь и ключ</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="64" />
+        <location filename="../qml/tools/SecurityWindow.qml" line="245" />
+        <source>Add SSH key</source>
+        <translation>Добавить SSH-ключ</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="64" />
+        <source>Add</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="68" />
+        <source>No firewall (ufw, nftables, iptables) is available</source>
+        <translation>Брандмауэр (ufw, nftables, iptables) недоступен</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="70" />
+        <source>deny incoming %1/%2 (%3)</source>
+        <translation>запретить входящие %1/%2 (%3)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="70" />
+        <source>Close port %1</source>
+        <translation>Закрыть порт %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="75" />
+        <source>Install and enable fail2ban with an sshd jail</source>
+        <translation>Установите и включите fail2ban с jail для sshd</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="76" />
+        <source>Install pending security updates</source>
+        <translation>Установите ожидающие обновления безопасности</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="77" />
+        <source>Replace weak SSH keys (DSA or RSA shorter than 2048 bits)</source>
+        <translation>Замените слабые SSH-ключи (DSA или RSA короче 2048 бит)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="78" />
+        <source>Review database/Redis ports reachable from outside and close them in the firewall</source>
+        <translation>Проверьте порты БД и Redis, доступные снаружи, и закройте их в брандмауэре</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="81" />
+        <source>fail2ban jails</source>
+        <translation>Jail fail2ban</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="81" />
+        <source>Security updates pending</source>
+        <translation>Ожидают обновления безопасности</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="82" />
+        <source>Weak SSH keys</source>
+        <translation>Слабые SSH-ключи</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="82" />
+        <source>High-risk open ports</source>
+        <translation>Опасные открытые порты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="88" />
+        <source>Changes were not confirmed in time and have been rolled back.</source>
+        <translation>Изменения не подтверждены вовремя и откатаны.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="93" />
+        <source>Overview</source>
+        <translation>Обзор</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="93" />
+        <source>Logins</source>
+        <translation>Входы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="94" />
+        <source>Keys</source>
+        <translation>Ключи</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="94" />
+        <source>Ports</source>
+        <translation>Порты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="94" />
+        <source>Updates</source>
+        <translation>Обновления</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="99" />
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="121" />
+        <source>Security score</source>
+        <translation>Оценка безопасности</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="122" />
+        <source>A heuristic estimate, not a compliance check.</source>
+        <translation>Эвристическая оценка, а не проверка соответствия стандартам.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="125" />
+        <source>Checks</source>
+        <translation>Проверки</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="135" />
+        <source>Recommendations</source>
+        <translation>Рекомендации</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="145" />
+        <source>No recommendations</source>
+        <translation>Рекомендаций нет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="155" />
+        <source>Ban IP…</source>
+        <translation>Забанить IP…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="161" />
+        <source>Unban…</source>
+        <translation>Разбан…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="162" />
+        <source>No banned addresses</source>
+        <translation>Нет забаненных адресов</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="162" />
+        <source>fail2ban is not available or has no jails</source>
+        <translation>fail2ban недоступен или в нём нет jail</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="163" />
+        <source>Banned IP</source>
+        <translation>Забаненный IP</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="170" />
+        <source>Failed sign-ins in the last 24 hours</source>
+        <translation>Неудачные входы за последние 24 часа</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="175" />
+        <source>Ban…</source>
+        <translation>Бан…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="176" />
+        <source>No failed sign-ins</source>
+        <translation>Неудачных входов нет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="177" />
+        <source>Message</source>
+        <translation>Сообщение</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="180" />
+        <source>Active sessions</source>
+        <translation>Активные сессии</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="184" />
+        <source>No active sessions</source>
+        <translation>Нет активных сессий</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="185" />
+        <location filename="../qml/tools/SecurityWindow.qml" line="201" />
+        <location filename="../qml/tools/SecurityWindow.qml" line="247" />
+        <source>User</source>
+        <translation>Пользователь</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="185" />
+        <source>Terminal</source>
+        <translation>Терминал</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="186" />
+        <source>Since</source>
+        <translation>С</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="186" />
+        <source>From</source>
+        <translation>Откуда</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="193" />
+        <source>Add key…</source>
+        <translation>Добавить ключ…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="198" />
+        <source>Delete…</source>
+        <translation>Удалить…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="199" />
+        <source>No keys found</source>
+        <translation>Ключи не найдены</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="202" />
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="203" />
+        <source>Bits</source>
+        <translation>Бит</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="204" />
+        <source>Strength</source>
+        <translation>Стойкость</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="204" />
+        <source>weak</source>
+        <translation>слабый</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="204" />
+        <source>ok</source>
+        <translation>ок</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="205" />
+        <source>Fingerprint</source>
+        <translation>Отпечаток</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="206" />
+        <source>Comment</source>
+        <translation>Комментарий</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="215" />
+        <source>Close…</source>
+        <translation>Закрыть…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="217" />
+        <source>Proto</source>
+        <translation>Прот.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="218" />
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="219" />
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="220" />
+        <source>Process</source>
+        <translation>Процесс</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="221" />
+        <source>Risk</source>
+        <translation>Риск</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="221" />
+        <source>high</source>
+        <translation>высокий</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="221" />
+        <source>review</source>
+        <translation>проверить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="229" />
+        <source>No pending security updates</source>
+        <translation>Нет ожидающих обновлений безопасности</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="230" />
+        <source>Package</source>
+        <translation>Пакет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="230" />
+        <source>Details</source>
+        <translation>Подробности</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="240" />
+        <source>IP address</source>
+        <translation>IP-адрес</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="241" />
+        <location filename="../qml/tools/SecurityWindow.qml" line="250" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SecurityWindow.qml" line="241" />
+        <location filename="../qml/tools/SecurityWindow.qml" line="250" />
+        <source>Next…</source>
+        <translation>Далее…</translation>
     </message>
 </context>
 <context>
@@ -3455,6 +5496,29 @@
     </message>
 </context>
 <context>
+    <name>ServerPicker</name>
+    <message>
+        <location filename="../qml/tools/ServerPicker.qml" line="33" />
+        <source>Servers</source>
+        <translation>Серверы</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ServerPicker.qml" line="36" />
+        <source>this</source>
+        <translation>этот</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ServerPicker.qml" line="37" />
+        <source>all</source>
+        <translation>все</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ServerPicker.qml" line="38" />
+        <source>none</source>
+        <translation>ничего</translation>
+    </message>
+</context>
+<context>
     <name>ServersDock</name>
     <message>
         <location filename="../qml/ServersDock.qml" line="19" />
@@ -3723,6 +5787,109 @@
         <location filename="../qml/Sidebar.qml" line="109" />
         <source>Import from ~/.ssh/config</source>
         <translation>Импорт из ~/.ssh/config</translation>
+    </message>
+</context>
+<context>
+    <name>SnippetsWindow</name>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="33" />
+        <source>Title and command are required</source>
+        <translation>Нужны название и команда</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="39" />
+        <source>Delete snippet</source>
+        <translation>Удалить сниппет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="39" />
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="50" />
+        <source>Library</source>
+        <translation>Библиотека</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="50" />
+        <source>History</source>
+        <translation>История</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="61" />
+        <source>Search</source>
+        <translation>Поиск</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="62" />
+        <source>New snippet</source>
+        <translation>Новый сниппет</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="84" />
+        <source>Title</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="85" />
+        <source>Tags (comma separated)</source>
+        <translation>Теги (через запятую)</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="87" />
+        <source>Shell command</source>
+        <translation>Команда shell</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="90" />
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="91" />
+        <source>Delete…</source>
+        <translation>Удалить…</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="93" />
+        <source>Run on selected servers</source>
+        <translation>Запустить на выбранных</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="96" />
+        <source>Run snippet “%1”</source>
+        <translation>Запуск сниппета «%1»</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="97" />
+        <source>Run command</source>
+        <translation>Выполнить команду</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="109" />
+        <source>No runs yet</source>
+        <translation>Запусков пока не было</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="111" />
+        <source>Time</source>
+        <translation>Время</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="112" />
+        <source>Server</source>
+        <translation>Сервер</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="113" />
+        <source>Outcome</source>
+        <translation>Итог</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/SnippetsWindow.qml" line="114" />
+        <source>Run</source>
+        <translation>Запустить</translation>
     </message>
 </context>
 <context>
@@ -4393,6 +6560,39 @@
     </message>
 </context>
 <context>
+    <name>ToolPane</name>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="53" />
+        <source>Administrator password</source>
+        <translation>Пароль администратора</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="66" />
+        <source>This action needs root rights. Enter the sudo password of the SSH user; it is kept in memory only.</source>
+        <translation>Для действия нужны права root. Введите пароль sudo SSH-пользователя; он хранится только в памяти.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="67" />
+        <source>Password</source>
+        <translation>Пароль</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="71" />
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="72" />
+        <source>Continue</source>
+        <translation>Продолжить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/ToolPane.qml" line="89" />
+        <source>Read-only mode: changes are blocked</source>
+        <translation>Режим «только чтение»: изменения заблокированы</translation>
+    </message>
+</context>
+<context>
     <name>TransferConflictDialog</name>
     <message>
         <location filename="../qml/TransferConflictDialog.qml" line="13" />
@@ -4645,6 +6845,167 @@
         <location filename="../qml/UtilPane.qml" line="167" />
         <source>Confirm</source>
         <translation>Подтвердить</translation>
+    </message>
+</context>
+<context>
+    <name>WebWindow</name>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="28" />
+        <source>No web server (nginx, Apache) was found on this server.</source>
+        <translation>На сервере не найден веб-сервер (nginx, Apache).</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="46" />
+        <source>Reload %1</source>
+        <translation>Перезагрузить %1</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="46" />
+        <source>The configuration is re-checked on the server; the web server is reloaded only if the check passes.</source>
+        <translation>Конфигурация перепроверяется на сервере; веб-сервер перезагружается, только если проверка пройдена.</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="47" />
+        <location filename="../qml/tools/WebWindow.qml" line="72" />
+        <source>Reload</source>
+        <translation>Перечитать</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="58" />
+        <source>Test certificate renewal</source>
+        <translation>Проверка продления сертификатов</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="58" />
+        <source>Renew certificates</source>
+        <translation>Продлить сертификаты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="59" />
+        <source>Run test</source>
+        <translation>Запустить проверку</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="59" />
+        <location filename="../qml/tools/WebWindow.qml" line="75" />
+        <source>Renew</source>
+        <translation>Продлить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="68" />
+        <source>Sites</source>
+        <translation>Сайты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="68" />
+        <source>Certificates</source>
+        <translation>Сертификаты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="71" />
+        <source>Check config</source>
+        <translation>Проверить конфиг</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="74" />
+        <source>Test renewal</source>
+        <translation>Проверить продление</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="76" />
+        <source>Refresh</source>
+        <translation>Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="81" />
+        <source>Web servers are not available</source>
+        <translation>Веб-серверы недоступны</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="97" />
+        <source>Configuration is valid</source>
+        <translation>Конфигурация корректна</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="97" />
+        <source>Configuration has errors — reload is blocked</source>
+        <translation>В конфигурации есть ошибки — перезагрузка запрещена</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="108" />
+        <source>Config</source>
+        <translation>Конфиг</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="109" />
+        <source>No sites found</source>
+        <translation>Сайты не найдены</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="111" />
+        <location filename="../qml/tools/WebWindow.qml" line="125" />
+        <source>Domains</source>
+        <translation>Домены</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="112" />
+        <source>Root</source>
+        <translation>Корень</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="113" />
+        <source>Listen</source>
+        <translation>Порты</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="115" />
+        <source>File</source>
+        <translation>Файл</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="122" />
+        <source>No certificates found</source>
+        <translation>Сертификаты не найдены</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="124" />
+        <source>Certificate</source>
+        <translation>Сертификат</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="126" />
+        <source>Expires</source>
+        <translation>Истекает</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="127" />
+        <source>Left</source>
+        <translation>Осталось</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="127" />
+        <source>%1 d</source>
+        <translation>%1 д</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="129" />
+        <source>Path</source>
+        <translation>Путь</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="138" />
+        <source>Site configuration</source>
+        <translation>Конфигурация сайта</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="141" />
+        <source>Copy</source>
+        <translation>Копировать</translation>
+    </message>
+    <message>
+        <location filename="../qml/tools/WebWindow.qml" line="141" />
+        <source>Close</source>
+        <translation>Закрыть</translation>
     </message>
 </context>
 </TS>

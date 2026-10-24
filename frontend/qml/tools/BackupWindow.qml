@@ -91,7 +91,7 @@ ToolPane {
             call("backup.restore", p, () => { note = qsTr("Dry run finished: nothing was written") }, e => { note = ""; errorText = e })
         } else {
             dangerous({ title: qsTr("Restore from backup"), message: qsTr("Files in the target directory can be overwritten. Make sure the target is correct."),
-                        items: [jobSel.title + ": " + p.snapshot + " → " + t], confirmText: qsTr("Restore"), needName: true }, "backup.restore", p,
+                        items: [jobSel.title + ": " + p.snapshot + " → " + t], confirmText: qsTr("Restore"), needName: true, hostname: true }, "backup.restore", p,
                       () => { note = qsTr("Restore finished") })
         }
     }

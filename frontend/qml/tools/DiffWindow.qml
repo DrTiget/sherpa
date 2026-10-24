@@ -24,6 +24,36 @@ ToolPane {
     readonly property var verOpts: versions.map(v => ({ value: v.id, text: root.srvName(v.connection_id) + ": " + v.path + " · " + String(v.id).slice(0, 6) }))
     function srvName(id) { const s = Backend.serverById(id); return s && s.name ? s.name : id }
 
+    // Построчное выравнивание двух блоков: ctx — общие строки, chg — замена, del/add — только слева/справа
+    function align(a, b) {
+        const n = a.length, m = b.length, ops = []
+        if (n === 0 || m === 0 || n * m > 4000000) {
+            const k = Math.max(n, m)
+            for (let i = 0; i < k; ++i)
+                ops.push({ kind: i < n && i < m ? "chg" : (i < n ? "del" : "add"), left: i < n ? a[i] : "", right: i < m ? b[i] : "" })
+            return ops
+        }
+        const w = m + 1
+        const t = new Int32Array((n + 1) * w)
+        for (let i = n - 1; i >= 0; --i)
+            for (let j = m - 1; j >= 0; --j)
+                t[i * w + j] = a[i] === b[j] ? t[(i + 1) * w + j + 1] + 1 : Math.max(t[(i + 1) * w + j], t[i * w + j + 1])
+        let i = 0, j = 0
+        const dels = [], adds = []
+        const flush = () => {
+            const k = Math.max(dels.length, adds.length)
+            for (let x = 0; x < k; ++x)
+                ops.push({ kind: x < dels.length && x < adds.length ? "chg" : (x < dels.length ? "del" : "add"), left: x < dels.length ? dels[x] : "", right: x < adds.length ? adds[x] : "" })
+            dels.length = 0; adds.length = 0
+        }
+        while (i < n || j < m) {
+            if (i < n && j < m && a[i] === b[j]) { flush(); ops.push({ kind: "ctx", left: a[i], right: b[j] }); ++i; ++j }
+            else if (j < m && (i >= n || t[i * w + j + 1] >= t[(i + 1) * w + j])) adds.push(b[j++])
+            else dels.push(a[i++])
+        }
+        flush()
+        return ops
+    }
     // unified (один блок) → строки левой и правой колонок
     function parseUnified(u) {
         const out = []
@@ -35,20 +65,16 @@ ToolPane {
         }
         // убрать пустой хвост после последнего \n
         if (out.length && out[out.length - 1].kind === "ctx" && out[out.length - 1].left === "") out.pop()
-        // соседние del+add — в одну строку
+        // Ядро заменяет весь отличающийся участок одним блоком «−…+…»: уточняем его построчным LCS
         const merged = []
         for (let i = 0; i < out.length; ++i) {
-            const a = out[i]
-            if (a.kind === "del") {
-                let j = i
-                const dels = []
-                while (j < out.length && out[j].kind === "del") dels.push(out[j++])
-                const adds = []
-                while (j < out.length && out[j].kind === "add") adds.push(out[j++])
-                const n = Math.max(dels.length, adds.length)
-                for (let k = 0; k < n; ++k) merged.push({ kind: dels[k] && adds[k] ? "chg" : (dels[k] ? "del" : "add"), left: dels[k] ? dels[k].left : "", right: adds[k] ? adds[k].right : "" })
-                i = j - 1
-            } else merged.push(a)
+            if (out[i].kind !== "del" && out[i].kind !== "add") { merged.push(out[i]); continue }
+            const dels = [], adds = []
+            let j = i
+            while (j < out.length && out[j].kind === "del") dels.push(out[j++].left)
+            while (j < out.length && out[j].kind === "add") adds.push(out[j++].right)
+            for (const r of align(dels, adds)) merged.push(r)
+            i = j - 1
         }
         return merged
     }

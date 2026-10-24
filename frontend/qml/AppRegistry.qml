@@ -42,13 +42,13 @@ QtObject {
 
         { id: "web", name: qsTr("Web servers"), glyph: "◎", cat: "dev", cap: "web", ready: true, source: "tools/WebWindow.qml", w: 900, h: 560, single: true },
 
-        { id: "security", name: qsTr("Security"), glyph: "⛨", cat: "system", cap: "security", ready: true, source: "tools/SecurityWindow.qml", w: 900, h: 580, single: true },
+        { id: "security", name: qsTr("Security"), glyph: "◉", cat: "system", cap: "security", ready: true, source: "tools/SecurityWindow.qml", w: 900, h: 580, single: true },
 
-        { id: "backup", name: qsTr("Backups"), glyph: "⎘", cat: "files", cap: "backup", ready: true, source: "tools/BackupWindow.qml", w: 980, h: 620, single: true },
+        { id: "backup", name: qsTr("Backups"), glyph: "⟲", cat: "files", cap: "backup", ready: true, source: "tools/BackupWindow.qml", w: 980, h: 620, single: true },
 
         { id: "snippets", name: qsTr("Snippets"), glyph: "{}", cat: "dev", cap: "snippet", ready: true, source: "tools/SnippetsWindow.qml", w: 980, h: 640, single: true },
 
-        { id: "multi", name: qsTr("Multi-server"), glyph: "⫴", cat: "dev", cap: "multi", ready: true, source: "tools/MultiWindow.qml", w: 980, h: 620, single: true },
+        { id: "multi", name: qsTr("Multi-server"), glyph: "∥", cat: "dev", cap: "multi", ready: true, source: "tools/MultiWindow.qml", w: 980, h: 620, single: true },
 
         { id: "diff", name: qsTr("Compare configs"), glyph: "≠", cat: "dev", cap: "diff", ready: true, source: "tools/DiffWindow.qml", w: 980, h: 600, single: false },
 

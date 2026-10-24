@@ -1,7 +1,9 @@
 #include "ToolUtil.h"
 
 #include <QClipboard>
+#include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QGuiApplication>
 #include <QStandardPaths>
 #include <QUrl>
@@ -34,6 +36,7 @@ bool ToolUtil::writeText(const QString &pathOrUrl, const QString &text)
 {
     const QUrl u(pathOrUrl);
     const QString path = u.isLocalFile() ? u.toLocalFile() : pathOrUrl;
+    QDir().mkpath(QFileInfo(path).absolutePath());
     QFile f(path);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
         return false;

@@ -2,5 +2,5 @@
 # (в тесте им служит локальный sshd в контейнере). Docker — через проброшенный сокет: -v /var/run/docker.sock:/var/run/docker.sock
 FROM sherpa-qt
 RUN apt-get update && apt-get install -y --no-install-recommends iproute2 iputils-ping dnsutils curl netcat-openbsd traceroute util-linux \
-      nginx-light openssl restic rsync redis-server redis-tools docker-cli sudo procps ca-certificates \
+      iptables nftables nginx-light openssl restic rsync redis-server redis-tools docker-cli sudo procps ca-certificates \
     && rm -rf /var/lib/apt/lists/*

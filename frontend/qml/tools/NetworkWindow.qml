@@ -35,7 +35,8 @@ ToolPane {
         else if (tab === "firewall") loadFirewall()
     }
     function loadFirewall() {
-        if (fwBackend === "" && backends.length) fwBackend = backends[0]
+        const bl = backends || []
+        if (fwBackend === "" && bl.length) fwBackend = bl[0]
         if (fwBackend === "") { loading = false; return }
         fwLoading = true
         req("net.firewall.list", { backend: fwBackend }, d => {

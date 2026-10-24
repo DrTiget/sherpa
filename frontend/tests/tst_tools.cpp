@@ -18,6 +18,8 @@
 
 Q_IMPORT_QML_PLUGIN(SherpaPlugin)
 
+#define WAIT(expr, ms) QTRY_VERIFY2_WITH_TIMEOUT((expr), #expr, ms)
+
 class TstTools : public QObject {
     Q_OBJECT
     CoreEnv env;
@@ -99,7 +101,6 @@ class TstTools : public QObject {
         p->start("sh", {"-c", cmd});
         daemons << p;
     }
-    template <typename F> void waitFor(F f, int ms = 15000) { QTRY_VERIFY_WITH_TIMEOUT(f(), ms); }
     QString err(QObject *t) { return t->property("errorText").toString(); }
 
 private slots:
@@ -167,22 +168,22 @@ private slots:
     {
         QObject *t = openTool("network");
         QVERIFY(t);
-        waitFor([&] { return ev(t, "ifaces.length").toInt() > 0; });
+        WAIT(ev(t, "ifaces.length").toInt() > 0, 15000);
         QVERIFY(evb(t, "ifaces.some(i => i.ifname === 'lo')"));
         shot("tools-net-01-interfaces");
         t->setProperty("tab", "routes");
-        waitFor([&] { return !t->property("loading").toBool(); });
+        WAIT(!t->property("loading").toBool(), 15000);
         shot("tools-net-02-routes");
         t->setProperty("tab", "dns");
-        waitFor([&] { return !t->property("loading").toBool(); });
+        WAIT(!t->property("loading").toBool(), 15000);
         QVERIFY(!ev(t, "dns.servers").isNull());
         shot("tools-net-03-dns");
         t->setProperty("tab", "ports");
-        waitFor([&] { return ev(t, "sockets.length").toInt() > 0; });
+        WAIT(ev(t, "sockets.length").toInt() > 0, 15000);
         QVERIFY(evb(t, "sockets.some(s => s.local.port === " + QString::number(sshd.port) + ")"));
         shot("tools-net-04-ports");
         t->setProperty("tab", "firewall");
-        waitFor([&] { return !t->property("loading").toBool(); });
+        WAIT(!t->property("loading").toBool(), 15000);
         shot("tools-net-05-firewall");
     }
     void networkRollbackDialog()
@@ -197,7 +198,7 @@ private slots:
         QTest::qWait(2200);
         QVERIFY(flow->property("remaining").toInt() < r0);
         // не подтвердили — по истечении срока (+запас) диалог закрывается, итог «expired»
-        waitFor([&] { return flow->property("result").toString() == "expired"; }, 20000);
+        WAIT(flow->property("result").toString() == "expired", 20000);
         QVERIFY(!flow->property("pending").toBool());
         closeTool("network");
     }
@@ -217,15 +218,15 @@ private slots:
         ev(t, "targetField.text = '127.0.0.1'");
         ev(t, "countField.text = '2'");
         QMetaObject::invokeMethod(t, "run");
-        waitFor([&] { return t->property("running").toBool(); }, 5000);
-        waitFor([&] { return !t->property("running").toBool(); }, 30000);
+        WAIT(t->property("running").toBool(), 5000);
+        WAIT(!t->property("running").toBool(), 30000);
         QVERIFY2(ev(t, "out.text").toString().contains("127.0.0.1"), qPrintable(ev(t, "out.text").toString()));
         QCOMPARE(t->property("exitCode").toInt(), 0);
         shot("tools-nettools-01-ping");
         t->setProperty("tool", "port");
         ev(t, "portField.text = '" + QString::number(sshd.port) + "'");
         QMetaObject::invokeMethod(t, "run");
-        waitFor([&] { return t->property("exitCode").toInt() == 0 && !t->property("running").toBool() && t->property("status").toString() != ""; }, 30000);
+        WAIT(t->property("exitCode").toInt() == 0 && !t->property("running").toBool() && t->property("status").toString() != "", 30000);
         t->setProperty("tool", "dig");
         closeTool("nettools");
     }
@@ -238,14 +239,14 @@ private slots:
         sh("docker rm -f sherpa-ui-test >/dev/null 2>&1; docker run -d --name sherpa-ui-test sherpa-qt sh -c 'while true; do echo hello-log; sleep 1; done'");
         QObject *t = openTool("docker");
         QVERIFY(t);
-        waitFor([&] { return evb(t, "containers.some(c => c.Names === 'sherpa-ui-test')"); }, 30000);
-        waitFor([&] { return ev(t, "Object.keys(stats).length").toInt() > 0; }, 20000);
+        WAIT(evb(t, "containers.some(c => c.Names === 'sherpa-ui-test')"), 30000);
+        WAIT(ev(t, "Object.keys(stats).length").toInt() > 0, 20000);
         shot("tools-docker-01-containers");
         QMetaObject::invokeMethod(t, "openLogs", Q_ARG(QVariant, ev(t, "containers.find(c => c.Names === 'sherpa-ui-test')")));
-        waitFor([&] { return ev(t, "panelText.text").toString().contains("hello-log"); }, 20000);
+        WAIT(ev(t, "panelText.text").toString().contains("hello-log"), 20000);
         shot("tools-docker-02-logs");
         QMetaObject::invokeMethod(t, "openInspect", Q_ARG(QVariant, ev(t, "containers.find(c => c.Names === 'sherpa-ui-test')")));
-        waitFor([&] { return ev(t, "panelText.text").toString().contains("NetworkSettings"); }, 20000);
+        WAIT(ev(t, "panelText.text").toString().contains("NetworkSettings"), 20000);
         QVERIFY(!ev(t, "panelText.text").toString().contains("Env"));
         shot("tools-docker-03-inspect");
         // остановка через подтверждение
@@ -254,12 +255,12 @@ private slots:
         QTRY_VERIFY_WITH_TIMEOUT(t->property("dangerDialog").value<QObject *>()->property("opened").toBool(), 5000);
         shot("tools-docker-04-confirm-stop");
         confirmDanger(t);
-        waitFor([&] { return evb(t, "containers.some(c => c.Names === 'sherpa-ui-test' && c.State === 'exited')"); }, 30000);
+        WAIT(evb(t, "containers.some(c => c.Names === 'sherpa-ui-test' && c.State === 'exited')"), 30000);
         QMetaObject::invokeMethod(t, "act", Q_ARG(QVariant, "rm"), Q_ARG(QVariant, ev(t, "containers.find(c => c.Names === 'sherpa-ui-test')")));
         confirmDanger(t);
-        waitFor([&] { return !evb(t, "containers.some(c => c.Names === 'sherpa-ui-test')"); }, 30000);
+        WAIT(!evb(t, "containers.some(c => c.Names === 'sherpa-ui-test')"), 30000);
         t->setProperty("tab", "images");
-        waitFor([&] { return ev(t, "images.length").toInt() > 0; });
+        WAIT(ev(t, "images.length").toInt() > 0, 15000);
         shot("tools-docker-05-images");
         closeTool("docker");
     }
@@ -275,19 +276,19 @@ private slots:
            " ssl_certificate /tmp/demo.crt;\\n ssl_certificate_key /tmp/demo.key;\\n}\\n' > /etc/nginx/conf.d/demo.conf && nginx");
         QObject *t = openTool("web");
         QVERIFY(t);
-        waitFor([&] { return ev(t, "sites.length").toInt() > 0; }, 30000);
+        WAIT(ev(t, "sites.length").toInt() > 0, 30000);
         QVERIFY(evb(t, "sites.some(s => s.names.indexOf('demo.example.com') >= 0)"));
         shot("tools-web-01-sites");
         QMetaObject::invokeMethod(t, "runTest");
-        waitFor([&] { return t->property("testRan").toBool(); });
+        WAIT(t->property("testRan").toBool(), 15000);
         QVERIFY(t->property("testValid").toBool());
         shot("tools-web-02-test-ok");
         QMetaObject::invokeMethod(t, "reload");
         confirmDanger(t);
-        waitFor([&] { return !t->property("testRan").toBool(); });
+        WAIT(!t->property("testRan").toBool(), 15000);
         QVERIFY2(err(t).isEmpty(), qPrintable(err(t)));
         t->setProperty("tab", "certs");
-        waitFor([&] { return evb(t, "certs.some(c => (c.path || '').indexOf('demo.crt') >= 0)"); }, 20000);
+        WAIT(evb(t, "certs.some(c => (c.path || '').indexOf('demo.crt') >= 0)"), 20000);
         shot("tools-web-03-certs");
         closeTool("web");
         sh("nginx -s stop >/dev/null 2>&1; true");
@@ -301,20 +302,20 @@ private slots:
         sh("redis-server --daemonize yes --port 6379 >/dev/null && sleep 1 && redis-cli set k1 v1 >/dev/null && redis-cli -n 2 set k2 v2 >/dev/null");
         QObject *t = openTool("databases");
         QVERIFY(t);
-        waitFor([&] { return t->property("engine").toString() == "redis"; }, 20000);
-        waitFor([&] { return ev(t, "dbs.length").toInt() > 0; }, 20000);
+        WAIT(t->property("engine").toString() == "redis", 20000);
+        WAIT(ev(t, "dbs.length").toInt() > 0, 20000);
         shot("tools-db-01-redis");
         t->setProperty("tab", "queries");
-        waitFor([&] { return ev(t, "queries.length").toInt() > 0; }, 20000);
+        WAIT(ev(t, "queries.length").toInt() > 0, 20000);
         shot("tools-db-02-clients");
         t->setProperty("tab", "dbs");
-        waitFor([&] { return ev(t, "dbs.length").toInt() > 0; });
+        WAIT(ev(t, "dbs.length").toInt() > 0, 15000);
         QMetaObject::invokeMethod(t, "openDump", Q_ARG(QVariant, ev(t, "dbs[0]")));
         QTest::qWait(300);
         shot("tools-db-03-dump-dialog");
         QMetaObject::invokeMethod(t, "doDump");
         confirmDanger(t);
-        waitFor([&] { return ev(t, "toast.text").toString().contains("/var/backups/"); }, 30000);
+        WAIT(ev(t, "toast.text").toString().contains("/var/backups/"), 30000);
         QVERIFY2(err(t).isEmpty(), qPrintable(err(t)));
         closeTool("databases");
         sh("redis-cli shutdown nosave >/dev/null 2>&1; true");
@@ -326,26 +327,26 @@ private slots:
         sh("mkdir -p /root/.ssh && chmod 700 /root/.ssh && rm -f /root/.ssh/authorized_keys; (nc -l -p 5432 >/dev/null 2>&1 &) ; true");
         QObject *t = openTool("security");
         QVERIFY(t);
-        waitFor([&] { return ev(t, "score.score").isValid() && !ev(t, "score.score").isNull(); }, 30000);
+        WAIT(ev(t, "score.score").isValid() && !ev(t, "score.score").isNull(), 30000);
         shot("tools-sec-01-overview");
         // добавить ключ (root → ввод имени сервера)
         const QString pub = sshd.readKey(sshd.clientKeyPath + ".pub").trimmed();
         ev(t, "dangerous({title: 'add', needName: true}, 'sec.keys.add', {connection_id: serverId, user: 'root', public_key: '" + pub + "'}, () => refresh())");
         confirmDanger(t, "web-01");
         t->setProperty("tab", "keys");
-        waitFor([&] { return ev(t, "keys.length").toInt() > 0; }, 20000);
+        WAIT(ev(t, "keys.length").toInt() > 0, 20000);
         shot("tools-sec-02-keys");
         QMetaObject::invokeMethod(t, "delKey", Q_ARG(QVariant, ev(t, "keys[0]")));
-        confirmDanger(t, "web-01");
-        waitFor([&] { return ev(t, "keys.length").toInt() == 0; }, 20000);
+        confirmDanger(t, QSysInfo::machineHostName()); // для root ядро сверяет hostname сервера
+        WAIT(ev(t, "keys.length").toInt() == 0, 20000);
         t->setProperty("tab", "ports");
-        waitFor([&] { return evb(t, "ports.some(p => p.port === 5432)"); }, 20000);
+        WAIT(evb(t, "ports.some(p => p.port === 5432)"), 20000);
         shot("tools-sec-03-ports");
         t->setProperty("tab", "logins");
-        waitFor([&] { return !t->property("loading").toBool(); });
+        WAIT(!t->property("loading").toBool(), 15000);
         shot("tools-sec-04-logins");
         t->setProperty("tab", "updates");
-        waitFor([&] { return !t->property("loading").toBool(); });
+        WAIT(!t->property("loading").toBool(), 15000);
         closeTool("security");
         sh("pkill -f 'nc -l -p 5432'; true");
     }
@@ -361,26 +362,26 @@ private slots:
         QObject *t = openTool("backup");
         QVERIFY(t);
         ev(t, QString("call('backup.jobs.set', {connection_id: serverId, title: 'Nightly src', engine: 'restic', source: '%1/src', repository: '%1/repo', password_file: '%1/pw', schedule: '0 3 * * *'}, () => refresh())").arg(base));
-        waitFor([&] { return ev(t, "jobs.length").toInt() == 1; });
+        WAIT(ev(t, "jobs.length").toInt() == 1, 15000);
         shot("tools-backup-01-jobs");
         QMetaObject::invokeMethod(t, "runJob", Q_ARG(QVariant, ev(t, "jobs[0]")));
-        waitFor([&] { return t->property("note").toString().contains("finished"); }, 60000);
+        WAIT(t->property("note").toString().contains("finished"), 60000);
         QMetaObject::invokeMethod(t, "select", Q_ARG(QVariant, ev(t, "jobs[0]")));
-        waitFor([&] { return ev(t, "snaps.length").toInt() == 1; }, 30000);
+        WAIT(ev(t, "snaps.length").toInt() == 1, 30000);
         shot("tools-backup-02-snapshots");
         // пробное восстановление
         ev(t, QString("openRestore(snaps[0]); rTarget.text = '%1/restore'; doRestore()").arg(base));
-        waitFor([&] { return t->property("note").toString().contains("Dry run finished"); }, 60000);
+        WAIT(t->property("note").toString().contains("Dry run finished"), 60000);
         QVERIFY(!QFile::exists(base + "/restore"));
         // настоящее восстановление — с вводом имени сервера
         ev(t, QString("openRestore(snaps[0]); rTarget.text = '%1/restore'; rDry.checked = false; doRestore()").arg(base));
-        confirmDanger(t, "web-01");
-        waitFor([&] { return QFile::exists(base + "/restore"); }, 60000);
+        confirmDanger(t, QSysInfo::machineHostName());
+        WAIT(QFile::exists(base + "/restore"), 60000);
         QMetaObject::invokeMethod(t, "checkJob", Q_ARG(QVariant, ev(t, "jobs[0]")));
-        waitFor([&] { return t->property("note").toString().contains("check passed"); }, 60000);
+        WAIT(t->property("note").toString().contains("check passed"), 60000);
         QMetaObject::invokeMethod(t, "pruneJob", Q_ARG(QVariant, ev(t, "jobs[0]")));
         confirmDanger(t);
-        waitFor([&] { return t->property("note").toString().contains("Prune finished"); }, 60000);
+        WAIT(t->property("note").toString().contains("Prune finished"), 60000);
         QVERIFY2(err(t).isEmpty(), qPrintable(err(t)));
         QMetaObject::invokeMethod(t, "openEdit", Q_ARG(QVariant, ev(t, "jobs[0]")));
         shot("tools-backup-03-edit");
@@ -395,7 +396,7 @@ private slots:
         QVERIFY(t);
         ev(t, "call('snippet.set', {title: 'Kernel version', command: 'uname -r', tags: ['sys', 'info']}, () => refresh())");
         ev(t, "call('snippet.set', {title: 'Disk usage', command: 'df -h /', tags: ['disk']}, () => refresh())");
-        waitFor([&] { return ev(t, "snippets.length").toInt() == 2; });
+        WAIT(ev(t, "snippets.length").toInt() == 2, 15000);
         QMetaObject::invokeMethod(t, "load", Q_ARG(QVariant, ev(t, "snippets.find(s => s.title === 'Kernel version')")));
         // запуск на двух серверах: слово подтверждения обязательно
         ev(t, "runner.start({snippetId: selId, preview: 'uname -r', targets: ['" + okId + "', '" + twoId + "'], title: 'Run snippet'})");
@@ -404,11 +405,11 @@ private slots:
         shot("tools-snippets-01-confirm-multi");
         QVERIFY(!dlg->property("okToGo").toBool());
         confirmDanger(t, {}, QString::fromUtf8("выполнить"));
-        waitFor([&] { return t->property("runner").value<QObject *>()->property("done").toBool(); }, 40000);
+        WAIT(t->property("runner").value<QObject *>()->property("done").toBool(), 40000);
         QCOMPARE(ev(t, "runner.results.filter(r => r.state === 'ok' && r.exit === 0).length").toInt(), 2);
         shot("tools-snippets-02-results");
         t->setProperty("tab", "history");
-        waitFor([&] { return ev(t, "history.length").toInt() >= 2; }, 15000);
+        WAIT(ev(t, "history.length").toInt() >= 2, 15000);
         shot("tools-snippets-03-history");
         closeTool("snippets");
     }
@@ -419,13 +420,13 @@ private slots:
         // разные ответы серверов → две группы в режиме «Сравнение»
         ev(t, "runner.start({command: 'echo $RANDOM$RANDOM', targets: ['" + okId + "', '" + twoId + "']})");
         confirmDanger(t, {}, QString::fromUtf8("выполнить"));
-        waitFor([&] { return t->property("runner").value<QObject *>()->property("done").toBool(); }, 40000);
+        WAIT(t->property("runner").value<QObject *>()->property("done").toBool(), 40000);
         QCOMPARE(ev(t, "runner.results.length").toInt(), 2);
         QVERIFY(ev(t, "runner.groups.length").toInt() >= 1);
         shot("tools-multi-01-by-server");
         ev(t, "runner.start({command: 'uname -s', targets: ['" + okId + "', '" + twoId + "']})");
         confirmDanger(t, {}, QString::fromUtf8("выполнить"));
-        waitFor([&] { return t->property("runner").value<QObject *>()->property("done").toBool(); }, 40000);
+        WAIT(t->property("runner").value<QObject *>()->property("done").toBool(), 40000);
         QCOMPARE(ev(t, "runner.groups.length").toInt(), 1);
         QCOMPARE(ev(t, "runner.groups[0].count").toInt(), 2);
         // переключение «Сравнение» внутри RunResults
@@ -442,9 +443,10 @@ private slots:
         QVERIFY(t);
         ev(t, "pathField.text = '/tmp/sherpa-a.conf'; otherSrv.current = '" + twoId + "'; otherPath.text = '/tmp/sherpa-b.conf'");
         QMetaObject::invokeMethod(t, "compare");
-        waitFor([&] { return t->property("compared").toBool(); });
+        WAIT(t->property("compared").toBool(), 15000);
         QVERIFY(!t->property("equal").toBool());
         QVERIFY(evb(t, "lines.some(l => l.kind === 'chg' && l.left === 'worker_processes 2;' && l.right === 'worker_processes 4;')"));
+        QVERIFY(evb(t, "lines.filter(l => l.kind === 'ctx').length === 2")); // listen и keepalive распознаны общими
         QVERIFY(evb(t, "lines.some(l => l.kind === 'add' && l.right === 'gzip on;')"));
         shot("tools-diff-01-two-columns");
         t->setProperty("onlyDiff", true);
@@ -453,12 +455,12 @@ private slots:
         t->setProperty("onlyDiff", false);
         // сохранить версию и сравнить с ней
         QMetaObject::invokeMethod(t, "saveVersion");
-        waitFor([&] { return ev(t, "versions.length").toInt() == 1; });
+        WAIT(ev(t, "versions.length").toInt() == 1, 15000);
         t->setProperty("against", "version");
         QTest::qWait(200);
         ev(t, "verSel.current = versions[0].id");
         QMetaObject::invokeMethod(t, "compare");
-        waitFor([&] { return t->property("equal").toBool(); });
+        WAIT(t->property("equal").toBool(), 15000);
         shot("tools-diff-03-identical");
         closeTool("diff");
     }
@@ -469,29 +471,29 @@ private slots:
         QObject *t = openTool("notes");
         QVERIFY(t);
         ev(t, "nTitle.text = 'Runbook'; nBody.text = '# Deploy\\n\\n* pull\\n* **restart** nginx\\n'; dirty = true; saveNote()");
-        waitFor([&] { return ev(t, "notes.length").toInt() == 1; });
+        WAIT(ev(t, "notes.length").toInt() == 1, 15000);
         QMetaObject::invokeMethod(t, "loadNote", Q_ARG(QVariant, ev(t, "notes[0]")));
         t->setProperty("preview", true);
         shot("tools-notes-01-preview");
         t->setProperty("tab", "secrets");
         ev(t, "call('vault.set', {connection_id: serverId, title: 'Grafana admin', value: 'top-secret-42'}, () => refresh())");
-        waitFor([&] { return ev(t, "secrets.length").toInt() == 1; });
+        WAIT(ev(t, "secrets.length").toInt() == 1, 15000);
         // в списке значения нет
         QVERIFY(!QJsonDocument::fromVariant(ev(t, "secrets")).toJson().contains("top-secret-42"));
         shot("tools-notes-02-secrets");
         QMetaObject::invokeMethod(t, "reveal", Q_ARG(QVariant, ev(t, "secrets[0]")));
         shot("tools-notes-03-confirm-reveal");
         confirmDanger(t);
-        waitFor([&] { return t->property("revealed").toString() == "top-secret-42"; });
+        WAIT(t->property("revealed").toString() == "top-secret-42", 15000);
         shot("tools-notes-04-revealed");
         QMetaObject::invokeMethod(t, "hideSecret");
         QVERIFY(t->property("revealed").toString().isEmpty());
         // автосокрытие
         QMetaObject::invokeMethod(t, "reveal", Q_ARG(QVariant, ev(t, "secrets[0]")));
         confirmDanger(t);
-        waitFor([&] { return !t->property("revealed").toString().isEmpty(); });
+        WAIT(!t->property("revealed").toString().isEmpty(), 15000);
         t->setProperty("revealLeft", 1);
-        waitFor([&] { return t->property("revealed").toString().isEmpty(); }, 5000);
+        WAIT(t->property("revealed").toString().isEmpty(), 5000);
         closeTool("notes");
     }
 
@@ -500,16 +502,16 @@ private slots:
     {
         QObject *t = openTool("audit");
         QVERIFY(t);
-        waitFor([&] { return ev(t, "items.length").toInt() > 3; }, 20000);
+        WAIT(ev(t, "items.length").toInt() > 3, 20000);
         QVERIFY(evb(t, "items.some(i => i.method === 'docker.stop' || i.method === 'sec.keys.add' || i.method === 'multi.run')"));
         shot("tools-audit-01-log");
         ev(t, "scope = 'all'");
-        waitFor([&] { return !t->property("loading").toBool(); });
+        WAIT(!t->property("loading").toBool(), 15000);
         ev(t, "query = 'multi'; refresh()");
-        waitFor([&] { return ev(t, "items.length").toInt() > 0 && evb(t, "items.every(i => (i.method + i.outcome).indexOf('multi') >= 0)"); }, 10000);
+        WAIT(ev(t, "items.length").toInt() > 0 && evb(t, "items.every(i => (i.method + i.outcome).indexOf('multi') >= 0)"), 10000);
         shot("tools-audit-02-search");
         QMetaObject::invokeMethod(t, "exportCsv");
-        waitFor([&] { return t->property("note").toString().startsWith("Saved"); }, 10000);
+        WAIT(t->property("note").toString().startsWith("Saved"), 10000);
         closeTool("audit");
     }
 
@@ -522,10 +524,10 @@ private slots:
         QTest::qWait(3500);
         shot("tools-widgets-01-wallpaper");
         QVERIFY(evb(w, "isOn('cpu') && isOn('disks')"));
-        waitFor([&] { return ev(w, "disks.length").toInt() > 0; }, 20000);
+        WAIT(ev(w, "disks.length").toInt() > 0, 20000);
         // положение сохраняется в раскладке
         QMetaObject::invokeMethod(w, "moved", Q_ARG(QVariant, "cpu"), Q_ARG(QVariant, 400), Q_ARG(QVariant, 300));
-        waitFor([&] { return desk()->layout().value("widgets").toMap().value("cpu").toMap().value("x").toInt() == 400; }, 5000);
+        WAIT(desk()->layout().value("widgets").toMap().value("cpu").toMap().value("x").toInt() == 400, 5000);
         // окна поверх виджетов, лаунчер показывает все новые утилиты
         openTool("docker");
         openTool("backup");
@@ -552,11 +554,11 @@ private slots:
         be->setLanguage("ru");
         QTest::qWait(300);
         QObject *t = openTool("security");
-        waitFor([&] { return ev(t, "score.score").isValid() && !ev(t, "score.score").isNull(); }, 30000);
+        WAIT(ev(t, "score.score").isValid() && !ev(t, "score.score").isNull(), 30000);
         shot("tools-ru-security");
         closeTool("security");
         t = openTool("network");
-        waitFor([&] { return ev(t, "ifaces.length").toInt() > 0; });
+        WAIT(ev(t, "ifaces.length").toInt() > 0, 15000);
         shot("tools-ru-network");
         closeTool("network");
         t = openTool("docker");

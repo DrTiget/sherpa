@@ -15,7 +15,8 @@ pub fn command(method: &str, p: &Value) -> CoreResult<(String, bool)> {
         "docker.volumes" => "volume ls --format json".into(),
         "docker.networks" => "network ls --no-trunc --format json".into(),
         "docker.stats" => "stats --no-stream --no-trunc --format json".into(),
-        "docker.inspect" => format!("inspect -- {}", shell_quote(&req_str(p, "id")?)),
+        // без --format docker печатает один многострочный JSON-массив, а разбор идёт построчно
+        "docker.inspect" => format!("inspect --format '{{{{json .}}}}' -- {}", shell_quote(&req_str(p, "id")?)),
         "docker.logs" => format!(
             "logs --timestamps --tail {} -- {}",
             opt_u64(p, "tail")?.unwrap_or(200).min(5000),

@@ -12,11 +12,13 @@ SDialog {
     property var items: []
     property string confirmText: qsTr("Confirm")
     property bool needName: false
+    property string expectName: ""
+    property string nameKind: "name"
     property string word: ""
     property var _then: null
     property alias nameField: nameField
     property alias wordField: wordField
-    readonly property bool okToGo: (!needName || nameField.text === serverName) && (word === "" || wordField.text.trim() === word)
+    readonly property bool okToGo: (!needName || nameField.text === expectName) && (word === "" || wordField.text.trim() === word)
 
     dialogWidth: 480
     tone: Theme.red
@@ -27,6 +29,8 @@ SDialog {
         items = opts.items || []
         confirmText = opts.confirmText || qsTr("Confirm")
         needName = opts.needName !== undefined ? opts.needName : prod
+        expectName = opts.expectName || serverName
+        nameKind = opts.nameKind || "name"
         word = opts.word || ""
         nameField.text = ""
         wordField.text = ""
@@ -57,7 +61,7 @@ SDialog {
         id: nameField
         visible: root.needName
         Layout.fillWidth: true
-        label: qsTr("Type the server name “%1” to confirm").arg(root.serverName)
+        label: root.nameKind === "hostname" ? qsTr("Type the server hostname “%1” to confirm").arg(root.expectName) : qsTr("Type the server name “%1” to confirm").arg(root.expectName)
         mono: true
         onAccepted: if (root.okToGo) go.clicked()
     }
