@@ -6,7 +6,7 @@ use super::command_failed;
 use crate::daemon::proto::{opt_bool, opt_str, opt_u64, req_str};
 use crate::daemon::registry::{unknown, Cx, MethodGroup};
 use crate::error::{CoreError, CoreResult};
-use crate::ssh::{shell_quote, RemoteExec};
+use crate::ssh::{shell_quote, ExecOutput, PooledConn, RemoteExec};
 use async_trait::async_trait;
 use serde_json::{json, Value};
 
@@ -26,7 +26,7 @@ pub async fn collect<E: RemoteExec>(exec: &E, kind: &str, p: &Value) -> CoreResu
         "net.sockets" => ("ss", "ss -tulpnH -e".into()),
         "net.firewall.list" => {
             let b=backend(p)?;
-            let cmd=match b.as_str() { "ufw"=>"ufw status numbered", "nft"=>"nft -j -a list ruleset", _=>"iptables -S" };
+            let cmd=match b.as_str() { "ufw"=>"ufw status numbered", "nft"=>"nft -j -a list ruleset", _=>"iptables-save" };
             return run_collect(exec, &b, cmd, kind, p).await;
         }
         _ => return Err(unknown(kind)),
@@ -146,6 +146,14 @@ pub fn rule_command(p: &Value) -> CoreResult<String> {
     })
 }
 
+/// Route generic collectors through the same privilege policy as all desktop utilities.
+struct Privileged<'a>(&'a PooledConn);
+impl RemoteExec for Privileged<'_> {
+    async fn exec_input(&self, command: &str, _input: Option<&[u8]>) -> CoreResult<ExecOutput> {
+        self.0.exec_privileged(command).await
+    }
+}
+
 pub struct NetMethods;
 #[async_trait]
 impl MethodGroup for NetMethods {
@@ -193,28 +201,18 @@ impl MethodGroup for NetMethods {
             let action = if method == "net.confirm" { "confirm" } else { "rollback" };
             let out = conn.exec_privileged(&transaction::finish_script(&id, action)).await?;
             transaction::check(&out)?;
-            return Ok(json!({"transaction":id,"state":out.stdout_lossy().trim()}));
-        }
-        if method == "net.firewall.list" {
-            // Privileged adapter keeps the parser/collector testable without SSH.
-            let b = backend(&p)?;
-            let cmd = match b.as_str() {
-                "ufw" => "ufw status numbered",
-                "nft" => "nft -j -a list ruleset",
-                _ => "iptables -S",
+            let expected = if action == "confirm" {
+                "confirmed"
+            } else {
+                "rolled_back"
             };
-            let out = conn
-                .exec_privileged(&format!(
-                    "LC_ALL=C; export LC_ALL; command -v {b} >/dev/null 2>&1 || exit 127; {cmd}"
-                ))
-                .await?;
-            if out.exit_status == Some(127) {
-                return Err(CoreError::new("cap.missing", "Firewall tool is unavailable").with("capability", b));
+            if out.stdout_lossy().trim() != expected {
+                return Err(parse::bad());
             }
-            if !out.success() {
-                return Err(command_failed(method, &out));
-            }
-            return parse::firewall(&b, &out.stdout_lossy());
+            return Ok(json!({"transaction":id,"state":expected}));
+        }
+        if method == "net.firewall.list" || (method == "net.sockets" && opt_bool(&p, "privileged")?) {
+            return collect(&Privileged(conn.as_ref()), method, &p).await;
         }
         collect(conn.as_ref(), method, &p).await
     }

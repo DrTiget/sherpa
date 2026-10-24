@@ -24,8 +24,28 @@ pub fn script(method: &str, p: &Value) -> CoreResult<String> {
             format!("du -k -0 --max-depth={depth} {one} -- {}", shell_quote(&path))
         } else {
             let min = opt_u64(p, "min_size")?.unwrap_or(100 * 1024 * 1024);
+            let mut filters = String::new();
+            if let Some(days) = opt_u64(p, "min_age_days")? {
+                filters += &format!(" -mtime +{days}");
+            }
+            if let Some(days) = opt_u64(p, "max_age_days")? {
+                filters += &format!(" -mtime -{days}");
+            }
+            for (key, flag) in [("owner", "-user"), ("extension", "-name")] {
+                if let Some(value) = crate::daemon::proto::opt_str(p, key)? {
+                    if value.is_empty() || !value.bytes().all(|b| b.is_ascii_alphanumeric() || b"_-.".contains(&b)) {
+                        return Err(CoreError::invalid(key, "invalid filter"));
+                    }
+                    let value = if key == "extension" {
+                        format!("*.{}", value.trim_start_matches('.'))
+                    } else {
+                        value
+                    };
+                    filters += &format!(" {flag} {}", shell_quote(&value));
+                }
+            }
             format!(
-                "find {} {} -type f -size +{}c -printf '%s\\t%p\\0'",
+                "find {} {} -type f -size +{}c{filters} -printf '%s\\t%p\\0'",
                 shell_quote(&path),
                 if one.is_empty() { "" } else { "-xdev" },
                 min.saturating_sub(1)

@@ -5,9 +5,13 @@ pub mod capabilities;
 pub mod cron;
 pub mod disk;
 pub mod log;
+pub(crate) mod management;
 pub mod monitor;
 pub mod net;
 pub mod nettools;
+pub mod pkg;
+pub mod svc;
+pub mod sys;
 
 use crate::error::CoreError;
 use crate::ssh::ExecOutput;
@@ -26,6 +30,15 @@ pub fn command_failed(command: &str, out: &ExecOutput) -> CoreError {
         .with("stderr", stderr)
 }
 
+pub mod audit;
+
+pub mod notes;
+
 pub mod db;
 pub mod docker;
 pub mod web;
+
+pub mod backup;
+pub mod diff;
+pub mod sec;
+pub mod snippet;

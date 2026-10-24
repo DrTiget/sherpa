@@ -33,6 +33,22 @@ pub trait RemoteExec {
     /// Выполнить команду (через `sh` пользователя), передав `input` в stdin.
     async fn exec_input(&self, command: &str, input: Option<&[u8]>) -> CoreResult<ExecOutput>;
 
+    /// Поток stdout/stderr с ограниченной очередью. В тестах — один блок на поток.
+    async fn exec_stream(
+        &self,
+        command: &str,
+        input: Option<&[u8]>,
+        output: tokio::sync::mpsc::Sender<(bool, Vec<u8>)>,
+    ) -> CoreResult<ExecOutput> {
+        let out = self.exec_input(command, input).await?;
+        for (stderr, data) in [(false, &out.stdout), (true, &out.stderr)] {
+            if !data.is_empty() {
+                let _ = output.send((stderr, data.clone())).await;
+            }
+        }
+        Ok(out)
+    }
+
     async fn exec(&self, command: &str) -> CoreResult<ExecOutput> {
         self.exec_input(command, None).await
     }
@@ -44,18 +60,14 @@ fn channel_error(e: russh::Error) -> CoreError {
 
 /// Выполнить команду в новом канале `exec` поверх готового соединения.
 pub async fn exec_on(handle: &Handle<Verifier>, command: &str, input: Option<&[u8]>) -> CoreResult<ExecOutput> {
-    exec_on_io(handle, command, input, None).await
+    exec_on_stream(handle, command, input, None).await
 }
 
-/// Поток вывода команды: `(stderr, байты)`.
-pub type OutputTx = tokio::sync::mpsc::Sender<(bool, Vec<u8>)>;
-
-/// Как `exec_on`, но при `stream` вывод уходит кусками в канал, а не копится в `ExecOutput`.
-pub async fn exec_on_io(
+pub async fn exec_on_stream(
     handle: &Handle<Verifier>,
     command: &str,
     input: Option<&[u8]>,
-    stream: Option<OutputTx>,
+    output: Option<tokio::sync::mpsc::Sender<(bool, Vec<u8>)>>,
 ) -> CoreResult<ExecOutput> {
     let mut ch = handle.channel_open_session().await.map_err(channel_error)?;
     ch.exec(true, command).await.map_err(channel_error)?;
@@ -66,22 +78,23 @@ pub async fn exec_on_io(
     let mut out = ExecOutput::default();
     while let Some(msg) = ch.wait().await {
         match msg {
-            ChannelMsg::Data { data } => match &stream {
-                Some(tx) => {
-                    if tx.send((false, data.to_vec())).await.is_err() {
-                        break;
-                    }
+            ChannelMsg::Data { data } => {
+                if let Some(tx) = &output {
+                    let _ = tx.send((false, data.to_vec())).await;
                 }
-                None => out.stdout.extend_from_slice(&data),
-            },
-            ChannelMsg::ExtendedData { data, .. } => match &stream {
-                Some(tx) => {
-                    if tx.send((true, data.to_vec())).await.is_err() {
-                        break;
-                    }
+                if output.is_none() || out.stdout.len() < 4096 {
+                    out.stdout.extend_from_slice(&data);
                 }
-                None => out.stderr.extend_from_slice(&data),
-            },
+            }
+            ChannelMsg::ExtendedData { data, .. } => {
+                if let Some(tx) = &output {
+                    let _ = tx.send((true, data.to_vec())).await;
+                }
+                // Потоковые операции не накапливают неограниченный вывод.
+                if output.is_none() || out.stderr.len() < 4096 {
+                    out.stderr.extend_from_slice(&data);
+                }
+            }
             ChannelMsg::ExitStatus { exit_status } => out.exit_status = Some(exit_status),
             ChannelMsg::Close => break,
             _ => {}

@@ -15,7 +15,7 @@ use tokio::sync::Semaphore;
 use crate::error::{CoreError, CoreResult};
 use crate::secret::Secret;
 use crate::ssh::client::{Session, Verifier};
-use crate::ssh::exec::{exec_on_io, shell_quote, ExecOutput, OutputTx, RemoteExec};
+use crate::ssh::exec::{exec_on, exec_on_stream, shell_quote, ExecOutput, RemoteExec};
 
 /// Лимит одновременных каналов `exec` утилит на одно соединение.
 pub const DEFAULT_MAX_CHANNELS: usize = 8;
@@ -226,39 +226,33 @@ impl PooledConn {
         self.exec_privileged_io(command, None, None).await
     }
 
-    /// То же с `input` в stdin команды и потоковым выводом (`stream`, см. `exec_on_io`).
-    /// Пароль sudo, если нужен, передаётся первой строкой stdin перед `input`.
+    /// stdin (в том числе chpasswd) и потоковый вывод поверх того же sudo-сеанса.
     pub async fn exec_privileged_io(
         &self,
         command: &str,
         input: Option<&[u8]>,
-        stream: Option<OutputTx>,
+        output: Option<tokio::sync::mpsc::Sender<(bool, Vec<u8>)>>,
     ) -> CoreResult<ExecOutput> {
         let st = self.probe_privs().await?;
-        if st.uid == Some(0) {
-            return self.exec_io(command, input, stream).await;
+        let mut data = zeroize::Zeroizing::new(Vec::new());
+        let cmd = if st.uid == Some(0) {
+            command.to_string()
+        } else if st.nopasswd.unwrap_or(false) {
+            format!("sudo -n -- sh -c {}", shell_quote(command))
+        } else {
+            let pw = self.sudo_password.lock().expect("sudo").clone();
+            let pw = pw.ok_or_else(|| {
+                CoreError::new("priv.required", "Root privileges are required")
+                    .with("connection_id", self.connection_id.clone())
+                    .with("sudo_available", st.sudo_present.unwrap_or(false))
+            })?;
+            data.extend_from_slice(pw.expose().as_bytes());
+            data.push(b'\n');
+            format!("sudo -S -k -p '' -- sh -c {}", shell_quote(command))
+        };
+        if let Some(input) = input {
+            data.extend_from_slice(input);
         }
-        let wrapped = shell_quote(command);
-        if st.nopasswd.unwrap_or(false) {
-            return self
-                .exec_io(&format!("sudo -n -- sh -c {wrapped}"), input, stream)
-                .await;
-        }
-        let pw = self.sudo_password.lock().expect("sudo").clone();
-        match pw {
-            Some(pw) => {
-                let mut data = format!("{}\n", pw.expose()).into_bytes();
-                data.extend_from_slice(input.unwrap_or_default());
-                self.exec_io(&format!("sudo -S -p '' -- sh -c {wrapped}"), Some(&data), stream)
-                    .await
-            }
-            None => Err(CoreError::new("priv.required", "Root privileges are required")
-                .with("connection_id", self.connection_id.clone())
-                .with("sudo_available", st.sudo_present.unwrap_or(false))),
-        }
-    }
-
-    async fn exec_io(&self, command: &str, input: Option<&[u8]>, stream: Option<OutputTx>) -> CoreResult<ExecOutput> {
         let _permit = self
             .channels
             .clone()
@@ -266,9 +260,9 @@ impl PooledConn {
             .await
             .map_err(|_| CoreError::internal("channel semaphore closed"))?;
         self.touch();
-        let r = exec_on_io(self.handle(), command, input, stream).await;
+        let result = exec_on_stream(self.handle(), &cmd, Some(&data), output).await;
         self.touch();
-        r
+        result
     }
 
     pub fn info(&self) -> Value {
@@ -287,7 +281,16 @@ impl PooledConn {
 
 impl RemoteExec for PooledConn {
     async fn exec_input(&self, command: &str, input: Option<&[u8]>) -> CoreResult<ExecOutput> {
-        self.exec_io(command, input, None).await
+        let _permit = self
+            .channels
+            .clone()
+            .acquire_owned()
+            .await
+            .map_err(|_| CoreError::internal("channel semaphore closed"))?;
+        self.touch();
+        let r = exec_on(self.handle(), command, input).await;
+        self.touch();
+        r
     }
 }
 

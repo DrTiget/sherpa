@@ -8,7 +8,7 @@ fn finish_body(action: &str) -> String {
     let operation = if action == "confirm" {
         "[ \"$state\" = pending ] || exit 76; [ \"$(date +%s)\" -lt \"$(cat \"$d/deadline\")\" ] || exit 76; echo confirmed > \"$d/state\"; rmdir /run/sherpa-net/pending; echo confirmed"
     } else {
-        "case \"$state\" in pending|rollback_failed) ;; rolled_back) echo rolled_back; exit 0;; *) exit 76;; esac; if timeout 20 sh \"$d/restore\"; then echo rolled_back > \"$d/state\"; rmdir /run/sherpa-net/pending; echo rolled_back; else echo rollback_failed > \"$d/state\"; exit 77; fi"
+        "case \"$state\" in pending|rollback_failed) ;; rolled_back) echo rolled_back; exit 0;; *) exit 76;; esac; if timeout -k 2 20 sh \"$d/restore\"; then echo rolled_back > \"$d/state\"; rmdir /run/sherpa-net/pending; echo rolled_back; else echo rollback_failed > \"$d/state\"; exit 77; fi"
     };
     format!("exec 9>\"$d/lock\"; flock -x 9 || exit 77; state=$(cat \"$d/state\") || exit 76; {operation}")
 }
@@ -50,7 +50,7 @@ echo pending > "$d/state"
 nohup sh "$d/watch" </dev/null >"$d/watch.log" 2>&1 &
 i=0; while [ ! -f "$d/armed" ]; do i=$((i+1)); if [ "$i" -gt 3 ]; then sh "$d/rollback"; exit 77; fi; sleep 1; done
 # Serialize apply with confirm/rollback, including a delayed SSH execution.
-( exec 9>"$d/lock"; flock -x 9 || exit 77; [ "$(cat "$d/state")" = pending ] || exit 76; timeout 5 sh -c {quoted_command} )
+( exec 9>"$d/lock"; flock -x 9 || exit 77; [ "$(cat "$d/state")" = pending ] || exit 76; timeout -k 2 5 sh -c {quoted_command} )
 r=$?; if [ "$r" -ne 0 ]; then sh "$d/rollback"; exit 77; fi
 echo pending
 "#,
@@ -201,5 +201,26 @@ mod tests {
         assert!(s.run(&finish_script("test", "rollback")).status.success());
         assert!(s.run(&apply_script("nft", "second", "true", 10)).status.success());
         assert!(s.run(&finish_script("second", "rollback")).status.success());
+    }
+
+    #[test]
+    #[cfg(unix)]
+    fn shell_expired_confirmation_is_rejected() {
+        let s = Sandbox::new();
+        assert!(s.run(&apply_script("nft", "test", "true", 10)).status.success());
+        std::fs::write(s.root.path().join("transactions/test/deadline"), "0\n").unwrap();
+        assert_eq!(s.run(&finish_script("test", "confirm")).status.code(), Some(76));
+        assert!(s.run(&finish_script("test", "rollback")).status.success());
+    }
+    #[test]
+    #[cfg(unix)]
+    fn shell_failed_snapshot_never_applies() {
+        let s = Sandbox::new();
+        std::fs::write(s.root.path().join("bin/nft"), "#!/bin/sh\nexit 1\n").unwrap();
+        let marker = s.root.path().join("changed");
+        let cmd = format!("touch {}", shell_quote(&marker.to_string_lossy()));
+        assert_eq!(s.run(&apply_script("nft", "test", &cmd, 10)).status.code(), Some(77));
+        assert!(!marker.exists());
+        assert!(!s.root.path().join("transactions/pending").exists());
     }
 }

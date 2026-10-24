@@ -27,6 +27,9 @@ fn source(p: &Value) -> CoreResult<(Option<String>, Option<String>)> {
             "cron.d filename must contain letters, digits, underscore or dash",
         ));
     }
+    if opt_bool(p, "system")? && (user.is_some() || file.is_some()) {
+        return Err(CoreError::invalid("system", "system list cannot select a user or file"));
+    }
     if user.is_some() && file.is_some() {
         return Err(CoreError::invalid("file", "user and file are mutually exclusive"));
     }
@@ -42,7 +45,7 @@ fn read_body(p: &Value) -> CoreResult<String> {
     }
     let arg = user.map(|u| format!(" -u {}", shell_quote(&u))).unwrap_or_default();
     // Только штатное «no crontab» даёт пустой список; прочие ошибки не скрываются.
-    Ok(format!("command -v crontab >/dev/null || {{ echo MISSING:crontab; exit 127; }}; err=$(mktemp) || exit; crontab{arg} -l 2>\"$err\"; rc=$?; if [ $rc -ne 0 ] && grep -q '^no crontab for ' \"$err\"; then rc=0; fi; rm -f \"$err\"; exit $rc"))
+    Ok(format!("for t in crontab mktemp grep rm; do command -v \"$t\" >/dev/null || {{ echo \"MISSING:$t\"; exit 127; }}; done; err=$(mktemp) || exit; crontab{arg} -l 2>\"$err\"; rc=$?; if [ $rc -ne 0 ] && grep -q '^no crontab for ' \"$err\"; then rc=0; fi; rm -f \"$err\"; exit $rc"))
 }
 fn safe_error(name: &str, out: &ExecOutput) -> CoreError {
     // crontab и systemctl могут печатать команды/окружение: не возвращаем stderr.
@@ -57,7 +60,8 @@ fn safe_error(name: &str, out: &ExecOutput) -> CoreError {
 async fn read<E: RemoteExec>(exec: &E, p: &Value) -> CoreResult<String> {
     let out = exec.exec(&format!("{PRE}{}", read_body(p)?)).await?;
     if out.exit_status == Some(127) && out.stdout_lossy().starts_with("MISSING:") {
-        return Err(CoreError::new("cap.missing", "crontab not installed").with("capability", "crontab"));
+        return Err(CoreError::new("cap.missing", "Required cron tool missing")
+            .with("capability", out.stdout_lossy().trim_start_matches("MISSING:").trim()));
     }
     if !out.success() {
         return Err(safe_error("cron.read", &out));
@@ -167,6 +171,9 @@ pub fn edit(text: &str, method: &str, p: &Value) -> CoreResult<String> {
                 lines.remove(index);
             }
             "cron.toggle" => {
+                if !p.get("enabled").is_some_and(Value::is_boolean) {
+                    return Err(CoreError::required("enabled"));
+                }
                 let enabled = opt_bool(p, "enabled")?;
                 let raw = lines[index].trim_start();
                 lines[index] = if enabled {
@@ -198,7 +205,7 @@ fn write_script(p: &Value, version: &str, new: &str) -> CoreResult<String> {
             user.map(|u| format!(" -u {}", shell_quote(&u))).unwrap_or_default()
         )
     };
-    Ok(format!("{PRE}for t in flock sha256sum base64 mktemp; do command -v \"$t\" >/dev/null || {{ echo \"MISSING:$t\"; exit 127; }}; done; umask 077; exec 9>/run/lock/sherpa-cron.lock || exit; flock -x -w 10 9 || exit; tmp=$(mktemp -d) || exit; trap 'rm -rf -- \"$tmp\"' EXIT HUP INT TERM; ( {read} ) >\"$tmp/old\" || exit; hash=$(sha256sum \"$tmp/old\"); hash=${{hash%% *}}; [ \"$hash\" = {} ] || exit 73; printf %s {} | base64 -d >\"$tmp/new\" || exit; {install}",shell_quote(version),shell_quote(&STANDARD.encode(new))))
+    Ok(format!("{PRE}for t in flock sha256sum base64 mktemp install mv rm; do command -v \"$t\" >/dev/null || {{ echo \"MISSING:$t\"; exit 127; }}; done; umask 077; exec 9>/run/lock/sherpa-cron.lock || exit; flock -x -w 10 9 || exit; tmp=$(mktemp -d) || exit; trap 'rm -rf -- \"$tmp\"' EXIT HUP INT TERM; ( {read} ) >\"$tmp/old\" || exit; hash=$(sha256sum \"$tmp/old\"); hash=${{hash%% *}}; [ \"$hash\" = {} ] || exit 73; printf %s {} | base64 -d >\"$tmp/new\" || exit; {install}",shell_quote(version),shell_quote(&STANDARD.encode(new))))
 }
 
 pub async fn collect<E: RemoteExec>(exec: &E, method: &str, p: &Value) -> CoreResult<Value> {

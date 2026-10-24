@@ -71,7 +71,7 @@ pub fn command(kind: &str, p: &Value) -> CoreResult<(String, String)> {
 
 pub fn launch_script(id: &str, tool: &str, cmd: &str) -> String {
     let dir = shell_quote(&format!("/tmp/sherpa-nettools-{id}"));
-    let job=format!("d={dir}; ulimit -f 128 || exit 1; timeout 60 sh -c {} >\"$d/output\" 2>&1; r=$?; echo \"$r\" >\"$d/status.tmp\"; mv \"$d/status.tmp\" \"$d/status\"; sleep 120; rm -rf -- \"$d\"",shell_quote(cmd));
+    let job=format!("d={dir}; ( ulimit -f 128 || exit 1; timeout -k 2 60 sh -c {} ) >\"$d/output\" 2>&1; r=$?; echo \"$r\" >\"$d/status.tmp\"; mv \"$d/status.tmp\" \"$d/status\"; sleep 120; rm -rf -- \"$d\"",shell_quote(cmd));
     format!("LC_ALL=C; export LC_ALL; umask 077; for t in {} timeout nohup sh head sleep mv rm; do command -v \"$t\" >/dev/null 2>&1 || exit 127; done; d={dir}; mkdir \"$d\" || exit 1; : >\"$d/output\"; nohup sh -c {} </dev/null >/dev/null 2>&1 &",shell_quote(tool),shell_quote(&job))
 }
 
@@ -139,7 +139,11 @@ impl MethodGroup for NettoolsMethods {
         let id = cx.state.new_id("nt");
         let (client, sub, state) = (cx.client.clone(), id.clone(), cx.state.clone());
         let kind = method.to_string();
+        let (ready_tx, ready_rx) = tokio::sync::oneshot::channel();
         let task = tokio::spawn(async move {
+            if ready_rx.await.is_err() {
+                return;
+            }
             let mut offset = 0;
             let result:CoreResult<()>=async {
                 for _ in 0..90 {
@@ -176,6 +180,7 @@ impl MethodGroup for NettoolsMethods {
                 task: task.abort_handle(),
             },
         );
+        let _ = ready_tx.send(());
         Ok(json!({"subscription":id}))
     }
 }

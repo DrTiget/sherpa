@@ -60,10 +60,11 @@ pub fn library(s: &mut Store, kind: &str, action: &str, p: &Value) -> CoreResult
         "set" => {
             let id = opt_str(p, "id")?.unwrap_or_else(util::new_id);
             let title = req_str(p, "title")?;
-            let connection = opt_str(p, "connection_id")?;
+            let connection = req_str(p, "connection_id")?;
             let mut body = json!({"id":id,"title":title,"connection_id":connection,"updated_at":util::now()});
             if kind == "vault" {
                 let value = req_str(p, "value")?;
+                body["note_id"] = opt_str(p, "note_id")?.into();
                 let encrypted = s.encrypt(&format!("vault:{id}:value"), &value)?;
                 body["has_secret"] = true.into();
                 put(s, kind, &id, &body)?;
@@ -99,7 +100,7 @@ impl MethodGroup for NotesMethods {
         ]
     }
     async fn call(&self, cx: &Cx, method: &str, p: Value) -> CoreResult<Value> {
-        let secret = method.starts_with("notes.secret.");
+        let secret = method.starts_with("notes.secret.") || method.starts_with("vault.");
         let action = method.rsplit('.').next().unwrap_or("");
         if action == "del" || action == "reveal" {
             cx.state.confirmations.consume(cx.client.id, method, &p)?;
@@ -125,13 +126,29 @@ impl MethodGroup for NotesMethods {
             .with_store(|s| library(s, if secret { "vault" } else { "notes" }, action, &p))
     }
 }
+
+/// Совместимые имена из DESKTOP §4.11.11.
+pub struct VaultMethods;
+#[async_trait]
+impl MethodGroup for VaultMethods {
+    fn prefix(&self) -> &'static str {
+        "vault"
+    }
+    fn methods(&self) -> &'static [&'static str] {
+        &["vault.list", "vault.set", "vault.del", "vault.reveal"]
+    }
+    async fn call(&self, cx: &Cx, method: &str, p: Value) -> CoreResult<Value> {
+        NotesMethods.call(cx, method, p).await
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
     fn encrypted_and_redacted() {
         let (_d, mut s) = crate::store::testutil::temp_store();
-        let p = json!({"title":"Grafana","value":"top-secret"});
+        let p = json!({"title":"Grafana","value":"top-secret","connection_id":"c"});
         let v = library(&mut s, "vault", "set", &p).unwrap();
         let id = v["id"].as_str().unwrap();
         assert!(!v.to_string().contains("top-secret"));

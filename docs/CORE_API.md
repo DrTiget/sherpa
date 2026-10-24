@@ -905,88 +905,6 @@ DatabaseQuery SQL: `{id, user, database, elapsed_sec, state, query}`.
 Не входят в этот набор: Docker Compose/pull/prune/PTY exec, редактирование и
 включение/отключение сайтов, `redis.flush`, пользовательский SQL, прогресс дампа.
 
-### 4.20 Сеть — `net.*`
-
-Все методы, кроме диагностики подписок, принимают `connection_id`.
-Команды исполняются на сервере через пул SSH; firewall требует `priv.*`.
-
-| Метод | Дополнительные параметры | Ответ |
-|-------|-------------------------|-------|
-| `net.iface.list` | — | `{items: [...]}` — объекты `ip -j address show`: `ifindex`, `ifname`, `flags`, `mtu`, `address`, `operstate`, `addr_info` (family/local/prefixlen/scope) |
-| `net.route.list` | — | `{ipv4: [...], ipv6: [...]}` — все таблицы; объекты iproute2 (`dst`, `gateway?`, `dev?`, `metric?`, `table?`, `type?`) |
-| `net.dns.get` | — | `{servers: [IP], search: [domain], options: [string], resolved: [{link, servers: [IP]}]}`; `/etc/resolv.conf`, дополнительно `resolvectl dns`, если установлен |
-| `net.sockets` | — | `{items: [{protocol, state, recv_queue, send_queue, local: {address, port}, peer: {address, port}, uid, processes: [{name,pid,fd}]}]}` — слушающие TCP/UDP, `ss -tulpnH -e` |
-| `net.firewall.list` | `backend`: `ufw` / `nft` / `iptables` | `{backend, items, active?}` (см. ниже) |
-| `net.apply` | параметры правила ниже; `confirm: true`, `confirm_token`, `confirm_timeout?` (60, 10–120 с) | `{transaction: UUID, confirm_timeout, state: "pending"}` |
-| `net.confirm` | `transaction` | `{transaction, state: "confirmed"}` |
-| `net.rollback` | `transaction` | `{transaction, state: "rolled_back"}` |
-
-`port: null` означает wildcard. `uid: null` и пустой `processes` означают,
-что ss не предоставил сведения (обычно нет прав на чужие процессы).
-Неизвестные поля объектов iproute2/nftables сохраняются.
-Правила UFW: `{id,destination,action,direction,source,comment}`;
-`active` — bool. nftables: нативные JSON-объекты `nftables[]`, включая
-таблицы, цепочки, правила с `handle` и выражения `expr`. iptables:
-`{tokens: [string]}` для строк `-P`, `-N`, `-A`; это IPv4-таблица filter.
-Бэкенд выбирается явно из `Capabilities.tools`, чтобы не менять случайно
-другой одновременно установленный firewall.
-
-Параметры правила: `backend`, `operation: "add"|"delete"`,
-`table?` (filter), `chain?` (INPUT для iptables, input для nft).
-Добавление: `action: "allow"|"deny"|"reject"`, `protocol: "tcp"|"udp"`,
-`port` (1–65535), `source?` (IPv4/CIDR, по умолчанию 0.0.0.0/0).
-Удаление: `rule_id` — номер UFW/iptables либо handle nftables (> 0).
-UFW добавляет входящее правило; nft работает с семейством `inet` и
-существующими таблицей/цепочкой. Raw shell и произвольные nft-выражения
-не принимаются. Перед `net.apply` фронт получает одноразовый
-`confirm_token` через `danger.prepare {method: "net.apply", params: {...}}`
-с теми же параметрами и показывает затрагиваемое правило пользователю.
-
-`net.apply` проверяет readonly, подтверждение и наличие rollback-инструментов,
-сохраняет снимок, запускает **серверный** watchdog, затем меняет правило.
-Нужны `flock`, `nohup`, стандартные sh/coreutils; для iptables также
-`iptables-save`/`iptables-restore`, для UFW — tar. На одном сервере возможна
-только одна незавершённая сетевая транзакция. Lock сериализует применение,
-подтверждение и откат; после истечения срока подтвердить откат нельзя.
-Откат работает при потере SSH/клиента/демона и повторяется каждые 5 с при
-ошибке восстановления. Ошибка применения также вызывает немедленный откат.
-Снимок nft восстанавливается атомарной загрузкой ruleset с flush; iptables
-сохраняет все IPv4-таблицы; UFW — конфигурацию и исходное active/inactive.
-Снимки/состояние/лог watchdog остаются в root-only `/run/sherpa-net/<UUID>`
-до перезагрузки. Сбой ОС/перезагрузка и внешние параллельные изменения
-firewall не покрываются; фронт не должен предлагать внешние изменения во
-время ожидания подтверждения. Сетевые адреса/маршруты/DNS пока только читаются.
-
-### 4.21 Сетевые инструменты — `nettools.*`
-
-| Метод | Параметры (помимо `connection_id`) | Ответ |
-|-------|-----------------------------------|-------|
-| `nettools.ping` | `target` (hostname/IP), `count?` (4, 1–30) | `{subscription}` |
-| `nettools.trace` | `target` | `{subscription}` |
-| `nettools.dig` | `target`, `record_type?`: A/AAAA/MX/TXT/NS (A) | `{subscription}` |
-| `nettools.curl` | `target`: HTTP(S) URL без credentials | `{subscription}`; только HEAD, без redirect |
-| `nettools.port` | `target`, `port` (1–65535) | `{subscription}`; TCP connect через nc |
-| `nettools.cancel` | `subscription` | `{unsubscribed}`; только подписка текущего клиента |
-
-Диагностика запускается **на сервере**, с `LC_ALL=C` и `timeout 60`.
-Нужны соответствующая программа, timeout и nohup (Capabilities.tools).
-Вывод stdout/stderr объединён и передаётся порциями не чаще раза в секунду:
-`{"event":"nettools.output","subscription":"nt1","connection_id":"c1",
-"method":"nettools.ping","records":[{"text":"64 bytes from ..."}]}`.
-Строка `text` — диагностический вывод для консоли, фронт его не парсит.
-Завершение: `{"event":"nettools.done","subscription":"nt1",
-"exit_status":0,"truncated":false}`. Ненулевой exit_status — результат
-диагностики (например, закрытый порт), 124 — удалённый timeout.
-Ошибка транспорта/протокола — событие `error` с `fatal:true`.
-Общий вывод ограничен 65536 байт; при достижении лимита поток завершается
-с `truncated:true`, `exit_status` может быть null. Подписка удаляется после
-завершения; отключение клиента/отмена прекращает доставку событий. Удалённая
-команда при этом ограничена 60 с, временные файлы удаляются через 120 с
-после завершения. Readonly не запрещает диагностику; создаются только
-временные служебные файлы. speedtest не реализован.
-
----
-
 ### 4.30 Диски — `disk.*`
 
 Все методы чтения принимают `connection_id`. Команды выполняются в `LC_ALL=C`;
@@ -1000,7 +918,7 @@ firewall не покрываются; фронт не должен предла�
 | `disk.list` | — | `{items: [DiskPartition], blockdevices: [...], filesystems: [...]}` |
 | `disk.scan` | `path` (абсолютный), `depth` (2, 0–10), `one_filesystem` (false), `timeout_sec` (30, 1–120), `limit` (1000, 1–5000) | `{subscription}`; события ниже |
 | `disk.scan.cancel` | `subscription` (без `connection_id`) | `{unsubscribed}`; чужая/неизвестная — `subscription.not_found` |
-| `disk.large` | `path`, `min_size` (байты, 104857600), `one_filesystem`, `timeout_sec`, `limit` | DiskScanData |
+| `disk.large` | `path`, `min_size` (байты, 104857600), `one_filesystem`, `timeout_sec`, `limit`, `min_age_days`, `max_age_days`, `owner`, `extension` | DiskScanData |
 
 DiskPartition: `{device, mount, total_bytes, used_bytes, available_bytes,
 usage_pct, inodes_total, inodes_used, inodes_available, inodes_usage_pct}`.
@@ -1013,7 +931,7 @@ DiskScanData: `{items: [{path, size_bytes}], partial, truncated}`. Размер�
 Элементы отсортированы по убыванию размера, ограничены `limit`. Таймаут даёт
 `partial: true`; незавершённая последняя запись отбрасывается. Прочие ошибки
 команды не скрываются. Пути с пробелами, табуляцией и переводами строк
-разбираются по NUL. Имена, не представимые в UTF-8, заменяются lossy-декодером.
+разбираются по NUL. Фильтры возраста соответствуют `find -mtime +N/-N` (полные 24-часовые периоды); `owner` — имя/UID, `extension` — расширение без шаблонов. Имена, не представимые в UTF-8, заменяются lossy-декодером.
 
 События: `disk.scan.progress {subscription, connection_id, state: "started"}`,
 затем `disk.scan.done {subscription, connection_id, data: DiskScanData}` либо
@@ -1041,7 +959,7 @@ unit: строка|null, message: строка|массив байтов|null, f
 `cursor` означает **после** записи (`--after-cursor`). Follow опрашивает
 journald через отдельные exec и продвигает курсор только после успешного
 чтения; данные доставляются через очередь клиента с backpressure. Первое
-чтение возвращает последние `lines` записей. Ошибка (в том числе устаревший
+чтение возвращает последние `lines` записей. С курсором берутся первые `lines` записей после него (`-n +N`), без пропусков между пачками. При grep начальный обратный порядок journald нормализуется к хронологическому. Ошибка (в том числе устаревший
 курсор) завершает подписку событием `error {subscription, error, fatal: true}`.
 Пауза реализуется `unfollow`, возобновление — `follow` с последним курсором.
 Отключение клиента отменяет подписки. Follow файлов в этой версии отсутствует.
@@ -1204,7 +1122,328 @@ JSON-объект до 64 КиБ в SQLite ядра; SSH не требуется
 является параметром опасного метода, который атомарно потребляет токен.
 API для других модулей описан в `UTILITY_GUIDE.md`.
 
+### 4.20 Сеть — `net.*`
+
+Все методы, кроме диагностики подписок, принимают `connection_id`.
+Команды исполняются на сервере через пул SSH; firewall требует `priv.*`.
+
+| Метод | Дополнительные параметры | Ответ |
+|-------|-------------------------|-------|
+| `net.iface.list` | — | `{items: [...]}` — объекты `ip -j address show`: `ifindex`, `ifname`, `flags`, `mtu`, `address`, `operstate`, `addr_info` (family/local/prefixlen/scope) |
+| `net.route.list` | — | `{ipv4: [...], ipv6: [...]}` — все таблицы; объекты iproute2 (`dst`, `gateway?`, `dev?`, `metric?`, `table?`, `type?`) |
+| `net.dns.get` | — | `{servers: [IP], search: [domain], options: [string], resolved: [{link, servers: [IP]}]}`; `/etc/resolv.conf`, дополнительно `resolvectl dns`, если доступен сервис |
+| `net.sockets` | `privileged?` (false) | `{items: [{protocol, state, recv_queue, send_queue, local: {address, port}, peer: {address, port}, uid, processes: [{name,pid,fd}]}]}` — слушающие TCP/UDP, `ss -tulpnH -e` |
+| `net.firewall.list` | `backend`: `ufw` / `nft` / `iptables` | `{backend, items, active?}` (см. ниже) |
+| `net.apply` | параметры правила ниже; `confirm: true`, `confirm_token`, `confirm_timeout?` (60, 10–120 с) | `{transaction: UUID, confirm_timeout, state: "pending"}` |
+| `net.confirm` | `transaction` | `{transaction, state: "confirmed"}` |
+| `net.rollback` | `transaction` | `{transaction, state: "rolled_back"}` |
+
+`port: null` означает wildcard. `uid: null` и пустой `processes` означают,
+что ss не предоставил сведения (обычно нет прав на чужие процессы).
+`privileged:true` собирает сокеты через root/sudo по правилам `priv.*`.
+Неизвестные поля объектов iproute2/nftables сохраняются.
+Правила UFW: `{id,destination,action,direction,source,comment}`;
+`active` — bool. nftables: нативные JSON-объекты `nftables[]`, включая
+таблицы, цепочки, правила с `handle` и выражения `expr`. iptables:
+`{table, tokens: [string]}` — цепочки и правила `iptables-save` всех IPv4-таблиц.
+Бэкенд выбирается явно из `Capabilities.tools`, чтобы не менять случайно
+другой одновременно установленный firewall.
+
+Параметры правила: `backend`, `operation: "add"|"delete"`,
+`table?` (filter), `chain?` (INPUT для iptables, input для nft).
+Добавление: `action: "allow"|"deny"|"reject"`, `protocol: "tcp"|"udp"`,
+`port` (1–65535), `source?` (IPv4/CIDR, по умолчанию 0.0.0.0/0).
+Удаление: `rule_id` — номер UFW/iptables либо handle nftables (> 0).
+UFW добавляет входящее правило; nft работает с семейством `inet` и
+существующими таблицей/цепочкой. Raw shell и произвольные nft-выражения
+не принимаются. Перед `net.apply` фронт получает одноразовый
+`confirm_token` через `danger.prepare {method: "net.apply", params: {...}}`
+с теми же параметрами и показывает затрагиваемое правило пользователю.
+
+`net.apply` проверяет readonly, подтверждение и наличие rollback-инструментов,
+сохраняет снимок, запускает **серверный** watchdog, затем меняет правило.
+Нужны `flock`, `nohup`, стандартные sh/coreutils; для iptables также
+`iptables-save`/`iptables-restore`, для UFW — tar. На одном сервере возможна
+только одна незавершённая сетевая транзакция. Lock сериализует применение,
+подтверждение и откат; после истечения срока подтвердить откат нельзя.
+Откат работает при потере SSH/клиента/демона и повторяется каждые 5 с при
+ошибке восстановления. Ошибка применения также вызывает немедленный откат.
+Снимок nft восстанавливается атомарной загрузкой ruleset с flush; iptables
+сохраняет все IPv4-таблицы; UFW — конфигурацию и исходное active/inactive.
+Снимки/состояние/лог watchdog остаются в root-only `/run/sherpa-net/<UUID>`
+до перезагрузки. Сбой ОС/перезагрузка и внешние параллельные изменения
+firewall не покрываются; фронт не должен предлагать внешние изменения во
+время ожидания подтверждения. Сетевые адреса/маршруты/DNS пока только читаются.
+
+### 4.21 Сетевые инструменты — `nettools.*`
+
+| Метод | Параметры (помимо `connection_id`) | Ответ |
+|-------|-----------------------------------|-------|
+| `nettools.ping` | `target` (hostname/IP), `count?` (4, 1–30) | `{subscription}` |
+| `nettools.trace` | `target` | `{subscription}` |
+| `nettools.dig` | `target`, `record_type?`: A/AAAA/MX/TXT/NS (A) | `{subscription}` |
+| `nettools.curl` | `target`: HTTP(S) URL без credentials | `{subscription}`; только HEAD, без redirect |
+| `nettools.port` | `target`, `port` (1–65535) | `{subscription}`; TCP connect через nc |
+| `nettools.cancel` | `subscription` | `{unsubscribed}`; только подписка текущего клиента |
+
+Диагностика запускается **на сервере**, с `LC_ALL=C` и `timeout 60`.
+Нужны соответствующая программа, timeout и nohup (Capabilities.tools).
+Вывод stdout/stderr объединён и передаётся порциями не чаще раза в секунду:
+`{"event":"nettools.output","subscription":"nt1","connection_id":"c1",
+"method":"nettools.ping","records":[{"text":"64 bytes from ..."}]}`.
+Строка `text` — диагностический вывод для консоли, фронт его не парсит.
+Завершение: `{"event":"nettools.done","subscription":"nt1",
+"exit_status":0,"truncated":false}`. Ненулевой exit_status — результат
+диагностики (например, закрытый порт), 124 — удалённый timeout.
+Ошибка транспорта/протокола — событие `error` с `fatal:true`.
+Общий вывод ограничен 65536 байт; при достижении лимита поток завершается
+с `truncated:true`, `exit_status` может быть null. Подписка удаляется после
+завершения; отключение клиента/отмена прекращает доставку событий. Удалённая
+команда при этом ограничена 60 с, временные файлы удаляются через 120 с
+после завершения. Readonly не запрещает диагностику; создаются только
+временные служебные файлы. speedtest не реализован.
+
+---
+
+### 4.40 Безопасность, бэкапы, команды, diff, заметки и аудит
+
+Все удалённые методы принимают `connection_id`, кроме операций по ID задания
+бэкапа: у них сервер берётся из задания. Чтение выполняется через RemoteExec;
+`sec.*` использует `priv.*` для доступа к системным данным. Секреты передаются
+только через JSON протокола. Следующие удаления, бан/разбан, добавление ключа,
+prune, настоящий restore, reveal и каждый запуск произвольной команды требуют
+одноразовый `confirm_token` из `danger.prepare` (§4.15), связанный с точными
+параметрами и текущим клиентом. Изменения сервера проверяют `readonly`.
+
+#### `sec.*`
+
+| Метод | Параметры сверх `connection_id` | Ответ |
+|-------|--------------------------------|-------|
+| `sec.fail2ban.jails` | — | `{items: [имя jail]}` |
+| `sec.fail2ban.bans` | `jail` | `{items: [IP]}` |
+| `sec.fail2ban.ban`, `sec.fail2ban.unban` | `jail`, `ip`, `confirm_token` | `{success}` |
+| `sec.logins` | — | `{items: [{message, ip}]}` |
+| `sec.sessions` | — | `{items: [{user, terminal, login_at, source}]}` |
+| `sec.keys.list` | `user?` (без него — все пользователи getent) | `{items: [{user?, line, key_type, public_key, comment, fingerprint, weak, bits}]}` |
+| `sec.keys.add` | `user`, `public_key` (одна строка), `confirm_token` | `{success}` |
+| `sec.keys.del` | `user`, `fingerprint`, `confirm_token` | `{deleted}` |
+| `sec.ports` | — | `{items: [{protocol, state, address, port, process, risk}], scope, firewall_verified: false}` |
+| `sec.updates` | — | `{items: [{name, details}]}` (APT security, текущий кэш) |
+| `sec.score` | `user?` | `{score: 0..100, checks, recommendations}` |
+
+`sec.logins`: journald за 24 часа, не более 10000 записей; fallback — последние
+10000 строк `/var/log/auth.log` (содержимое файла может охватывать другой период).
+`sec.ports` показывает слушатели вне loopback; доступность через firewall/NAT
+не утверждается. Для закрытия порта применяется `net.*` с откатом.
+DSA и RSA <2048 бит помечаются слабыми. При удалении ключа файл перечитывается,
+проверяется SHA-256 под flock, результат пишется через временный файл и rename;
+изменение исходного файла означает `sec.keys_changed` и требует обновить список.
+Оценка: от 100 вычитаются 20 за отсутствие jails, до 30 за security-обновления
+(3 за пакет), до 30 за слабые ключи (15 за ключ), до 30 за слушатели БД/Redis
+(10 за порт). Это эвристика, не проверка соответствия стандартам безопасности.
+
+#### `backup.*`
+
+| Метод | Параметры | Ответ |
+|-------|-----------|-------|
+| `backup.jobs.list` | `connection_id?` | `{items: [BackupJob]}` |
+| `backup.jobs.set` | `id?`, `connection_id`, `title`, `engine: restic\|rsync`, `source` (абсолютный), `repository`, `password_file?`, `privileged?`, `schedule?` | BackupJob |
+| `backup.jobs.del` | `id`, `confirm_token` | `{deleted}` |
+| `backup.run` | `id` | `{success, dry_run: false}` |
+| `backup.snapshots` | `id` | `{items: [ResticSnapshot]}` |
+| `backup.restore` | `id`, `snapshot`, `target` (абсолютный), `dry_run` (по умолчанию true), `confirm_token?` | `{success, dry_run}` |
+| `backup.check`, `backup.prune` | `id`, для prune `confirm_token` | `{success, dry_run: false}` |
+
+BackupJob — переданные поля плюс `id`, `updated_at`, после запуска
+`last_run_at`, `last_run_ok`. `schedule` — сохранённое описание расписания;
+данная группа не устанавливает cron и не запускает задания по таймеру.
+Для restic обязателен путь `password_file` на сервере; пароль в БД задания
+не хранится. Доступы S3/SFTP должны быть настроены на сервере. `privileged`
+по умолчанию false; true выполняет команды через `priv.*`.
+Для rsync поддерживается запуск (`-a -s`, без `--delete`), остальные операции
+требуют restic. ResticSnapshot — объект `restic snapshots --json` с `id`,
+`short_id`, `time`, `paths`, `hostname`, `tags?` и дополнительными полями restic.
+Настоящий restore (`dry_run: false`) и prune требуют подтверждения.
+Ошибки бэкапа не возвращают stderr, который может содержать данные хранилища.
+
+#### `snippet.*`, `multi.run`
+
+| Метод | Параметры | Ответ |
+|-------|-----------|-------|
+| `snippet.list`, `snippet.get` | для get `id` | `{items: [Snippet]}` / Snippet |
+| `snippet.set` | `id?`, `title`, `command`, `tags?: [строка]` | Snippet `{id, title, command, tags}` |
+| `snippet.del` | `id`, `confirm_token` | `{deleted}` |
+| `snippet.run`, `multi.run` | `id` сниппета или `command`; `targets: [connection_id]`, либо `connection_id`, либо `group_id`, либо `all: true`; `confirm_token`, для >1 сервера `confirm_text: "выполнить"` | `{run, total}` |
+| `snippet.history` | — | `{items: [{id, run, connection_id, timestamp, outcome}]}` |
+
+Цели фиксируются перед запуском, дубликаты удаляются; 1–1000 целей, до 8
+одновременно. По серверу приходит `multi.result` с `{run, connection_id,
+ok, data: {exit_status, elapsed_ms, stdout, stderr}}` либо `error`; завершение
+пачки — `multi.done {run, total, failed_tasks}`. Ненулевой exit_status —
+результат команды; транспортная ошибка — `ok: false`. Отключение клиента
+отменяет задачу и её ожидающие каналы; уже начатая удалённая команда может
+продолжить выполнение. История хранит только метаданные, без текста команды
+и вывода. Произвольный shell требует подтверждения даже на одном сервере.
+
+#### `diff.*`
+
+| Метод | Параметры | Ответ |
+|-------|-----------|-------|
+| `diff.compare` | `connection_id`, `path`; `other_connection_id`, `other_path?` либо `version_id` | `{equal, unified}` |
+| `diff.save` | `connection_id`, `path` | `{id, connection_id, path, content}` |
+| `diff.versions.list` | `connection_id?` | `{items: [сохранённая версия]}` |
+| `diff.versions.del` | `id`, `confirm_token` | `{deleted}` |
+
+Только абсолютные пути и UTF-8, не более 1 МиБ на файл. Unified diff содержит
+один блок со всем контекстом, сохраняет отсутствие завершающего LF. Сохранённые
+версии содержат текст файла в БД: для паролей используется хранилище секретов.
+
+#### `notes.*`, `vault.*`
+
+| Метод | Параметры | Ответ |
+|-------|-----------|-------|
+| `notes.list`, `notes.get` | `connection_id?` / `id` | `{items: [Note]}` / Note |
+| `notes.set` | `id?`, `connection_id`, `title`, `markdown` | Note `{id, connection_id, title, markdown, updated_at}` |
+| `notes.del` | `id`, `confirm_token` | `{deleted}` |
+| `notes.secret.list`, `vault.list` | `connection_id?` | `{items: [SecretMetadata]}` |
+| `notes.secret.set`, `vault.set` | `id?`, `connection_id`, `note_id?`, `title`, `value` | SecretMetadata |
+| `notes.secret.del`, `vault.del` | `id`, `confirm_token` | `{deleted}` |
+| `notes.secret.reveal`, `vault.reveal` | `id`, `confirm_token` | `{id, value, visible_for_sec: 10}` |
+
+SecretMetadata — `{id, connection_id, note_id?, title, has_secret, updated_at}`;
+значение отсутствует во всех ответах, кроме явного reveal. Шифрование — общий
+ключ-файл и AEAD с AAD `vault:<id>:value`; замена ключа через force-new-key
+удаляет недоступные секреты. Reveal записывается в аудит. Таймер сокрытия
+и очистка буфера обмена — обязанность фронта.
+
+#### `audit.*` и общий хук
+
+`audit.list {connection_id?, client?, q?, limit?}` → `{items: [AuditEntry]}`.
+`audit.export` с теми же фильтрами → `{csv}` (RFC4180, CRLF, защита формул).
+`limit` по умолчанию 100, максимум 10000. AuditEntry — `{id, timestamp, client,
+connection_id?, method, outcome}`. `client` — ID клиента демона, `q` ищет
+в method/outcome. Записи старше 90 дней удаляются при добавлении записи.
+
+Общий хук `daemon::registry::dispatch` записывает изменяющие вызовы всех
+зарегистрированных групп (включая ошибки) по классификатору
+`utilities::audit::is_mutating`; параметры, команды, stderr, секреты не пишутся.
+Для новых нестандартных названий действий нужно расширить классификатор.
+Другим модулям доступна функция `utilities::audit::record(store, client,
+connection_id, method, outcome)`. Мультисерверные задачи дополнительно пишут
+итог по каждому серверу. Локальные CLI-команды не проходят через этот хук.
+
+### 4.50 Службы, пакеты и система — `svc.*`, `pkg.*`, `sys.*`
+
+Во всех методах обязателен `connection_id`. Команды выполняются с `LC_ALL=C`,
+изменения — через `ensure_writable` и `priv.*` (root/sudo). Нет инструмента —
+`cap.missing`; ненулевой код — `remote.command_failed`; неожиданный формат —
+`remote.bad_output`. Ответы содержат JSON, фронт не разбирает команды.
+
+**Службы (systemd).**
+
+| Метод | Дополнительные параметры | Ответ |
+|-------|--------------------------|-------|
+| `svc.list` | — | `{items: [Service]}`: установленные и загруженные service-юниты |
+| `svc.status` | `unit` | Service; отсутствует — `svc.not_found` |
+| `svc.logs` | `unit`, `lines` (100, максимум 2000) | `{items: [JournalEntry]}`; чтение через sudo для полного журнала |
+| `svc.start`, `svc.stop`, `svc.restart`, `svc.reload`, `svc.enable`, `svc.disable` | `unit`, `confirm_token`, `confirm_hostname` | `{changed: true}` |
+
+Service: `{name, description, load_state, active_state, sub_state, enabled,
+user, pid, memory_bytes}`. `enabled` — строка systemd (`enabled`, `disabled`,
+`static`, `masked`, …); неизвестная/неучитываемая память — `null`.
+JournalEntry: `{timestamp_usec, priority, unit, identifier, message}`;
+`timestamp_usec` — микросекунды Unix, `priority` — число 0–7 или `null`.
+`message` сохраняет JSON-тип journald (обычно строка, для бинарного сообщения
+возможен массив байтов). Все изменения служб требуют подтверждения с именем
+сервера, включая sshd, сетевые и systemd-службы.
+
+**Пакеты.** Менеджер выбирается из кэшированных Capabilities:
+`apt`, `dnf`, `yum`, `pacman`, `apk`. Параметра для запуска произвольного
+менеджера/команды нет. Для остальных менеджеров — `cap.missing`.
+
+| Метод | Дополнительные параметры | Ответ |
+|-------|--------------------------|-------|
+| `pkg.detect` | — | `{manager}` |
+| `pkg.installed` | — | PackageList |
+| `pkg.search` | `query` (1–200 символов) | PackageList |
+| `pkg.updates` | — | PackageList |
+| `pkg.install`, `pkg.remove` | `packages` (1–200 имён), `confirm_token`; для remove также `confirm_hostname` | `{operation}` сразу; далее события |
+| `pkg.upgrade` | `packages` (необяз.; отсутствие — все), `confirm_token`, `confirm_hostname` | `{operation}` сразу; далее события |
+
+PackageList: `{manager, items: [{name, version, arch, description,
+installed_version}]}`. Недоступные поля — `null`; поиск apt/dnf/yum не
+сообщает версию, rpm/dnf/yum не сообщают прежнюю версию обновления. Читается
+текущий локальный индекс: методы чтения не обновляют репозитории. Полный
+upgrade pacman использует `-Syu`; обновление выбранных пакетов — `-S --needed`.
+Установка/удаление/обновление не задают интерактивных вопросов. Ошибка
+блокировки базы — `pkg.locked`.
+
+События (только клиенту, вызвавшему операцию):
+
+- `pkg.output {operation, connection_id, stream: "stdout"|"stderr", data_b64}` —
+  блок вывода SSH в base64; границы UTF-8 и строк могут пересекать блоки;
+- `pkg.done {operation, connection_id, data: {changed: true, exit_status: 0}}` —
+  успешное завершение после последнего блока;
+- `error {operation, connection_id, error, fatal: true}` — ошибка, вместо done.
+
+Очереди ограничены, медленный клиент притормаживает чтение SSH. При отключении
+клиента задача и канал отменяются; пакетная транзакция на сервере могла успеть
+выполниться частично, поэтому после подключения следует перечитать состояние.
+
+**Система.** В этой реализации время, пользователи и группы имеют префикс
+`sys.*` (имена `time.*`/`user.*`/`group.*` в дизайн-макете — концептуальные).
+
+| Метод | Дополнительные параметры | Ответ |
+|-------|--------------------------|-------|
+| `sys.info` | — | `{hostname, kernel, kernel_release, arch}` |
+| `sys.hostname.set` | `hostname`, `confirm_token`, `confirm_hostname` | `{changed: true}`; через hostnamectl |
+| `sys.time.get` | — | `{timezone, time, rtc_time, ntp, ntp_synchronized, can_ntp}`; timedatectl show |
+| `sys.time.set_zone` | `timezone` (например `Europe/Moscow`) | `{changed: true}` |
+| `sys.time.set` | `time` (дата/время timedatectl, например `2026-10-24 12:00:00`) | `{changed: true}`; NTP предварительно отключается отдельным явным вызовом |
+| `sys.time.ntp` | `enabled` (bool, обяз.) | `{changed: true}` |
+| `sys.user.list` | — | `{items: [SystemUser]}` |
+| `sys.user.add` | `name`, `create_home` (false), `home?`, `shell?` (абсолютные пути) | `{changed: true}`; useradd |
+| `sys.user.remove` | `name`, `remove_home` (false), `confirm_token`, `confirm_hostname` | `{changed: true}`; userdel, удаление root запрещено |
+| `sys.user.passwd` | `name`, `password` (секрет) | `{changed: true}`; chpasswd, секрет только в stdin SSH, не в команде/ошибке |
+| `sys.user.sudo` | `name`, `enabled` (bool, обяз.), `group?`: `sudo` или `wheel` | `{changed: true}`; без group выбирается существующая sudo, затем wheel |
+| `sys.group.list` | — | `{items: [{name, gid, members: [name]}]}` |
+| `sys.group.add` | `name` | `{changed: true}` |
+| `sys.group.remove` | `name`, `confirm_token`, `confirm_hostname` | `{changed: true}`; удаление root запрещено |
+| `sys.power` | `action`: `reboot` или `shutdown`, `delay_sec` (60, 60–86400), `confirm_token`, `confirm_hostname` | `{scheduled: true, delay_sec}`; задержка округляется вверх до минут shutdown |
+
+SystemUser: `{name, uid, gid, description, home, shell, groups: [name]}`;
+группы включают первичную и дополнительные. Парольные поля getent не выдаются.
+Поля `time`, `rtc_time` — строки timedatectl в часовом поясе сервера, прочие
+временные метки сохраняют общие соглашения. NTP-флаги — bool или `null`.
+В системах без shadow-утилит (например, минимальный Alpine) чтение getent
+работает, изменения без нужной программы возвращают `cap.missing`.
+
+Capabilities.tools дополнен hostname/hostnamectl/timedatectl/getent,
+useradd/userdel/usermod/groupadd/groupdel/gpasswd/chpasswd/shutdown,
+dpkg-query/apt-cache/apt/rpm. Флаги utilities: `system` (hostname), `time`
+(timedatectl), `users` (getent); `packages` включён для пяти реализованных
+менеджеров.
+
+**Подтверждение.** Перед опасным действием фронт получает hostname через
+`sys.info`, просит пользователя ввести его и включает `confirm_hostname`
+в `params` вызова `danger.prepare {method, params}` (§4.15). Затем вызывает
+метод с **теми же** params плюс выданный `confirm_token`. Имя сверяется с
+`hostname` сервера, билет одноразовый, привязан к клиенту/методу/всем параметрам
+и действует 60 секунд. Установка пакетов требует билет, но не имя сервера.
+Это также применяется к полному upgrade и смене hostname на любых серверах.
+
+---
+
 ## 5. Каталог кодов ошибок
+
+Коды групп §4.40: `document.not_found` (нет документа/секрета/задания),
+`store.bad_document` (повреждённый JSON в БД), `backup.failed` (неуспешная
+удалённая операция, `exit_status`), `diff.too_large` (>1 МиБ), `diff.binary`
+(NUL в файле), `sec.key_not_found` (нет отпечатка), `sec.keys_changed`
+(файл изменён после чтения). Общие `remote.bad_output`, `cap.missing`,
+`remote.command_failed`, `priv.required`, `priv.readonly`,
+`danger.confirmation_required`, `validation.*` применимы ко всем группам.
+
 
 Формат: `<область>.<причина>`. Фронты держат таблицу переводов ru/en по
 этим кодам; `params` — для подстановки.
@@ -1366,6 +1605,10 @@ API для других модулей описан в `UTILITY_GUIDE.md`.
 | `cap.missing` | `capability` | На сервере нет нужной возможности (`procfs`, `sudo`, …) |
 | `remote.command_failed` | `command`, `exit_status`, `stderr` | Команда на сервере завершилась с ошибкой |
 | `remote.bad_output` | `command` | Вывод команды на сервере не удалось разобрать |
+| `svc.not_found` | `unit` | systemd-юнит не найден |
+| `pkg.locked` | `manager` | База пакетного менеджера заблокирована другой операцией |
+| `sys.password_failed` | `name` | Не удалось сменить пароль; диагностика скрыта для защиты секрета |
+| `danger.hostname_mismatch` | — | Введённое имя не совпало с hostname сервера |
 | `action.confirm_required` | — | Отсутствует явное `confirm: true` для Docker/Web/DB |
 | `db.cancel_failed` | — | Сервер не отменил запрос или не отключил Redis-клиента |
 
