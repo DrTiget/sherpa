@@ -146,6 +146,411 @@
     </message>
 </context>
 <context>
+    <name>CronWindow</name>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="30"/>
+        <source>every year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="30"/>
+        <source>every month</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="30"/>
+        <source>every week</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="31"/>
+        <source>every day at 00:00</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="31"/>
+        <source>every hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="31"/>
+        <location filename="../qml/CronWindow.qml" line="282"/>
+        <source>at boot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="39"/>
+        <location filename="../qml/CronWindow.qml" line="281"/>
+        <source>every minute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="41"/>
+        <source>every %1 min</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="42"/>
+        <source>every hour at :%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="44"/>
+        <source>every %1 h at :%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="47"/>
+        <source>every day at %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="48"/>
+        <source>every %1 at %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="48"/>
+        <source>Sun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="48"/>
+        <source>Mon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="48"/>
+        <source>Tue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="48"/>
+        <source>Wed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="48"/>
+        <source>Thu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="48"/>
+        <source>Fri</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="48"/>
+        <source>Sat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="49"/>
+        <source>on day %1 of the month at %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="50"/>
+        <source>weekdays at %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="127"/>
+        <source>Job disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="127"/>
+        <source>Job enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="134"/>
+        <source>Not available on this server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="134"/>
+        <source>Waiting for the server…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="135"/>
+        <source>cron was not found on this server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="144"/>
+        <source>User cron</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="144"/>
+        <source>System cron</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="144"/>
+        <source>systemd timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="149"/>
+        <location filename="../qml/CronWindow.qml" line="174"/>
+        <source>User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="150"/>
+        <source>Crontab user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="154"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="155"/>
+        <location filename="../qml/CronWindow.qml" line="241"/>
+        <source>New job</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="166"/>
+        <source>No jobs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="170"/>
+        <location filename="../qml/CronWindow.qml" line="202"/>
+        <source>State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="170"/>
+        <source>active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="170"/>
+        <location filename="../qml/CronWindow.qml" line="223"/>
+        <source>disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="171"/>
+        <location filename="../qml/CronWindow.qml" line="183"/>
+        <source>Schedule</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="172"/>
+        <source>Meaning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="173"/>
+        <location filename="../qml/CronWindow.qml" line="295"/>
+        <source>Command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="175"/>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="186"/>
+        <source>Next runs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="190"/>
+        <source>Edit…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="191"/>
+        <location filename="../qml/CronWindow.qml" line="215"/>
+        <source>Disable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="191"/>
+        <location filename="../qml/CronWindow.qml" line="214"/>
+        <source>Enable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="192"/>
+        <source>Delete…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="199"/>
+        <source>No timers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="203"/>
+        <source>Timer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="204"/>
+        <source>Autostart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="205"/>
+        <source>Next run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="206"/>
+        <source>Last run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="223"/>
+        <source>enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="230"/>
+        <source>Delete job?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="231"/>
+        <source>The job will be removed from the crontab:
+%1  %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="232"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="234"/>
+        <source>Job deleted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="241"/>
+        <source>Edit job</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="258"/>
+        <source>Enter a command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="259"/>
+        <location filename="../qml/CronWindow.qml" line="287"/>
+        <source>Invalid schedule</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="260"/>
+        <source>File name: letters, digits, _ and - only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="265"/>
+        <source>Job saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="271"/>
+        <source>Minute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="271"/>
+        <source>Hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="271"/>
+        <source>Day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="271"/>
+        <source>Month</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="271"/>
+        <source>Weekday</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="281"/>
+        <source>every 5 min</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="281"/>
+        <source>hourly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="282"/>
+        <source>daily 03:00</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="282"/>
+        <source>weekly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="282"/>
+        <source>monthly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="286"/>
+        <source>Cron expression</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="291"/>
+        <source>Next runs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="294"/>
+        <source>The job runs every minute — make sure this is intended.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="298"/>
+        <source>File in /etc/cron.d</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="299"/>
+        <source>Run as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="302"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CronWindow.qml" line="303"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DangerDialog</name>
     <message>
         <location filename="../qml/DangerDialog.qml" line="13"/>
@@ -263,127 +668,343 @@
     </message>
 </context>
 <context>
-    <name>EditorWindow</name>
+    <name>DisksWindow</name>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="54"/>
-        <source>Saved</source>
+        <location filename="../qml/DisksWindow.qml" line="53"/>
+        <source>(files)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="91"/>
-        <source>not found</source>
+        <location filename="../qml/DisksWindow.qml" line="92"/>
+        <source>Scan failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="107"/>
-        <source>%1 replaced</source>
+        <location filename="../qml/DisksWindow.qml" line="126"/>
+        <source>Not available on this server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="124"/>
-        <location filename="../qml/EditorWindow.qml" line="255"/>
-        <source>Reload</source>
+        <location filename="../qml/DisksWindow.qml" line="126"/>
+        <source>Waiting for the server…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="125"/>
-        <location filename="../qml/EditorWindow.qml" line="140"/>
-        <source>Find</source>
+        <location filename="../qml/DisksWindow.qml" line="127"/>
+        <source>The required tools (df, lsblk, du, find) were not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="126"/>
-        <source>Save</source>
+        <location filename="../qml/DisksWindow.qml" line="136"/>
+        <source>Partitions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="130"/>
-        <source>Read-only mode: saving is disabled.</source>
+        <location filename="../qml/DisksWindow.qml" line="136"/>
+        <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="141"/>
-        <source>Replace with</source>
+        <location filename="../qml/DisksWindow.qml" line="136"/>
+        <source>Large files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="142"/>
-        <source>Match case</source>
+        <location filename="../qml/DisksWindow.qml" line="141"/>
+        <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="145"/>
-        <source>Replace</source>
+        <location filename="../qml/DisksWindow.qml" line="154"/>
+        <source>No partitions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="146"/>
-        <source>Replace all</source>
+        <location filename="../qml/DisksWindow.qml" line="157"/>
+        <source>Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="210"/>
-        <source>File text</source>
+        <location filename="../qml/DisksWindow.qml" line="158"/>
+        <source>Mount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="226"/>
-        <source>Ln %1, Col %2</source>
+        <location filename="../qml/DisksWindow.qml" line="159"/>
+        <location filename="../qml/DisksWindow.qml" line="228"/>
+        <location filename="../qml/DisksWindow.qml" line="281"/>
+        <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="241"/>
-        <source>Unsaved changes</source>
+        <location filename="../qml/DisksWindow.qml" line="160"/>
+        <source>Used</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="243"/>
-        <source>Save changes to %1 before closing?</source>
+        <location filename="../qml/DisksWindow.qml" line="161"/>
+        <source>Usage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="245"/>
-        <source>Discard</source>
+        <location filename="../qml/DisksWindow.qml" line="168"/>
+        <source>Double-click a partition to analyze its contents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="247"/>
-        <location filename="../qml/EditorWindow.qml" line="267"/>
+        <location filename="../qml/DisksWindow.qml" line="169"/>
+        <source>Analyze selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="179"/>
+        <source>Path to analyze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="180"/>
+        <source>depth 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="180"/>
+        <source>depth 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="180"/>
+        <source>depth 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="182"/>
+        <source>one filesystem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="183"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/DisksWindow.qml" line="183"/>
+        <source>Scan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="189"/>
+        <source>List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="206"/>
+        <source>partial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="207"/>
+        <source>truncated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="227"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="229"/>
+        <source>Share</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="237"/>
+        <source>Largest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="258"/>
+        <source>Scanning %1…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="258"/>
+        <source>Pick a path and press Scan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="259"/>
+        <source>Low priority (nice/ionice), up to 60 s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="269"/>
+        <location filename="../qml/DisksWindow.qml" line="282"/>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="270"/>
+        <source>Min size, MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="271"/>
+        <source>Extension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="272"/>
+        <source>Older, days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="273"/>
+        <source>Find</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="279"/>
+        <source>Searching…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="279"/>
+        <source>Press Find to search for large files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="288"/>
+        <source>partial: timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/DisksWindow.qml" line="289"/>
+        <source>%1 files · double-click copies the path</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EditorWindow</name>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="55"/>
+        <source>Saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="92"/>
+        <source>not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="108"/>
+        <source>%1 replaced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="125"/>
+        <location filename="../qml/EditorWindow.qml" line="256"/>
+        <source>Reload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="126"/>
+        <location filename="../qml/EditorWindow.qml" line="141"/>
+        <source>Find</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="127"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="131"/>
+        <source>Read-only mode: saving is disabled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="142"/>
+        <source>Replace with</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="143"/>
+        <source>Match case</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="146"/>
+        <source>Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="147"/>
+        <source>Replace all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="211"/>
+        <source>File text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="227"/>
+        <source>Ln %1, Col %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="242"/>
+        <source>Unsaved changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="244"/>
+        <source>Save changes to %1 before closing?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="246"/>
+        <source>Discard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/EditorWindow.qml" line="248"/>
+        <location filename="../qml/EditorWindow.qml" line="268"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/EditorWindow.qml" line="249"/>
         <source>Save and close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="253"/>
+        <location filename="../qml/EditorWindow.qml" line="254"/>
         <source>Discard changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="254"/>
+        <location filename="../qml/EditorWindow.qml" line="255"/>
         <source>Reload the file from the server and lose your edits?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="262"/>
+        <location filename="../qml/EditorWindow.qml" line="263"/>
         <source>File changed on the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="265"/>
+        <location filename="../qml/EditorWindow.qml" line="266"/>
         <source>Someone modified “%1” after you opened it. Overwrite their version with yours, or reload their version?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="269"/>
+        <location filename="../qml/EditorWindow.qml" line="270"/>
         <source>Reload from server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/EditorWindow.qml" line="270"/>
+        <location filename="../qml/EditorWindow.qml" line="271"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1255,6 +1876,79 @@
     </message>
 </context>
 <context>
+    <name>Fmt</name>
+    <message>
+        <location filename="../qml/Fmt.qml" line="8"/>
+        <source>B</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="8"/>
+        <source>KB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="8"/>
+        <source>MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="8"/>
+        <source>GB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="8"/>
+        <source>TB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="8"/>
+        <source>PB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="31"/>
+        <source>emerg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="31"/>
+        <source>alert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="31"/>
+        <source>crit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="31"/>
+        <source>err</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="31"/>
+        <source>warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="31"/>
+        <source>notice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="31"/>
+        <source>info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Fmt.qml" line="31"/>
+        <source>debug</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HomePage</name>
     <message>
         <location filename="../qml/HomePage.qml" line="38"/>
@@ -1573,6 +2267,209 @@
     </message>
 </context>
 <context>
+    <name>LogsWindow</name>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="26"/>
+        <source>15 min</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="26"/>
+        <source>1 h</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="26"/>
+        <source>Today</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="26"/>
+        <source>24 h</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="26"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="27"/>
+        <source>Any level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="27"/>
+        <source>Errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="27"/>
+        <source>Warnings and worse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="28"/>
+        <source>Notice and worse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="28"/>
+        <source>Info and worse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="29"/>
+        <source>All boots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="29"/>
+        <source>This boot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="29"/>
+        <source>Previous boot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="92"/>
+        <source>Follow stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="118"/>
+        <source>Not available on this server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="118"/>
+        <source>Waiting for the server…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="119"/>
+        <source>journalctl was not found on this server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="129"/>
+        <source>Sources</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="139"/>
+        <source>System journal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="153"/>
+        <source>Unit (nginx.service)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="153"/>
+        <source>Unit filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="157"/>
+        <source>Search / regex…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="157"/>
+        <source>Search in logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="158"/>
+        <source>sudo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="159"/>
+        <source>⏸ Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="159"/>
+        <source>▶ Follow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="160"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="161"/>
+        <source>Save…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="162"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="209"/>
+        <source>No entries match the filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="213"/>
+        <source>%1 entries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="214"/>
+        <source>following</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="216"/>
+        <source>Vacuum journal…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="224"/>
+        <source>Could not write the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="228"/>
+        <source>Vacuum journal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="231"/>
+        <source>Old journal files will be deleted until the journal is smaller than the limit. This cannot be undone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="232"/>
+        <source>Keep at most, MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="233"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="234"/>
+        <source>Vacuum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/LogsWindow.qml" line="236"/>
+        <source>Journal vacuumed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Main</name>
     <message>
         <location filename="../qml/Main.qml" line="39"/>
@@ -1741,6 +2638,196 @@
     <message>
         <location filename="../qml/NameDialog.qml" line="36"/>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PackagesWindow</name>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="59"/>
+        <source>Install</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="59"/>
+        <source>The packages below will be installed with their dependencies.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="60"/>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="60"/>
+        <source>The packages below will be removed from the server together with unused dependencies, if the manager decides so.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="62"/>
+        <location filename="../qml/PackagesWindow.qml" line="115"/>
+        <source>Upgrade selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="62"/>
+        <source>Upgrade all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="63"/>
+        <source>The selected packages will be upgraded to the latest versions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="63"/>
+        <source>All installed packages will be upgraded. Services may restart.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="72"/>
+        <source>Done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="77"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="84"/>
+        <source>Not available on this server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="84"/>
+        <source>Waiting for the server…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="85"/>
+        <source>No supported package manager (apt, dnf, yum, pacman, apk) was found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="94"/>
+        <source>Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="95"/>
+        <location filename="../qml/PackagesWindow.qml" line="149"/>
+        <source>Installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="95"/>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="102"/>
+        <source>Package name to search, then Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="102"/>
+        <source>Filter installed packages…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="103"/>
+        <source>Package search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="110"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="118"/>
+        <source>Upgrade all…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="120"/>
+        <source>Install selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="124"/>
+        <source>Remove selected…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="127"/>
+        <source>%1 updates available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="127"/>
+        <source>%1 packages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="127"/>
+        <source>%1 found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="134"/>
+        <source>System is up to date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="135"/>
+        <location filename="../qml/PackagesWindow.qml" line="142"/>
+        <location filename="../qml/PackagesWindow.qml" line="148"/>
+        <source>Package</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="135"/>
+        <source>Now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="136"/>
+        <source>New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="136"/>
+        <location filename="../qml/PackagesWindow.qml" line="143"/>
+        <source>Arch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="137"/>
+        <location filename="../qml/PackagesWindow.qml" line="149"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="141"/>
+        <source>Nothing found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="142"/>
+        <location filename="../qml/PackagesWindow.qml" line="148"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="147"/>
+        <source>Type a name and press Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/PackagesWindow.qml" line="161"/>
+        <source>Operation log</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2340,6 +3427,158 @@
     </message>
 </context>
 <context>
+    <name>ServicesWindow</name>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="61"/>
+        <location filename="../qml/ServicesWindow.qml" line="138"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="61"/>
+        <location filename="../qml/ServicesWindow.qml" line="139"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="61"/>
+        <location filename="../qml/ServicesWindow.qml" line="140"/>
+        <source>Restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="61"/>
+        <location filename="../qml/ServicesWindow.qml" line="141"/>
+        <source>Reload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="61"/>
+        <location filename="../qml/ServicesWindow.qml" line="142"/>
+        <source>Enable autostart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="61"/>
+        <location filename="../qml/ServicesWindow.qml" line="142"/>
+        <source>Disable autostart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="64"/>
+        <source>The action is applied on the server immediately. Stopping or disabling network, SSH or systemd services may cut off access.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="73"/>
+        <source>Not available on this server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="73"/>
+        <source>Waiting for the server…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="74"/>
+        <source>systemd was not found on this server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="83"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="83"/>
+        <source>Running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="84"/>
+        <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="84"/>
+        <location filename="../qml/ServicesWindow.qml" line="105"/>
+        <location filename="../qml/ServicesWindow.qml" line="127"/>
+        <source>Autostart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="87"/>
+        <source>Search services…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="87"/>
+        <source>Search services</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="89"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="98"/>
+        <source>No services match the filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="102"/>
+        <source>State</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="103"/>
+        <source>Unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="104"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="106"/>
+        <location filename="../qml/ServicesWindow.qml" line="133"/>
+        <source>Memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="125"/>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="131"/>
+        <source>User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="145"/>
+        <source>Journal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="158"/>
+        <source>No journal entries</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="162"/>
+        <source>The journal of this service needs administrator rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/ServicesWindow.qml" line="163"/>
+        <source>Show with sudo</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SettingsDialog</name>
     <message>
         <location filename="../qml/SettingsDialog.qml" line="9"/>
@@ -2442,6 +3681,428 @@
     <message>
         <location filename="../qml/Sidebar.qml" line="109"/>
         <source>Import from ~/.ssh/config</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SystemWindow</name>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="36"/>
+        <source>d </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="36"/>
+        <source>h </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="36"/>
+        <source>m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="43"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="43"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="43"/>
+        <source>Users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="43"/>
+        <location filename="../qml/SystemWindow.qml" line="212"/>
+        <source>Groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="61"/>
+        <source>Operating system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="63"/>
+        <source>Kernel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="65"/>
+        <source>Architecture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="67"/>
+        <source>Uptime</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="69"/>
+        <source>Current user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="78"/>
+        <source>Host name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="84"/>
+        <location filename="../qml/SystemWindow.qml" line="88"/>
+        <location filename="../qml/SystemWindow.qml" line="332"/>
+        <source>Change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="86"/>
+        <source>Change host name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="87"/>
+        <source>The host name will be changed to the one below. Services and monitoring that rely on the old name may break.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="89"/>
+        <source>Host name changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="99"/>
+        <source>Power</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="101"/>
+        <source>The command is scheduled with a delay (from 1 minute); the terminal and utilities lose the connection when the server goes down.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="104"/>
+        <source>Delay, min</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="106"/>
+        <source>Reboot…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="107"/>
+        <source>Shut down…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="121"/>
+        <source>Time settings are not available on this server: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="127"/>
+        <source>Server time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="129"/>
+        <source>RTC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="131"/>
+        <location filename="../qml/SystemWindow.qml" line="153"/>
+        <source>Time zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="133"/>
+        <source>Synchronized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="134"/>
+        <source>yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="134"/>
+        <source>no</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="145"/>
+        <source>Automatic time sync (NTP)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="157"/>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="158"/>
+        <source>Time zone changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="167"/>
+        <source>Set time manually</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="171"/>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="172"/>
+        <source>Time set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="175"/>
+        <source>Turn off NTP first to set the time manually.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="186"/>
+        <source>Search users…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="186"/>
+        <source>Search users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="187"/>
+        <location filename="../qml/SystemWindow.qml" line="289"/>
+        <source>Add user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="197"/>
+        <location filename="../qml/SystemWindow.qml" line="303"/>
+        <source>Login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="199"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="200"/>
+        <source>Home</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="201"/>
+        <location filename="../qml/SystemWindow.qml" line="304"/>
+        <source>Shell</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="218"/>
+        <source>Administrator (sudo)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="225"/>
+        <source>Change password…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="226"/>
+        <source>Delete user…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="239"/>
+        <location filename="../qml/SystemWindow.qml" line="312"/>
+        <source>Add group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="249"/>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="251"/>
+        <location filename="../qml/SystemWindow.qml" line="261"/>
+        <source>Members</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="265"/>
+        <source>Delete group…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="267"/>
+        <source>Delete group %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="267"/>
+        <source>The group will be removed from the server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="268"/>
+        <location filename="../qml/SystemWindow.qml" line="348"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="268"/>
+        <source>Group deleted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="279"/>
+        <source>Reboot the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="279"/>
+        <source>Shut down the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="280"/>
+        <source>The server will reboot in %1 min. All sessions will be interrupted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="281"/>
+        <source>The server will shut down in %1 min. You will need physical or provider access to start it again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="282"/>
+        <source>Reboot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="282"/>
+        <source>Shut down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="283"/>
+        <source>Scheduled: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="283"/>
+        <source>reboot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="283"/>
+        <source>shutdown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="294"/>
+        <source>Enter a login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="298"/>
+        <source>User created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="305"/>
+        <source>Password (optional)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="306"/>
+        <source>Create home directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="307"/>
+        <location filename="../qml/SystemWindow.qml" line="318"/>
+        <location filename="../qml/SystemWindow.qml" line="331"/>
+        <location filename="../qml/SystemWindow.qml" line="343"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="308"/>
+        <location filename="../qml/SystemWindow.qml" line="319"/>
+        <source>Create</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="317"/>
+        <source>Group name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="323"/>
+        <source>Change password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="328"/>
+        <source>Password changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="329"/>
+        <source>New password for %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="336"/>
+        <source>Delete user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="341"/>
+        <source>User %1 will be deleted from the server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="342"/>
+        <source>Also delete the home directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="344"/>
+        <source>Continue…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="346"/>
+        <source>Delete user %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="347"/>
+        <source>The user and the home directory will be deleted. This cannot be undone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="347"/>
+        <source>The user will be deleted; the home directory is kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SystemWindow.qml" line="348"/>
+        <source>User deleted</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2849,6 +4510,55 @@
     <message>
         <location filename="../qml/TunnelsWindow.qml" line="223"/>
         <source>Forward a port through this server: for example reach a database that listens only on the server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UtilPane</name>
+    <message>
+        <location filename="../qml/UtilPane.qml" line="92"/>
+        <source>Administrator rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/UtilPane.qml" line="110"/>
+        <source>Root rights are required for this action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/UtilPane.qml" line="113"/>
+        <source>This action needs sudo. The password is kept only in the daemon memory until the connection closes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/UtilPane.qml" line="115"/>
+        <source>sudo password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/UtilPane.qml" line="118"/>
+        <location filename="../qml/UtilPane.qml" line="166"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/UtilPane.qml" line="119"/>
+        <source>Authenticate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/UtilPane.qml" line="135"/>
+        <source>Confirm action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/UtilPane.qml" line="156"/>
+        <source>To confirm, type the server name: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/UtilPane.qml" line="167"/>
+        <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
