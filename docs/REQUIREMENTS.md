@@ -149,4 +149,4 @@ Sherpa — система для удобной настройки и обслу
 
 ## 6. Открытые вопросы
 - Контракт ядра — `docs/CORE_API.md` (решения на подтверждение — §7).
-- Дизайн экранов — `docs/design/SCREENS.md`, макеты в Figma.
+- Дизайн — `docs/design/SCREENS.md`, `DESKTOP.md`, прототип `docs/design/prototype/`.
