@@ -100,7 +100,12 @@ impl MethodGroup for DiskMethods {
         }
         let id = cx.state.new_id("d");
         let (sub, client) = (id.clone(), cx.client.clone());
+        let state = cx.state.clone();
+        let (ready, start) = tokio::sync::oneshot::channel();
         let task = tokio::spawn(async move {
+            if start.await.is_err() {
+                return;
+            }
             if !client
                 .send(&event(
                     "disk.scan.progress",
@@ -108,6 +113,7 @@ impl MethodGroup for DiskMethods {
                 ))
                 .await
             {
+                state.subscriptions.lock().expect("subs").remove(&sub);
                 return;
             }
             let ev = match collect(conn.as_ref(), "disk.scan", &p).await {
@@ -118,6 +124,7 @@ impl MethodGroup for DiskMethods {
                 Err(error) => event("error", json!({"subscription":sub,"error":error,"fatal":true})),
             };
             client.send(&ev).await;
+            state.subscriptions.lock().expect("subs").remove(&sub);
         });
         cx.state.subscriptions.lock().expect("subs").insert(
             id.clone(),
@@ -127,6 +134,7 @@ impl MethodGroup for DiskMethods {
                 task: task.abort_handle(),
             },
         );
+        let _ = ready.send(());
         Ok(json!({"subscription":id}))
     }
 }

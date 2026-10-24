@@ -12,6 +12,11 @@ pub fn journal(text: &str) -> CoreResult<Value> {
         }
         let str_value = |key: &str| fields[key].as_str().map(str::to_owned);
         cursor = str_value("__CURSOR");
+        if cursor.as_ref().is_none_or(|s| s.is_empty()) {
+            return Err(
+                CoreError::new("remote.bad_output", "Journal entry has no cursor").with("command", "journalctl")
+            );
+        }
         items.push(json!({"timestamp_usec":str_value("__REALTIME_TIMESTAMP").and_then(|s|s.parse::<u64>().ok()),"cursor":cursor,"priority":str_value("PRIORITY").and_then(|s|s.parse::<u8>().ok()),"unit":fields["_SYSTEMD_UNIT"],"message":fields["MESSAGE"],"fields":fields}));
     }
     Ok(json!({"items":items,"cursor":cursor}))
@@ -36,7 +41,7 @@ mod tests {
     fn empty_binary_and_bad() {
         assert_eq!(journal("").unwrap()["items"], json!([]));
         assert_eq!(
-            journal("{\"MESSAGE\":[0,255]}").unwrap()["items"][0]["message"],
+            journal("{\"MESSAGE\":[0,255],\"__CURSOR\":\"s=binary\"}").unwrap()["items"][0]["message"],
             json!([0, 255])
         );
         assert!(journal("garbage").is_err());

@@ -986,10 +986,127 @@ firewall не покрываются; фронт не должен предла�
 
 ---
 
+### 4.30 Диски — `disk.*`
+
+Все методы чтения принимают `connection_id`. Команды выполняются в `LC_ALL=C`;
+сканы используют `nice -n 19 ionice -c3`, `timeout` (TERM, затем KILL через 2 с).
+Отсутствующая программа — `cap.missing {capability}`; невалидный вывод —
+`remote.bad_output {command}`. GNU `du/find`, util-linux обязательны для сканов;
+эти операции не эмулируются на несовместимых BusyBox-командах.
+
+| Метод | Параметры помимо `connection_id` | Ответ |
+|-------|---------------------------------|-------|
+| `disk.list` | — | `{items: [DiskPartition], blockdevices: [...], filesystems: [...]}` |
+| `disk.scan` | `path` (абсолютный), `depth` (2, 0–10), `one_filesystem` (false), `timeout_sec` (30, 1–120), `limit` (1000, 1–5000) | `{subscription}`; события ниже |
+| `disk.scan.cancel` | `subscription` (без `connection_id`) | `{unsubscribed}`; чужая/неизвестная — `subscription.not_found` |
+| `disk.large` | `path`, `min_size` (байты, 104857600), `one_filesystem`, `timeout_sec`, `limit` | DiskScanData |
+
+DiskPartition: `{device, mount, total_bytes, used_bytes, available_bytes,
+usage_pct, inodes_total, inodes_used, inodes_available, inodes_usage_pct}`.
+Недоступные счётчики inode — `null`. `blockdevices` — дерево `lsblk --json
+--bytes` (name, kname, type, size, fstype, mountpoint, children),
+`filesystems` — дерево `findmnt --json` (target, source, fstype, options, children).
+
+DiskScanData: `{items: [{path, size_bytes}], partial, truncated}`. Размеры du —
+выделенное место (KiB переведены в байты), find — логическая длина файла.
+Элементы отсортированы по убыванию размера, ограничены `limit`. Таймаут даёт
+`partial: true`; незавершённая последняя запись отбрасывается. Прочие ошибки
+команды не скрываются. Пути с пробелами, табуляцией и переводами строк
+разбираются по NUL. Имена, не представимые в UTF-8, заменяются lossy-декодером.
+
+События: `disk.scan.progress {subscription, connection_id, state: "started"}`,
+затем `disk.scan.done {subscription, connection_id, data: DiskScanData}` либо
+`error {subscription, error, fatal: true}`. Промежуточных процентов нет.
+При отключении клиента подписка отменяется. Отмена прекращает ожидание и
+события; удалённый скан в любом случае ограничен `timeout_sec`.
+
+### 4.31 Журналы — `log.*`
+
+| Метод | Параметры помимо `connection_id` | Ответ |
+|-------|---------------------------------|-------|
+| `log.sources` | `sudo` (false) | `{journal: bool, files: [абсолютный путь]}`; обычные файлы `/var/log` до глубины 2 |
+| `log.query` | `unit`, `priority` (строка journalctl, например `"0..3"`), `since`, `until`, `grep` (regex), `boot` (строка, например `"0"`/`"-1"`), `lines` (100, 1–1000), `cursor`, `sudo` | LogQueryData |
+| `log.follow` | те же фильтры, `interval_ms` (1000, 1000–60000) | `{subscription, interval_ms}`; события `log.line {subscription, data: LogEntry}` |
+| `log.unfollow` | `subscription` (без `connection_id`) | `{unsubscribed}`; чужая/неизвестная — `subscription.not_found` |
+| `log.file.tail` | `path` внутри `/var/log/`, `lines` (100, 1–5000), `sudo` | `{lines: [строка]}`; максимум 512 КиБ хвоста |
+| `log.vacuum` | `confirm: true`, `max_bytes` (> 0) | `{vacuumed: true}` |
+
+LogQueryData: `{items: [LogEntry], cursor: строка|null}`. LogEntry:
+`{timestamp_usec: u64|null, cursor: строка|null, priority: u8|null,
+unit: строка|null, message: строка|массив байтов|null, fields: объект journald}`.
+Время — микросекунды Unix из `__REALTIME_TIMESTAMP`; все оригинальные поля
+сохранены в `fields`, бинарные значения не преобразуются в строки.
+
+`cursor` означает **после** записи (`--after-cursor`). Follow опрашивает
+journald через отдельные exec и продвигает курсор только после успешного
+чтения; данные доставляются через очередь клиента с backpressure. Первое
+чтение возвращает последние `lines` записей. Ошибка (в том числе устаревший
+курсор) завершает подписку событием `error {subscription, error, fatal: true}`.
+Пауза реализуется `unfollow`, возобновление — `follow` с последним курсором.
+Отключение клиента отменяет подписки. Follow файлов в этой версии отсутствует.
+
+Чтение по умолчанию без sudo; при нехватке прав фронт повторяет с `sudo:true`
+после `priv.sudo.auth`. Vacuum всегда использует `ensure_writable` и
+`exec_privileged`, без `confirm:true` — `validation.invalid {field:"confirm"}`.
+Tail проверяет канонический путь (симлинки наружу `/var/log` запрещены).
+
+### 4.32 Планировщик — `cron.*`
+
+| Метод | Параметры помимо `connection_id` | Ответ |
+|-------|---------------------------------|-------|
+| `cron.list` | `user?` или `file?`, либо `system:true`; `sudo?` | CronTable; при `system:true` — `{files:[CronTable с path]}` |
+| `cron.add` | `user` или `file`, `version`, `schedule`, `command`, `run_as` (для file), `confirm:true` | `{updated:true, version}` |
+| `cron.set` | как add + `line` (номер строки с 1) | `{updated:true, version}` |
+| `cron.del` | `user` или `file`, `version`, `line`, `confirm:true` | `{updated:true, version}` |
+| `cron.toggle` | как del + `enabled` (bool) | `{updated:true, version}` |
+| `cron.timer.list` | — | `{items:[Timer]}` |
+| `cron.timer.enable` / `cron.timer.disable` | `unit` (имя `.timer`), `confirm:true` | `{updated:true}`; `systemctl enable/disable --now` |
+
+`user` — имя пользователя (не shell-выражение); без источника `cron.list`
+читает crontab текущего SSH-пользователя. `file` — имя непосредственно в
+`/etc/cron.d`, только буквы/цифры/`_`/`-`. Симлинки не редактируются.
+`system:true` читает обычные файлы `/etc/cron.d`, сохраняя их порядок строк.
+Отсутствующий пользовательский crontab — пустая таблица; ошибки доступа
+не превращаются в пустой результат. Все изменения и чтение чужого crontab/
+системных файлов идут через `exec_privileged`; изменения — после
+`ensure_writable`. Для записи `user` обязателен, если не указан `file`,
+чтобы sudo не подменил целевого пользователя на root.
+
+CronTable: `{version: sha256, items:[{line, raw, kind, enabled, schedule,
+command, user}]}`. `kind`: `job|environment|comment|blank`. `schedule`,
+`command`, `user` — `null` для неприменимых строк; `raw` сохраняет исходную
+строку. Комментарии и окружение при изменении задачи сохраняются.
+Отключение — маркер `#SHERPA_DISABLED `; обычные комментарии не считаются
+отключёнными заданиями. `schedule` — пять полей cron (проверяются диапазоны,
+списки, шаги, имена месяцев/дней) либо стандартный `@daily`/`@reboot` и т. п.
+Команда — одна строка; `%` сохраняет обычную семантику cron.
+
+`version` берётся из последнего `cron.list`: несовпадение — `cron.changed`.
+Запись повторно сверяет SHA-256 под `flock` (ожидание до 10 с), затем
+устанавливает crontab или атомарно заменяет файл cron.d через rename с правами
+0644. Блокировка сериализует изменения Sherpa; внешние редакторы её не
+соблюдают, поэтому абсолютная защита от внешней записи после сверки не
+гарантируется. Stderr cron-команд не включается в ошибки: он может содержать
+команду или окружение задания.
+
+Timer: `{Id, ActiveState, UnitFileState, NextElapseUSecRealtime,
+LastTriggerUSec, Unit}` — свойства `systemctl show` в виде строк; неизвестное
+время — пустая строка. Перечисляются загруженные таймеры (`list-units --all`),
+включая неактивные; создание unit-файлов этим API не выполняется.
+
+---
+
 ## 5. Каталог кодов ошибок
 
 Формат: `<область>.<причина>`. Фронты держат таблицу переводов ru/en по
 этим кодам; `params` — для подстановки.
+
+### cron
+
+| Код | Params | Описание |
+|-----|--------|----------|
+| `cron.changed` | — | Crontab изменился; перечитайте список и повторите редактирование |
+
 
 ### net — сетевые транзакции и диагностика
 

@@ -31,8 +31,8 @@ pub fn script(method: &str, p: &Value) -> CoreResult<String> {
             for (key,flag) in [("unit","--unit"),("priority","--priority"),("since","--since"),("until","--until"),("grep","--grep"),("boot","--boot"),("cursor","--after-cursor")] {
                 if let Some(value)=opt_str(p,key)? {if value.contains('\0'){return Err(CoreError::invalid(key,"NUL is forbidden"));} cmd+=&format!(" {flag}={}",shell_quote(&value));}
             }
-            // after-cursor + -n иначе вернёт только хвост и потеряет записи между опросами.
-            if opt_str(p,"cursor")?.is_some() {cmd=cmd.replace(&format!(" -n {n}"),"");}
+            // +N берёт первые N после курсора, обычное -n пропустило бы начало пачки.
+            if opt_str(p,"cursor")?.is_some() {cmd=cmd.replace(&format!(" -n {n}"),&format!(" -n +{n}"));}
             cmd
         },
         _=>return Err(unknown(method)),
@@ -64,7 +64,21 @@ pub async fn collect<E: RemoteExec>(exec: &E, method: &str, p: &Value) -> CoreRe
         }
         "log.file.tail" => Ok(parse::tail(&text)),
         "log.vacuum" => Ok(json!({"vacuumed":true})),
-        _ => parse::journal(&text),
+        _ => {
+            let mut data = parse::journal(&text)?;
+            // С grep и обычным -n journald неявно включает reverse.
+            if opt_str(p, "grep")?.is_some() && opt_str(p, "cursor")?.is_none() {
+                if let Some(items) = data["items"].as_array_mut() {
+                    items.reverse();
+                }
+                data["cursor"] = data["items"]
+                    .as_array()
+                    .and_then(|a| a.last())
+                    .map(|v| v["cursor"].clone())
+                    .unwrap_or(Value::Null);
+            }
+            Ok(data)
+        }
     }
 }
 struct Reader {
@@ -124,7 +138,12 @@ impl MethodGroup for LogMethods {
         let interval = opt_u64(&p, "interval_ms")?.unwrap_or(1000).clamp(1000, 60000);
         let id = cx.state.new_id("l");
         let (sub, client) = (id.clone(), cx.client.clone());
+        let state = cx.state.clone();
+        let (ready, start) = tokio::sync::oneshot::channel();
         let task = tokio::spawn(async move {
+            if start.await.is_err() {
+                return;
+            }
             loop {
                 match collect(&reader, "log.query", &p).await {
                     Ok(data) => {
@@ -151,6 +170,7 @@ impl MethodGroup for LogMethods {
                 }
                 tokio::time::sleep(Duration::from_millis(interval)).await;
             }
+            state.subscriptions.lock().expect("subs").remove(&sub);
         });
         cx.state.subscriptions.lock().expect("subs").insert(
             id.clone(),
@@ -160,6 +180,7 @@ impl MethodGroup for LogMethods {
                 task: task.abort_handle(),
             },
         );
+        let _ = ready.send(());
         Ok(json!({"subscription":id,"interval_ms":interval}))
     }
 }
@@ -173,8 +194,26 @@ mod tests {
         let f = FakeExec::new().on("journalctl", "{\"MESSAGE\":\"hello\",\"__CURSOR\":\"s=next\"}\n", 0);
         assert_eq!(collect(&f, "log.query", &p).await.unwrap()["cursor"], "s=next");
         let c = &f.calls()[0];
-        assert!(c.contains("LC_ALL=C") && c.contains("--after-cursor='s=abc'") && !c.contains(" -n "));
+        assert!(c.contains("LC_ALL=C") && c.contains("--after-cursor='s=abc'") && c.contains(" -n +100"));
         assert!(c.contains("'\\''"));
+    }
+    #[tokio::test]
+    async fn grep_order_and_bad_cursor() {
+        let f = FakeExec::new().on(
+            "journalctl",
+            "{\"__CURSOR\":\"new\",\"MESSAGE\":\"b\"}\n{\"__CURSOR\":\"old\",\"MESSAGE\":\"a\"}\n",
+            0,
+        );
+        let d = collect(&f, "log.query", &json!({"grep":"test"})).await.unwrap();
+        assert_eq!(d["items"][0]["message"], "a");
+        assert_eq!(d["cursor"], "new");
+        assert_eq!(
+            collect(&FakeExec::new().on("journalctl", "{}", 0), "log.query", &json!({}))
+                .await
+                .unwrap_err()
+                .code,
+            "remote.bad_output"
+        );
     }
     #[tokio::test]
     async fn errors_sources_and_tail() {
