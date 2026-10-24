@@ -22,6 +22,10 @@ export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so"
 export QML_SOURCES_PATHS=/src/frontend/qml
 linuxdeploy --appdir "$APPDIR" --plugin qt \
     -e "$APPDIR/usr/bin/sherpa" -d /work/sherpa.desktop -i /work/sherpa.svg
+# libOpenGL/libGLdispatch (glvnd) linuxdeploy не бандлит (в excludelist), а в чистой Ubuntu их может не быть
+for l in libOpenGL.so.0 libGLdispatch.so.0; do
+    cp -L "$(ldconfig -p | awk -v l="$l" '$1==l && /x86-64/ {print $NF; exit}')" "$APPDIR/usr/lib/"
+done
 # sherpa-core — не Qt-программа; рядом с sherpa (CoreClient ищет его в каталоге приложения)
 test -x "$APPDIR/usr/bin/sherpa-core"
 
